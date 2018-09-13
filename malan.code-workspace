@@ -31,7 +31,8 @@
 			"tuple": "cpp",
 			"iostream": "cpp",
 			"iomanip": "cpp",
-			"utility": "cpp"
+			"utility": "cpp",
+			"iosfwd": "cpp"
 		}
 	}
 }

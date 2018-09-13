@@ -3,26 +3,10 @@
 #include <iostream>
 #include <iomanip>
 
-void
-Boolean_literal::print() const
-{
-	std::cout << std::boolalpha << m_value << '\n';
-}
-
-void
-Integer_literal::print() const
-{
-	std::cout << m_value << '\n';
-}
-
-
-Binary_expression::Binary_expression(Binary_expression const* expr, char const* op)
-{
-	std::cout << '(' << expr->get_lhs() << ' ';
-	std::cout << op << ' ';
-	expr->get_rhs();
-	std::cout << ' ' << ')';
-}
+// void Expression::print()
+// {
+//     std::cout << string_literal;
+// }
 
 /// Prints '(+ e1 e2)'
 // void
