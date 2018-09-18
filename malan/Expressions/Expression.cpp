@@ -3,10 +3,10 @@
 #include <iostream>
 #include <iomanip>
 
-// void Expression::print()
-// {
-//     std::cout << string_literal;
-// }
+char const* Expression::get_string() const
+{
+    return string_literal;
+}
 
 /// Prints '(+ e1 e2)'
 // void

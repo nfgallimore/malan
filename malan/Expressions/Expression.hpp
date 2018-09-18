@@ -16,7 +16,7 @@ public:
 
 	// Printing
 	/// Print a representation of the expression
-	//virtual void print();
+	char const* get_string() const;
 
 
 	// Debugging

@@ -1,0 +1,3 @@
+/Users/nfgallimore/Code/Compilers/malan/build/CMakeFiles/rebuild_cache.dir
+/Users/nfgallimore/Code/Compilers/malan/build/CMakeFiles/edit_cache.dir
+/Users/nfgallimore/Code/Compilers/malan/build/CMakeFiles/main.dir

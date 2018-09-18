@@ -1,0 +1,1 @@
+/Library/Developer/CommandLineTools/usr/bin/c++   -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/main.dir/malan/main.cpp.o CMakeFiles/main.dir/malan/Expressions/Expression.cpp.o CMakeFiles/main.dir/malan/Expressions/BinaryExpression.cpp.o CMakeFiles/main.dir/malan/Expressions/LogicalExpression.cpp.o  -o main 

@@ -11,9 +11,9 @@ Binary_expression::Binary_expression(Expression* operand0, Expression* operand1,
 void
 Binary_expression::print()
 {
-	std::cout << '(' << get_lhs() << ')';
+	std::cout << '(' << get_lhs()->get_string() << ')';
 	std::cout << ' ' << get_operation() << ' ';
-	std::cout << ' ' << '(' << get_rhs() << ')';
+	std::cout << '(' << get_rhs()->get_string() << ")\n";
 }
 
 Expression*

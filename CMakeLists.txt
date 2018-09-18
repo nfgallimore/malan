@@ -4,4 +4,4 @@ project (Malan)
 include_directories(malan)
 include_directories(malan/expressions)
 
-add_executable(main ${PROJECT_SOURCE_DIR}/malan/main.cpp)
+add_executable(main ./malan/main.cpp ./malan/Expressions/Expression.cpp ./malan/Expressions/BinaryExpression.cpp ./malan/Expressions/LogicalExpression.cpp)
