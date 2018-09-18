@@ -1,6 +1,6 @@
 #include "BinaryExpression.hpp"
 #include <iostream>
-
+#include <string>
 Binary_expression::Binary_expression(Expression* operand0, Expression* operand1, char const* operation)
 {
     m_operands[0] = operand0;
@@ -8,12 +8,12 @@ Binary_expression::Binary_expression(Expression* operand0, Expression* operand1,
     m_operation = operation;
 }
 
-void
-Binary_expression::print()
+std::string const
+Binary_expression::get_string() const
 {
-	std::cout << '(' << get_lhs()->get_string() << ')';
-	std::cout << ' ' << get_operation() << ' ';
-	std::cout << '(' << get_rhs()->get_string() << ")\n";
+    std::string lhs = "(" + get_lhs()->get_string() + ")";
+    std::string rhs = "(" + get_rhs()->get_string() + ")";
+    return lhs + " " + get_operation() + " " + rhs + "\n";
 }
 
 Expression*

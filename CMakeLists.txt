@@ -1,10 +1,6 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 3.12.1)
 project (Malan)
 
-include_directories(malan)
-include_directories(malan/Expressions)
-
-add_executable(main ./malan/main.cpp 
-./malan/Expressions/Expression.cpp 
-./malan/Expressions/BinaryExpression.cpp 
-./malan/Expressions/LogicalExpression.cpp)
+add_subdirectory(src)
+add_subdirectory(test)
+add_test (NAME Test COMMAND test/Test)

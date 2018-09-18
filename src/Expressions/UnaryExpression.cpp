@@ -26,10 +26,12 @@ Unary_expression::print() const
 
 }
 
-bool Unary_expression::get_operation_after_operand() const {
+bool Unary_expression::get_operation_after_operand() const 
+{
 	return m_operation_after_operand;
 }
 
-char* Unary_expression::get_operation() const {
+char* Unary_expression::get_operation() const 
+{
 	return m_operation;
 }

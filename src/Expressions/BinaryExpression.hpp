@@ -1,4 +1,5 @@
 #include "Expression.hpp"
+#include <string>
 
 class Binary_expression : public Expression 
 {
@@ -11,7 +12,7 @@ public:
 
 	char const* get_operation() const;
 
-	virtual void print();
+	virtual std::string const get_string() const;
 
 private:
 	std::array<Expression*, 2> m_operands;
