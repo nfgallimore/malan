@@ -1,3 +1,3 @@
-add_executable(main 
+add_executable(Main 
 main.cpp 
 Expressions/BinaryExpression.cpp)
