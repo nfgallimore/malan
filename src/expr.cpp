@@ -71,7 +71,7 @@ Unary_expression::get_operand() const
 /*
 * Binary Expression
 */
-Binary_expression::Binary_expression(Expr* operand0, Expr* operand1, char const* operation)
+Binary_expr::Binary_expr(Expr* operand0, Expr* operand1, char const* operation)
 {
     m_operands[0] = operand0;
     m_operands[1] = operand1;
@@ -79,7 +79,7 @@ Binary_expression::Binary_expression(Expr* operand0, Expr* operand1, char const*
 }
 
 std::string const
-Binary_expression::get_string() const
+Binary_expr::get_string() const
 {
     std::string lhs = "(" + get_lhs()->get_string() + ")";
     std::string rhs = "(" + get_rhs()->get_string() + ")";
@@ -87,19 +87,19 @@ Binary_expression::get_string() const
 }
 
 Expr*
-Binary_expression::get_lhs() const
+Binary_expr::get_lhs() const
 {
     return m_operands[0];
 }
 
 Expr* 
-Binary_expression::get_rhs() const 
+Binary_expr::get_rhs() const 
 {
     return m_operands[1];
 }
 
 char const*
-Binary_expression::get_operation() const 
+Binary_expr::get_operation() const 
 {
     return m_operation;
 }

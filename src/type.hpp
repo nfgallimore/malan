@@ -73,11 +73,8 @@ std::ostream& operator<<(std::ostream& os, Type const& t);
 
 // Operations
 
-void print(std::ostream& os, Type const* t);
 /// Prints `t` to the output stream.
+void print(std::ostream& os, Type const* t);
 
-bool equal(Type const* a, Type const* b);
 /// Returns true when `a` and `b` denote the same type.
-
-
-
+bool equal(Type const* a, Type const* b);

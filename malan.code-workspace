@@ -39,7 +39,9 @@
 			"vector": "cpp",
 			"string": "cpp",
 			"sstream": "cpp",
-			"strstream": "cpp"
+			"strstream": "cpp",
+			"array": "cpp",
+			"string_view": "cpp"
 		}
 	}
 }
