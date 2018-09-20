@@ -2,18 +2,14 @@
 
 find_package(Boost 1.55 REQUIRED COMPONENTS unit_test_framework)
 
-include_directories (./src
-                     ${Boost_INCLUDE_DIRS}
-                     ./../src/Expressions
-                     )
+include_directories (${Boost_INCLUDE_DIRS})
 add_definitions (-DBOOST_TEST_DYN_LINK)
 
-add_executable (test 
-                    src/BinaryExpression_t.cpp 
-                    ../src/Expressions/BinaryExpression.cpp
-                )
+set(SrcDirectory "../src/")
 
-target_link_libraries (Test
+add_executable (test Expr_t.cpp ./${SrcDirectory}/expr.cpp)
+
+target_link_libraries (test
                         ${Boost_FILESYSTEM_LIBRARY}
                         ${Boost_SYSTEM_LIBRARY}
                         ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}

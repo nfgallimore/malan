@@ -1,3 +1,5 @@
+#pragma Once
+
 class Value 
 {
 public:

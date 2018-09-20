@@ -37,7 +37,9 @@
 			"variant": "cpp",
 			"deque": "cpp",
 			"vector": "cpp",
-			"string": "cpp"
+			"string": "cpp",
+			"sstream": "cpp",
+			"strstream": "cpp"
 		}
 	}
 }
