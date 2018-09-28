@@ -4,6 +4,8 @@
 
 struct Expr;
 
+struct Location;
+
 struct Stmt
 {
 

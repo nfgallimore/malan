@@ -2,7 +2,7 @@
 
 #include <string>
 
-class Name
+struct Name
 {
     std::string str;
 };

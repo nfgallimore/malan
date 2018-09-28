@@ -2,7 +2,6 @@
 
 #include <iostream>
 
-
 class Value
 {
 public:
@@ -64,24 +63,22 @@ private:
     Data m_data;
 };
 
-
-
 struct Expr
 {
 public:
+    enum Kind
+    {
+        literal,
+        unary,
+        binary
+    };
+
     virtual Value evaluate() const = 0;
-    friend std::ostream& operator<< (std::ostream& os, const Expr& p);
 
-protected:
-    virtual void print(std::ostream& str) const = 0;
+    friend std::ostream& operator<<(std::ostream& os, Expr const& t);
+
+    void print(std::ostream& os, Expr const* e);
 };
-
-std::ostream& operator<< (std::ostream& os, const Expr& e)
-{
-    e.print(os);
-    return os;
-}
-
 
 
 // Helper functions
@@ -107,7 +104,7 @@ void check_if_bool(Value* v)
 
 
 /// Class to represent a unary expression
-class Unary_expr : Expr
+class Unary_expr : public Expr
 {
 public:
     /// Construct a unary expression
@@ -136,7 +133,7 @@ class Binary_expr : public Expr
 public:
     Expr* get_lhs() const
     {
-        return m_e1;
+ ;       return m_e1;
     }
     
     Expr* get_rhs() const 
@@ -153,6 +150,7 @@ private:
     Expr* m_e2;
     char* m_op;
 };
+
 
 
 class Bool_expr : Expr
@@ -515,7 +513,7 @@ public:
     Expr* print();
 };
 
-class Not_expr :  
+class Not_expr : Unary_expr
 {
 public:
     Not_expr(Expr* e)
