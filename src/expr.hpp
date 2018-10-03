@@ -63,461 +63,81 @@ private:
     Data m_data;
 };
 
-struct Expr
-{
+class Expr {
 public:
-    enum Kind
-    {
-        literal,
-        unary,
-        binary
-    };
-
+    // evaluates an expression
     virtual Value evaluate() const = 0;
 
-    friend std::ostream& operator<<(std::ostream& os, Expr const& t);
+    // prints an expression
+    virtual void print(std::ostream& os, Expr const& e) const = 0;
 
-    void print(std::ostream& os, Expr const* e);
+    // debugs an expression with the name of class and memory address
+    virtual void debug(Expr const& e) const = 0;
+
+    // converts to sexpr
+    virtual void to_sexpr(Expr const& e) const = 0;
 };
 
+class Bool_literal : public Expr {
+public:    
+    void print(std::ostream& os, Expr const& e) const override;
+    void debug(Expr const& e) const override;
+    void to_sexpr(Expr const& e) const override;
+    Bool_literal(bool b) : m_value(b) { }
+    Value evaluate() const override { return Value(m_value); }
 
-// Helper functions
+private:
+    bool m_value;
+};
 
-/// Checks if the values are different from each other and throws an exception if they are
-void check_if_different_types(Value* v1, Value* v2) 
-{
-    if (v1->get_kind() != v2->get_kind()) 
-    {
-        throw std::logic_error("Cannot evaluate two expressions of different kinds of values.");
-    }
+class Int_literal : public Expr {
+public:    
+    void print(std::ostream& os, Expr const& e) const override;
+    void debug(Expr const& e) const override;
+    void to_sexpr(Expr const& e) const override;
+    Int_literal(int i) : m_value(i) { }
+    Value evaluate() const override { return Value(m_value); }
+
+private:
+    int m_value;
+};
+
+class Identifier : public Expr {
+public:
+    void print(std::ostream& os, Expr const& e) const override;
+    void debug(Expr const& e) const override;
+    void to_sexpr(Expr const& e) const override;
+    Identifier(Value v) : m_value(v) { }
+    Value evaluate() const override { return m_value; }
+
+private:
+    Value m_value;
+};
+
+class Logical_and : public Expr {
+    void print(std::ostream& os, Expr const& e) const override;
+    void debug(Expr const& e) const override;
+    void to_sexpr(Expr const& e) const override;
+    Identifier(Value v) : m_value(v) { }
+    Value evaluate() const override { return m_value; }
 }
 
-// Checks if the value is a boolean and throws an exception if it is
-void check_if_bool(Value* v) 
+std::ostream& operator<<(std::ostream& os, Expr const& e);
+
+inline void
+print(std::ostream& os, Expr const& e)
 {
-    if (v->get_kind() == Value::bool_val)
-    {
-        throw std::logic_error("Cannot perform operation on boolean values");
-    }
+    e.print(os, e);
+};
+
+inline void
+debug (Expr const& e)
+{
+    e.debug(e);
 }
 
-
-
-/// Class to represent a unary expression
-class Unary_expr : public Expr
+inline void
+to_sexpr(Expr const& e)
 {
-public:
-    /// Construct a unary expression
-    Unary_expr(Expr* expr, char* op) 
-        : m_expr(expr), m_op(op)
-    { }
-
-    /// Gets the expression operand
-    Expr* get_operand() const 
-    {
-        return m_expr;
-    }
-
-    /// Prints the unary expression
-    virtual void print(std::ostream& str);
-
-private:
-    Expr* m_expr;
-    char* m_op;
-};
-
-
-
-class Binary_expr : public Expr 
-{
-public:
-    Expr* get_lhs() const
-    {
- ;       return m_e1;
-    }
-    
-    Expr* get_rhs() const 
-    {
-        return m_e2;
-    }
-
-    Binary_expr(Expr* left, Expr* right, char* op) 
-        : m_e1(left), m_e2(right), m_op(op)
-    { }
-
-private:
-    Expr* m_e1;
-    Expr* m_e2;
-    char* m_op;
-};
-
-
-
-class Bool_expr : Expr
-{
-public:
-    Value evaluate() const override 
-    {
-        return Value(value); 
-    }
-
-private:
-    bool value;
-};
-
-
-
-class Int_expr : Expr
-{
-public:
-    Value evaluate() const override
-    {
-        return Value(value); 
-    }
-
-private:
-    int value;
-};
-
-
-
-class Float_expr : Expr
-{
-public:
-    Value evaluate() const override 
-    {
-        return Value(value); 
-    }
-
-private:
-    float value;
-};
-
-
-
-class Add_expr : Binary_expr
-{
-public:
-    Value evaluate() const override
-    {
-        Value v1 = get_lhs()->evaluate();
-        Value v2 = get_rhs()->evaluate();
-
-        check_if_bool(&v1);
-
-        check_if_different_types(&v1, &v2);
-
-        switch(v1.get_kind())
-        {
-            case Value::int_val:
-                return Value(v1.get_int() + v2.get_int());
-
-            case Value::float_val:
-                return Value(v1.get_float() + v2.get_float());
-        }
-
-        throw std::logic_error("Unknown kind of value");
-    }
-};
-
-
-
-class Sub_expr : Binary_expr
-{
-public:
-    Value evaluate() const override
-    {
-        Value v1 = get_lhs()->evaluate();
-        Value v2 = get_rhs()->evaluate();
-
-        check_if_bool(&v1);
-        
-        check_if_different_types(&v1, &v2);
-
-
-        switch(v1.get_kind())
-        {
-            case Value::int_val:
-                return Value(v1.get_int() - v2.get_int());
-
-            case Value::float_val:
-                return Value(v1.get_float() - v2.get_float());
-        }
-
-        throw std::logic_error("Unknown kind of value");
-    }
-};
-
-
-
-class Mult_expr : Binary_expr
-{
-public:
-    Value evaluate() const override
-    {
-        Value v1 = get_lhs()->evaluate();
-        Value v2 = get_rhs()->evaluate();
-
-        check_if_bool(&v1);
-
-        check_if_different_types(&v1, &v2);
-
-
-        switch(v1.get_kind())
-        {
-            case Value::int_val:
-                return Value(v1.get_int() * v2.get_int());
-
-            case Value::float_val:
-                return Value(v1.get_float() * v2.get_float());
-        }
-
-        throw std::logic_error("Unknown kind of value");
-    }
-};
-
-
-
-class Div_expr : Binary_expr
-{
-public:
-    Value evaluate() const override
-    {
-        Value v1 = get_lhs()->evaluate();
-        Value v2 = get_rhs()->evaluate();
-
-        check_if_bool(&v1);
-
-        check_if_different_types(&v1, &v2);
-
-        switch(v1.get_kind())
-        {
-            case Value::int_val:
-                return Value(v1.get_int() / v2.get_int());
-
-            case Value::float_val:
-                return Value(v1.get_float() / v2.get_float());
-        }
-
-        throw std::logic_error("Unknown kind of value");
-    }
-};
-
-
-// Comparison expressions
-
-/// Equality expression
-class Eq_expr : Binary_expr
-{
-public:
-    Value evaluate() const override
-    {
-        Value v1 = get_lhs()->evaluate();
-        Value v2 = get_rhs()->evaluate();
-
-        check_if_different_types(&v1, &v2);
-
-        switch(v1.get_kind())
-        {
-            case Value::int_val:
-                return Value(v1.get_int() == v2.get_int());
-
-            case Value::float_val:
-                return Value(v1.get_float() == v2.get_float());
-
-            case Value::bool_val:
-                return Value(v1.get_bool() == v2.get_bool());
-        }
-
-        throw std::logic_error("Unknown kind of value");
-    }
-};
-
-
-/// Not equal expression
-class Not_eq_expr : Binary_expr
-{
-public:
-    Value evaluate() const override
-    {
-        Value v1 = get_lhs()->evaluate();
-        Value v2 = get_rhs()->evaluate();
-
-        check_if_different_types(&v1, &v2);
-
-        switch(v1.get_kind())
-        {
-            case Value::int_val:
-                return Value(v1.get_int() != v2.get_int());
-
-            case Value::float_val:
-                return Value(v1.get_float() != v2.get_float());
-
-            case Value::bool_val:
-                return Value(v1.get_bool() != v2.get_bool());
-        }
-
-        throw std::logic_error("Unknown kind of value");
-    }
-};
-
-
-
-class Lt_expr : Binary_expr
-{
-public:
-    Value evaluate() const override
-    {
-        Value v1 = get_lhs()->evaluate();
-        Value v2 = get_rhs()->evaluate();
-
-        check_if_bool(&v1);
-
-        check_if_different_types(&v1, &v2);
-
-        switch(v1.get_kind())
-        {
-            case Value::int_val:
-                return Value(v1.get_int() < v2.get_int());
-
-            case Value::float_val:
-                return Value(v1.get_float() < v2.get_float());
-        }
-
-        throw std::logic_error("Unknown kind of value");
-    }
-};
-
-
-
-class Gt_expr : Binary_expr
-{
-public:
-    Value evaluate() const override
-    {
-        Value v1 = get_lhs()->evaluate();
-        Value v2 = get_rhs()->evaluate();
-
-        check_if_bool(&v1);
-
-        check_if_different_types(&v1, &v2);
-
-        switch(v1.get_kind())
-        {
-            case Value::int_val:
-                return Value(v1.get_int() > v2.get_int());
-
-            case Value::float_val:
-                return Value(v1.get_float() > v2.get_float());
-        }
-
-        throw std::logic_error("Unknown kind of value");
-    }
-};
-
-
-
-class Lt_or_eq_expr : Binary_expr
-{
-public:
-    Value evaluate() const override
-    {
-        Value v1 = get_lhs()->evaluate();
-        Value v2 = get_rhs()->evaluate();
-
-        check_if_bool(&v1);
-
-        check_if_different_types(&v1, &v2);
-
-        switch(v1.get_kind())
-        {
-            case Value::int_val:
-                return Value(v1.get_int() <= v2.get_int());
-
-            case Value::float_val:
-                return Value(v1.get_float() <= v2.get_float());
-        }
-
-        throw std::logic_error("Unknown kind of value");
-    }
-};
-
-
-
-class Gt_or_eq_expr : Binary_expr
-{
-public:
-    Value evaluate() const override
-    {
-        Value v1 = get_lhs()->evaluate();
-        Value v2 = get_rhs()->evaluate();
-
-        check_if_bool(&v1);
-
-        check_if_different_types(&v1, &v2);
-
-        switch(v1.get_kind())
-        {
-            case Value::int_val:
-                return Value(v1.get_int() <= v2.get_int());
-
-            case Value::float_val:
-                return Value(v1.get_float() <= v2.get_float());
-        }
-
-        throw std::logic_error("Unknown kind of value");
-    }
-};
-
-
-
-class Or_expr : Binary_expr
-{
-public:
-    Value evaluate() const override
-    {
-        Value v1 = get_lhs()->evaluate();
-        Value v2 = get_rhs()->evaluate();
-        
-        if (v1.get_kind() != Value::bool_val && v2.get_kind() != Value::bool_val)
-        {
-            throw std::logic_error("Logical operations can only be performed on boolean values.");
-        }
-
-        return Value(v1.get_bool() || v2.get_bool());
-    }
-};
-
-
-
-class And_expr : Binary_expr
-{
-public:
-    Value evaluate() const override
-    {
-        Value v1 = get_lhs()->evaluate();
-        Value v2 = get_rhs()->evaluate();
-        
-        if (v1.get_kind() != Value::bool_val && v2.get_kind() != Value::bool_val)
-        {
-            throw std::logic_error("Logical operations can only be performed on boolean values.");
-        }
-
-        return Value(v1.get_bool() && v2.get_bool());
-    }
-
-    And_expr(Expr* e1, Expr* e2) 
-        : Binary_expr(e1, e2, "AND")
-    { }
-
-    Expr* print();
-};
-
-class Not_expr : Unary_expr
-{
-public:
-    Not_expr(Expr* e)
-        : Unary_expr(e, "NOT")
-    { }
-    Expr* print();
-};
+    e.to_sexpr(e);
+}

@@ -2,13 +2,31 @@
 
 #include "expr.hpp"
 
-void print(std::ostream& os, Expr const* e) {
-
+void Int_literal::print(std::ostream& os, Expr const& e) const {
+    os << e.evaluate().get_int();
 }
 
-std::ostream&
-operator<<(std::ostream& os, Expr const& e)
-{
-  print(os, &e);
-  return os;
+void Int_literal::debug(Expr const& e) const {
+    std::cout << "Int_literal " << &e << '\n';
+}
+
+void Int_literal::to_sexpr(Expr const& e) const {
+    std::cout << "Int\n";
+}
+
+void Bool_literal::print(std::ostream& os, Expr const& e) const {
+    os << std::boolalpha << e.evaluate().get_bool();
+}
+
+void Bool_literal::debug(Expr const& e) const {
+    std::cout << "Bool_literal " << &e << '\n';
+}
+
+void Bool_literal::to_sexpr(Expr const& e) const {
+    std::cout << "Bool\n";
+}
+
+std::ostream& operator<<(std::ostream& os, Expr const& e) {
+    e.print(os, e);
+    return os;
 }

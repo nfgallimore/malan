@@ -18,7 +18,8 @@ public:
     bool_type,
     int_type,
     ref_type,
-    fun_type
+    fun_type,
+    float_type
   };
 
 protected:
@@ -53,6 +54,14 @@ public:
   { }
 };
 
+/// Represents the string `float`.
+class Float_type : public Type
+{
+public:
+  Float_type()
+    : Type(float_type)
+  { }
+};
 
 /// Represents strings of the form `ref t` where `t` is a type.
 class Ref_type : public Type
@@ -69,7 +78,8 @@ private:
 };
 
 
-/// Represents a function
+/// Represents strings of the form `func f:(x:int, y:int) -> bool`
+/// where `f` is the function name, `x` is of type int, `y` is of type int and func returns bool
 class Fun_type : public Type
 {
   public:
@@ -78,7 +88,7 @@ class Fun_type : public Type
     { }
 
     Fun_type(Type* ret)
-      : Type(fun_type), m_params(NULL), m_ret_type(ret)
+      : Type(fun_type), m_params(0), m_ret_type(ret)
     { }
 
 

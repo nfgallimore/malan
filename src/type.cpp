@@ -45,6 +45,9 @@ print(std::ostream& os, Type const* t)
   case Type::int_type:
     return print_str(os, "int");
   
+  case Type::float_type:
+    return print_str(os, "float");
+  
   case Type::ref_type:
     return print_ref(os, static_cast<Ref_type const*>(t));
 
@@ -96,6 +99,9 @@ equal(Type const* a, Type const* b)
     return true;
   
   case Type::int_type:
+    return true;
+
+  case Type::float_type:
     return true;
   
   case Type::ref_type:

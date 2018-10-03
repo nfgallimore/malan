@@ -3,8 +3,7 @@
 #include <iostream>
 
 struct Expr;
-
-struct Location;
+struct Decl;
 
 struct Stmt
 {
@@ -34,3 +33,30 @@ struct While_stmt : Stmt
     Stmt* body;
 };
 
+struct Ternary_stmt : Stmt
+{
+    Expr* cond;
+    Stmt* then;
+    Stmt* els;
+};
+
+
+// (if Sexpr(e)
+// )
+struct Return_stmt : Stmt
+{
+    Stmt* stmt;
+};
+
+struct Expression_stmt : Stmt
+{
+    Expr* expr;
+};
+
+
+// Local variables
+struct Local_defn_stmt : Stmt
+{
+    Block_stmt* block;
+    Decl* decl;
+};
