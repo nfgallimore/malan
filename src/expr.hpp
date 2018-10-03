@@ -76,6 +76,174 @@ private:
     Type* m_type;
 };
 
+class Logical_or : public Expr {
+public:
+    Logical_or(Expr* e1, Expr* e2, Type* t) : m_e1(e1), m_e2(e2), m_type(t) { }
+    void print(std::ostream& os) const override;
+    void debug(std::ostream& os) const override;
+    void to_sexpr(std::ostream& os) const override;
+    Value evaluate() const override {
+        return Value(m_e1->evaluate().get_bool() || m_e2->evaluate().get_bool());
+    }
+    Expr* get_lhs() { return m_e1; }
+    Expr* get_rhs() { return m_e2; }
+private:
+    Expr* m_e1;
+    Expr* m_e2;
+    Type* m_type;
+};
+
+class Logical_not : public Expr {
+public:
+    Logical_not(Expr* e, Type* t) : m_expr(e), m_type(t) { }
+    void print(std::ostream& os) const override;
+    void debug(std::ostream& os) const override;
+    void to_sexpr(std::ostream& os) const override;
+    Value evaluate() const override {
+        return Value(!m_expr->evaluate().get_bool());
+    }
+    Expr* get_exp() { return m_expr; }
+private:
+    Expr* m_expr;
+    Type* m_type;
+};
+
+class Ternary_expr : public Expr {
+public:
+    Ternary_expr(Expr* e1, Expr* e2, Expr* e3, Type* t) 
+        : m_e1(e1), m_e2(e2), m_e3(e3), m_type(t) 
+    { }
+    void print(std::ostream& os) const override;
+    void debug(std::ostream& os) const override;
+    void to_sexpr(std::ostream& os) const override;
+    Value evaluate() const override {
+        throw std::logic_error("Cannot evaluate ternary expression.");
+    }
+private:
+    Expr* m_e1;
+    Expr* m_e2;
+    Expr* m_e3;
+    Type* m_type;
+};
+
+class Equal_expr : public Expr {
+public:
+    Equal_expr(Expr* e1, Expr* e2, Type* t) 
+        : m_e1(e1), m_e2(e2), m_type(t) 
+    { }
+    void print(std::ostream& os) const override;
+    void debug(std::ostream& os) const override;
+    void to_sexpr(std::ostream& os) const override;
+    Value evaluate() const override {
+        throw std::logic_error("Not implemented");
+    }
+private:
+    Expr* m_e1;
+    Expr* m_e2;
+    Type* m_type;
+};
+
+class Not_equal_expr : public Expr {
+public:
+    Not_equal_expr(Expr* e1, Expr* e2, Type* t) 
+        : m_e1(e1), m_e2(e2), m_type(t) 
+    { }
+    void print(std::ostream& os) const override;
+    void debug(std::ostream& os) const override;
+    void to_sexpr(std::ostream& os) const override;
+    Value evaluate() const override {
+        throw std::logic_error("Not implemented");
+    }
+private:
+    Expr* m_e1;
+    Expr* m_e2;
+    Type* m_type;
+};
+
+class Less_than_expr : public Expr {
+public:
+    Less_than_expr(Expr* e1, Expr* e2, Type* t) 
+        : m_e1(e1), m_e2(e2), m_type(t) 
+    { }
+    void print(std::ostream& os) const override;
+    void debug(std::ostream& os) const override;
+    void to_sexpr(std::ostream& os) const override;
+    Value evaluate() const override {
+        throw std::logic_error("Not implemented");
+    }
+private:
+    Expr* m_e1;
+    Expr* m_e2;
+    Type* m_type;
+};
+
+class Greater_than_expr : public Expr {
+public:
+    Greater_than_expr(Expr* e1, Expr* e2, Type* t) 
+        : m_e1(e1), m_e2(e2), m_type(t) 
+    { }
+    void print(std::ostream& os) const override;
+    void debug(std::ostream& os) const override;
+    void to_sexpr(std::ostream& os) const override;
+    Value evaluate() const override {
+        throw std::logic_error("Not implemented");
+    }
+private:
+    Expr* m_e1;
+    Expr* m_e2;
+    Type* m_type;
+};
+
+class Less_than_or_equal_expr : public Expr {
+public:
+    Less_than_or_equal_expr(Expr* e1, Expr* e2, Type* t) 
+        : m_e1(e1), m_e2(e2), m_type(t) 
+    { }
+    void print(std::ostream& os) const override;
+    void debug(std::ostream& os) const override;
+    void to_sexpr(std::ostream& os) const override;
+    Value evaluate() const override {
+        throw std::logic_error("Not implemented");
+    }
+private:
+    Expr* m_e1;
+    Expr* m_e2;
+    Type* m_type;
+};
+
+class Greater_than_or_equal_expr : public Expr {
+public:
+    Greater_than_or_equal_expr(Expr* e1, Expr* e2, Type* t) 
+        : m_e1(e1), m_e2(e2), m_type(t) 
+    { }
+    void print(std::ostream& os) const override;
+    void debug(std::ostream& os) const override;
+    void to_sexpr(std::ostream& os) const override;
+    Value evaluate() const override {
+        throw std::logic_error("Not implemented");
+    }
+private:
+    Expr* m_e1;
+    Expr* m_e2;
+    Type* m_type;
+};
+
+class Add_expr : public Expr {
+public:
+    Add_expr(Expr* e1, Expr* e2, Type* t) 
+        : m_e1(e1), m_e2(e2), m_type(t) 
+    { }
+    void print(std::ostream& os) const override;
+    void debug(std::ostream& os) const override;
+    void to_sexpr(std::ostream& os) const override;
+    Value evaluate() const override {
+        throw std::logic_error("Not implemented");
+    }
+private:
+    Expr* m_e1;
+    Expr* m_e2;
+    Type* m_type;
+};
 std::ostream& operator<<(std::ostream& os, Expr const& e);
 
 inline void

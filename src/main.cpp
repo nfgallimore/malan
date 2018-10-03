@@ -136,11 +136,75 @@ void exprs()
     id.to_sexpr(std::cout << "s_expr: ");
     std::cout << "\n\n";
 
-    // Logical and operations
-    std::cout << "Logical and:\n";
+    // Logical AND operations
+    std::cout << "Logical AND:\n";
     Logical_and andExp(&bl, &bl, &bt);
     std::cout << "print: " << andExp << '\n';
     andExp.debug(std::cout << "debug: ");
     andExp.to_sexpr(std::cout << "s_expr: ");
     std::cout << "\nevaluate: " << andExp.evaluate().get_bool() << "\n\n";
+
+    // Logical OR operations
+    std::cout << "Logical OR:\n";
+    Logical_or orExp(&bl, &bl, &bt);
+    std::cout << "print: " << orExp << '\n';
+    orExp.debug(std::cout << "debug: ");
+    orExp.to_sexpr(std::cout << "s_expr: ");
+    std::cout << "\nevaluate: " << orExp.evaluate().get_bool() << "\n\n";
+    
+    // Logical NOT operations
+    std::cout << "Logical not:\n";
+    Logical_not notExp(&bl, &bt);
+    std::cout << "print: " << notExp << '\n';
+    notExp.debug(std::cout << "debug: ");
+    notExp.to_sexpr(std::cout << "s_expr: ");
+    std::cout << "\nevaluate: " << notExp.evaluate().get_bool() << "\n\n";
+
+    // Ternary expression operations
+    std::cout << "Ternary expression:\n";
+    Ternary_expr ternaryExpr(&bl, &bl, &bl, &bt);
+    std::cout << "print: " << ternaryExpr << '\n';
+    ternaryExpr.debug(std::cout << "debug: ");
+    ternaryExpr.to_sexpr(std::cout << "s_expr: ");
+    std::cout << "\n\n";
+
+    // Equal expression operations
+    std::cout << "Equal expression:\n";
+    Equal_expr equalExpr(&bl, &bl, &bt);
+    std::cout << "print: " << equalExpr << '\n';
+    equalExpr.debug(std::cout << "debug: ");
+    equalExpr.to_sexpr(std::cout << "s_expr: ");
+    std::cout << "\n\n";
+
+    // Not equal expression operations
+    std::cout << "Not equal expression:\n";
+    Not_equal_expr notEqExpr(&bl, &bl, &bt);
+    std::cout << "print: " << notEqExpr << '\n';
+    notEqExpr.debug(std::cout << "debug: ");
+    notEqExpr.to_sexpr(std::cout << "s_expr: ");
+    std::cout << "\n\n";
+
+    // Greater than expression operations
+    std::cout << "Greater than expression:\n";
+    Greater_than_expr greaterExpr(&bl, &bl, &bt);
+    std::cout << "print: " << greaterExpr << '\n';
+    greaterExpr.debug(std::cout << "debug: ");
+    greaterExpr.to_sexpr(std::cout << "s_expr: ");
+    std::cout << "\n\n";
+
+    // Less than or equal expression operations
+    std::cout << "Less than or equal expression:\n";
+    Less_than_or_equal_expr lessOrEqExpr(&bl, &bl, &bt);
+    std::cout << "print: " << lessOrEqExpr << '\n';
+    lessOrEqExpr.debug(std::cout << "debug: ");
+    lessOrEqExpr.to_sexpr(std::cout << "s_expr: ");
+    std::cout << "\n\n";
+
+    // Greater than or equal expression operations
+    std::cout << "Greater than or equal expression:\n";
+    Greater_than_or_equal_expr greaterOrEqExpr(&bl, &bl, &bt);
+    std::cout << "print: " << greaterOrEqExpr << '\n';
+    greaterOrEqExpr.debug(std::cout << "debug: ");
+    greaterOrEqExpr.to_sexpr(std::cout << "s_expr: ");
+    std::cout << "\n\n";
 }
