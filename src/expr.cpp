@@ -11,7 +11,7 @@ void Int_literal::debug(Expr const& e) const {
 }
 
 void Int_literal::to_sexpr(Expr const& e) const {
-    std::cout << "Int\n";
+    std::cout << "Int(" << e.evaluate().get_int() << ')';
 }
 
 void Bool_literal::print(std::ostream& os, Expr const& e) const {
@@ -23,7 +23,19 @@ void Bool_literal::debug(Expr const& e) const {
 }
 
 void Bool_literal::to_sexpr(Expr const& e) const {
-    std::cout << "Bool\n";
+    std::cout << "Bool(" << e.evaluate().get_bool() << ')';
+}
+
+void Identifier::print(std::ostream& os, Expr const& e) const {
+    os << e.evaluate().get_str();
+}
+
+void Identifier::debug(Expr const& e) const {
+    std::cout << "Identifier " << &e << '\n';
+}
+
+void Identifier::to_sexpr(Expr const& e) const {
+    std::cout << "Identifier(" << e.evaluate().get_str() << ')';
 }
 
 std::ostream& operator<<(std::ostream& os, Expr const& e) {
