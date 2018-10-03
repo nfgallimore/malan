@@ -1,6 +1,9 @@
 #include <iostream>
+
 #include "type.hpp"
 #include "expr.hpp"
+#include "decl.hpp"
+#include "name.hpp"
 
 void types();
 void exprs();
@@ -103,10 +106,40 @@ void types()
 
 void exprs()
 {    
+    // Int literal operations
+    std::cout << "Integer literal:\n";
     Int_literal il(1);
-    std::cout << il << '\n';
-    debug(il);
+    std::cout << "print: " << il << '\n';
+    il.debug(std::cout << "debug: ");
+    il.to_sexpr(std::cout << "s_expr: ");
+    std::cout << "\n\n";
 
+    // Bool literal operations
+    std::cout << "Boolean literal:\n";
     Bool_literal bl(false);
-    std::cout << bl << '\n';
+    std::cout << "print: " << bl << '\n';
+    bl.debug(std::cout << "debug: ");
+    bl.to_sexpr(std::cout << "s_expr: ");
+    std::cout << "\n\n";
+
+    // Identifier operations
+    std::cout << "Identifier:\n";
+    Name n("x");
+    Type t = Int_type();
+
+    Var_decl vdecl(&n, &t, &il);
+
+    Identifier id(&vdecl);
+    std::cout << "print: " << id << '\n';
+    id.debug(std::cout << "debug: ");
+    id.to_sexpr(std::cout << "s_expr: ");
+    std::cout << "\n\n";
+
+    // Logical and operations
+    std::cout << "Logical and:\n";
+    Logical_and andExp(&bl, &bl);
+    std::cout << "print: " << andExp << '\n';
+    andExp.debug(std::cout << "debug: ");
+    andExp.to_sexpr(std::cout << "s_expr: ");
+    std::cout << "\nevaluate: " << andExp.evaluate().get_bool() << "\n\n";
 }

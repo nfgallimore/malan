@@ -2,32 +2,30 @@
 
 #include <iostream>
 
+class Decl;
+
 class Value
 {
 public:
     enum Kind {
         int_val,
         float_val,
-        bool_val,
-        str_val
+        bool_val
     };
     
     union Data {
         Data(int d) : z(d) { }
         Data(float d) : f(d) { }
         Data(bool d) : b(d) { }
-        Data(char* d) : s(d) { }
 
         int z;
         float f;
         bool b;
-        char* s;
     };
 
     explicit Value(int v) : m_kind(int_val), m_data(v) { }
     explicit Value(float v) : m_kind(float_val), m_data(v) { }
     explicit Value(bool v) : m_kind(bool_val), m_data(v) { }
-    explicit Value(char* v) : m_kind(str_val), m_data(v) { } 
 
     Kind get_kind() const { return m_kind; }
 
@@ -46,11 +44,6 @@ public:
         return m_data.b;
     }
 
-    std::string get_str() const {
-        assert(m_kind == str_val);
-        return m_data.s;
-    }
-
 private:
     Kind m_kind;
     Data m_data;
@@ -62,21 +55,21 @@ public:
     virtual Value evaluate() const = 0;
 
     // prints an expression
-    virtual void print(std::ostream& os, Expr const& e) const = 0;
+    virtual void print(std::ostream& os) const = 0;
 
     // debugs an expression with the name of class and memory address
-    virtual void debug(Expr const& e) const = 0;
+    virtual void debug(std::ostream& o) const = 0;
 
     // converts to sexpr
-    virtual void to_sexpr(Expr const& e) const = 0;
+    virtual void to_sexpr(std::ostream& o) const = 0;
 };
 
 class Bool_literal : public Expr {
 public:    
     Bool_literal(bool b) : m_value(b) { }
-    void print(std::ostream& os, Expr const& e) const override;
-    void debug(Expr const& e) const override;
-    void to_sexpr(Expr const& e) const override;
+    void print(std::ostream& os) const override;
+    void debug(std::ostream& os) const override;
+    void to_sexpr(std::ostream& os) const override;
     Value evaluate() const override { return Value(m_value); }
 private:
     bool m_value;
@@ -85,9 +78,9 @@ private:
 class Int_literal : public Expr {
 public:    
     Int_literal(int i) : m_value(i) { }
-    void print(std::ostream& os, Expr const& e) const override;
-    void debug(Expr const& e) const override;
-    void to_sexpr(Expr const& e) const override;
+    void print(std::ostream& os) const override;
+    void debug(std::ostream& os) const override;
+    void to_sexpr(std::ostream& os) const override;
     Value evaluate() const override { return Value(m_value); }
 private:
     int m_value;
@@ -95,25 +88,29 @@ private:
 
 class Identifier : public Expr {
 public:
-    Identifier(char* s) : m_value(s) { }
-    void print(std::ostream& os, Expr const& e) const override;
-    void debug(Expr const& e) const override;
-    void to_sexpr(Expr const& e) const override;
-    Value evaluate() const override { return Value(m_value); }
+    Identifier(Decl* d) : m_value(d) { }
+    void print(std::ostream& os) const override;
+    void debug(std::ostream& os) const override;
+    void to_sexpr(std::ostream& os) const override;
+    Value evaluate() const override { throw std::logic_error("Cannot evaluate an identifier."); }
 private:
-    char* m_value;
+    Decl* m_value;
 };
 
 class Logical_and : public Expr {
 public:
-    Logical_and(Expr const* e1, Expr const* e2) : m_e1(e1), m_e2(e2) { }
-    void print(std::ostream& os, Expr const& e) const override;
-    void debug(Expr const& e) const override;
-    void to_sexpr(Expr const& e) const override;
-    Value evaluate() const override;
+    Logical_and(Expr* e1, Expr* e2) : m_e1(e1), m_e2(e2) { }
+    void print(std::ostream& os) const override;
+    void debug(std::ostream& os) const override;
+    void to_sexpr(std::ostream& os) const override;
+    Value evaluate() const override {
+        return Value(m_e1->evaluate().get_bool() && m_e2->evaluate().get_bool());
+    }
+    Expr* get_lhs() { return m_e1; }
+    Expr* get_rhs() { return m_e2; }
 private:
-    Expr const* m_e1;
-    Expr const* m_e2;
+    Expr* m_e1;
+    Expr* m_e2;
 };
 
 std::ostream& operator<<(std::ostream& os, Expr const& e);
@@ -121,17 +118,5 @@ std::ostream& operator<<(std::ostream& os, Expr const& e);
 inline void
 print(std::ostream& os, Expr const& e)
 {
-    e.print(os, e);
+    e.print(os);
 };
-
-inline void
-debug (Expr const& e)
-{
-    e.debug(e);
-}
-
-inline void
-to_sexpr(Expr const& e)
-{
-    e.to_sexpr(e);
-}
