@@ -34,7 +34,6 @@ private:
   Kind m_kind;
 };
 
-
 /// Represents the string `bool`.
 class Bool_type : public Type
 {
@@ -43,7 +42,6 @@ public:
     : Type(bool_type)
   { }
 };
-
 
 /// Represents the string `int`.
 class Int_type : public Type
@@ -76,7 +74,6 @@ public:
 private:
   Type* m_ref;
 };
-
 
 /// Represents strings of the form `func f:(x:int, y:int) -> bool`
 /// where `f` is the function name, `x` is of type int, `y` is of type int and func returns bool

@@ -11,7 +11,7 @@ void Var_decl::debug(std::ostream& os) const {
 }
 
 void Var_decl::to_sexpr(std::ostream& os) const {
-    os << "Var_decl(" << m_type << ", " << m_name << ", " << m_init << ")";
+    os << "(Var_decl " << m_type << " " << m_name << " " << m_init << ")";
 }
 
 std::ostream& operator<<(std::ostream& os, Decl const& d) {

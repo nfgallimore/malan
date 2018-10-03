@@ -106,9 +106,12 @@ void types()
 
 void exprs()
 {    
+    Type it = Int_type();
+    Type bt = Bool_type();
+
     // Int literal operations
     std::cout << "Integer literal:\n";
-    Int_literal il(1);
+    Int_literal il(1, &it);
     std::cout << "print: " << il << '\n';
     il.debug(std::cout << "debug: ");
     il.to_sexpr(std::cout << "s_expr: ");
@@ -116,20 +119,18 @@ void exprs()
 
     // Bool literal operations
     std::cout << "Boolean literal:\n";
-    Bool_literal bl(false);
+    Bool_literal bl(false, &bt);
     std::cout << "print: " << bl << '\n';
     bl.debug(std::cout << "debug: ");
     bl.to_sexpr(std::cout << "s_expr: ");
     std::cout << "\n\n";
 
     // Identifier operations
-    std::cout << "Identifier:\n";
     Name n("x");
-    Type t = Int_type();
-
-    Var_decl vdecl(&n, &t, &il);
-
-    Identifier id(&vdecl);
+    Var_decl vdecl(&n, &it, &il);
+    
+    std::cout << "Identifier:\n";
+    Identifier id(&vdecl, &it);
     std::cout << "print: " << id << '\n';
     id.debug(std::cout << "debug: ");
     id.to_sexpr(std::cout << "s_expr: ");
@@ -137,7 +138,7 @@ void exprs()
 
     // Logical and operations
     std::cout << "Logical and:\n";
-    Logical_and andExp(&bl, &bl);
+    Logical_and andExp(&bl, &bl, &bt);
     std::cout << "print: " << andExp << '\n';
     andExp.debug(std::cout << "debug: ");
     andExp.to_sexpr(std::cout << "s_expr: ");

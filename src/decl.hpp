@@ -61,6 +61,7 @@ public:
     void print(std::ostream& os) const override;
     void debug(std::ostream& os) const override;
     void to_sexpr(std::ostream& os) const override;
+    Name* get_name() const override { return m_name; }
 
 private:
     Name* m_name;
@@ -77,6 +78,7 @@ public:
     void print(std::ostream& os) const override;
     void debug(std::ostream& os) const override;
     void to_sexpr(std::ostream& os) const override;
+    Name* get_name() const override { return m_name; }
 
 private:
     Name* m_name;

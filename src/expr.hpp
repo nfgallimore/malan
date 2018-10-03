@@ -2,52 +2,11 @@
 
 #include <iostream>
 
+#include "value.hpp"
+#include "type.hpp"
+
 class Decl;
-
-class Value
-{
-public:
-    enum Kind {
-        int_val,
-        float_val,
-        bool_val
-    };
-    
-    union Data {
-        Data(int d) : z(d) { }
-        Data(float d) : f(d) { }
-        Data(bool d) : b(d) { }
-
-        int z;
-        float f;
-        bool b;
-    };
-
-    explicit Value(int v) : m_kind(int_val), m_data(v) { }
-    explicit Value(float v) : m_kind(float_val), m_data(v) { }
-    explicit Value(bool v) : m_kind(bool_val), m_data(v) { }
-
-    Kind get_kind() const { return m_kind; }
-
-    int get_int() const {
-        assert(m_kind == int_val);
-        return m_data.z;
-    }
-
-    float get_float() const {
-        assert(m_kind == float_val);
-        return m_data.f;
-    }
-
-    bool get_bool() const {
-        assert(m_kind == bool_val);
-        return m_data.b;
-    }
-
-private:
-    Kind m_kind;
-    Data m_data;
-};
+class Value;
 
 class Expr {
 public:
@@ -66,40 +25,43 @@ public:
 
 class Bool_literal : public Expr {
 public:    
-    Bool_literal(bool b) : m_value(b) { }
+    Bool_literal(bool b, Type* t) : m_value(b), m_type(t) { }
     void print(std::ostream& os) const override;
     void debug(std::ostream& os) const override;
     void to_sexpr(std::ostream& os) const override;
     Value evaluate() const override { return Value(m_value); }
 private:
     bool m_value;
+    Type* m_type;
 };
 
 class Int_literal : public Expr {
 public:    
-    Int_literal(int i) : m_value(i) { }
+    Int_literal(int i, Type* t) : m_value(i), m_type(t) { }
     void print(std::ostream& os) const override;
     void debug(std::ostream& os) const override;
     void to_sexpr(std::ostream& os) const override;
     Value evaluate() const override { return Value(m_value); }
 private:
     int m_value;
+    Type* m_type;
 };
 
 class Identifier : public Expr {
 public:
-    Identifier(Decl* d) : m_value(d) { }
+    Identifier(Decl* d, Type* t) : m_value(d), m_type(t) { }
     void print(std::ostream& os) const override;
     void debug(std::ostream& os) const override;
     void to_sexpr(std::ostream& os) const override;
     Value evaluate() const override { throw std::logic_error("Cannot evaluate an identifier."); }
 private:
     Decl* m_value;
+    Type* m_type;
 };
 
 class Logical_and : public Expr {
 public:
-    Logical_and(Expr* e1, Expr* e2) : m_e1(e1), m_e2(e2) { }
+    Logical_and(Expr* e1, Expr* e2, Type* t) : m_e1(e1), m_e2(e2), m_type(t) { }
     void print(std::ostream& os) const override;
     void debug(std::ostream& os) const override;
     void to_sexpr(std::ostream& os) const override;
@@ -111,6 +73,7 @@ public:
 private:
     Expr* m_e1;
     Expr* m_e2;
+    Type* m_type;
 };
 
 std::ostream& operator<<(std::ostream& os, Expr const& e);
