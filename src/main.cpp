@@ -102,7 +102,34 @@ void types()
     std::cout << fun_np << " == " << fun_p << " -> " << equal(&fun_np, &fun_p) << '\n';
     std::cout << fun_np << " == " << fun_np << " -> " << equal(&fun_np, &fun_np) << '\n';
     std::cout << '\n';
+
+    std::cout << "Debugging types:\n";
+    debug(std::cout, &b);
+    debug(std::cout, &i);
+    debug(std::cout, &f);
+    debug(std::cout, &rb);
+    debug(std::cout, &ri);
+    debug(std::cout, &fun_p);
+    debug(std::cout, &fun_np);
+    std::cout << "\n\n";
+
+    std::cout << "Converting types to s_expr:\n";
+    to_sexpr(std::cout, &b);
+    std::cout << '\n';
+    to_sexpr(std::cout, &i);
+    std::cout << '\n';
+    to_sexpr(std::cout, &f);
+    std::cout << '\n';
+    to_sexpr(std::cout, &rb);
+    std::cout << '\n';
+    to_sexpr(std::cout, &ri);
+    std::cout << '\n';
+    to_sexpr(std::cout, &fun_p);
+    std::cout << '\n';
+    to_sexpr(std::cout, &fun_np);
+    std::cout << "\n\n";
 }
+
 
 void exprs()
 {    
@@ -153,7 +180,7 @@ void exprs()
     std::cout << "\nevaluate: " << orExp.evaluate().get_bool() << "\n\n";
     
     // Logical NOT operations
-    std::cout << "Logical not:\n";
+    std::cout << "Logical NOT:\n";
     Logical_not notExp(&bl, &bt);
     std::cout << "print: " << notExp << '\n';
     notExp.debug(std::cout << "debug: ");
@@ -184,6 +211,14 @@ void exprs()
     notEqExpr.to_sexpr(std::cout << "s_expr: ");
     std::cout << "\n\n";
 
+    // Less than expression operations
+    std::cout << "Less than expression:\n";
+    Less_than_expr lessExpr(&bl, &bl, &bt);
+    std::cout << "print: " << lessExpr << '\n';
+    lessExpr.debug(std::cout << "debug: ");
+    lessExpr.to_sexpr(std::cout << "s_expr: ");
+    std::cout << "\n\n";
+
     // Greater than expression operations
     std::cout << "Greater than expression:\n";
     Greater_than_expr greaterExpr(&bl, &bl, &bt);
@@ -198,6 +233,14 @@ void exprs()
     std::cout << "print: " << lessOrEqExpr << '\n';
     lessOrEqExpr.debug(std::cout << "debug: ");
     lessOrEqExpr.to_sexpr(std::cout << "s_expr: ");
+    std::cout << "\n\n";
+
+    // Greater than or equal expression operations
+    std::cout << "Greater than or equal expression:\n";
+    Greater_than_or_equal_expr greaterOrEqExpr(&bl, &bl, &bt);
+    std::cout << "print: " << greaterOrEqExpr << '\n';
+    greaterOrEqExpr.debug(std::cout << "debug: ");
+    greaterOrEqExpr.to_sexpr(std::cout << "s_expr: ");
     std::cout << "\n\n";
 
     // Addition expression operations
@@ -256,3 +299,4 @@ void exprs()
     recipExpr.to_sexpr(std::cout << "s_expr: ");
     std::cout << "\n\n";
 }
+

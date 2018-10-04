@@ -88,7 +88,6 @@ class Fun_type : public Type
       : Type(fun_type), m_params(0), m_ret_type(ret)
     { }
 
-
     std::vector<Type*> get_params() const { return m_params; }
     
     Type* get_return_type() const { return m_ret_type; }
@@ -108,6 +107,13 @@ std::ostream& operator<<(std::ostream& os, Type const& t);
 
 /// Prints `t` to the output stream.
 void print(std::ostream& os, Type const* t);
+
+/// Prints the kind of type `t` and its address to output stream
+void debug(std::ostream& os, Type const* t);
+
+/// Prints `t` as a symbolic expression to output stream
+void to_sexpr(std::ostream& os, Type const* t);
+
 
 /// Returns true when `a` and `b` denote the same type.
 bool equal(Type const* a, Type const* b);

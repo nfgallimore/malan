@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+// Printing type operations
+
 static void
 print_str(std::ostream& os, char const* str)
 {
@@ -53,6 +55,88 @@ print(std::ostream& os, Type const* t)
 
   case Type::fun_type:
     return print_fun(os, static_cast<Fun_type const*>(t));
+  }
+}
+
+// Debugging type operations
+
+static void
+debug_str(std::ostream& os, char const* str, Type const* t) 
+{
+  os << str << ' ' << t << '\n';;
+}
+
+static void
+debug_ref(std::ostream& os, Ref_type const* t)
+{
+  os << "Ref_type " << t << '\n';
+}
+
+static void
+debug_fun(std::ostream& os, Fun_type const* t)
+{
+  os << "Fun_type " << t << '\n';
+}
+
+void
+debug(std::ostream& os, Type const* t)
+{
+  switch (t->get_kind()) {
+  case Type::bool_type:
+    return debug_str(os, "bool", t);
+  
+  case Type::int_type:
+    return debug_str(os, "int", t);
+  
+  case Type::float_type:
+    return debug_str(os, "float", t);
+  
+  case Type::ref_type:
+    return debug_ref(os, static_cast<Ref_type const*>(t));
+
+  case Type::fun_type:
+    return debug_fun(os, static_cast<Fun_type const*>(t));
+  }
+}
+
+// Converting to symbolic expression operations
+
+static void
+to_sexpr_str(std::ostream& os, char const* str) 
+{
+  os << '(' << str << ')';;
+}
+
+static void
+to_sexpr_ref(std::ostream& os, Ref_type const* t)
+{
+  os << "(Ref_type " << *t << ')';
+}
+
+static void
+to_sexpr_fun(std::ostream& os, Fun_type const* t)
+{
+  os << "(Fun_type " << *t << ')';
+}
+
+void
+to_sexpr(std::ostream& os, Type const* t)
+{
+  switch (t->get_kind()) {
+  case Type::bool_type:
+    return to_sexpr_str(os, "bool");
+  
+  case Type::int_type:
+    return to_sexpr_str(os, "int");
+  
+  case Type::float_type:
+    return to_sexpr_str(os, "float");
+  
+  case Type::ref_type:
+    return to_sexpr_ref(os, static_cast<Ref_type const*>(t));
+
+  case Type::fun_type:
+    return to_sexpr_fun(os, static_cast<Fun_type const*>(t));
   }
 }
 
