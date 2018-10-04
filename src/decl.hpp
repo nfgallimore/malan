@@ -88,9 +88,3 @@ private:
 };
 
 std::ostream& operator<<(std::ostream& os, Decl const& d);
-
-inline void
-print(std::ostream& os, Decl const& d)
-{
-    d.print(os);
-};

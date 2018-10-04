@@ -99,7 +99,7 @@ void Ternary_expr::debug(std::ostream& os) const {
 }
 
 void Ternary_expr::to_sexpr(std::ostream& os) const {
-    std::cout << "(Ternary_expr " << *m_e1 << " " << *m_e2 << " " << *m_e3 << ')';
+    std::cout << "(" << *m_e1 << " ? " << *m_e2 << " : " << *m_e3 << ')';
 }
 
 // Equal Expression Operations
@@ -113,7 +113,7 @@ void Equal_expr::debug(std::ostream& os) const {
 }
 
 void Equal_expr::to_sexpr(std::ostream& os) const {
-    std::cout << "(Equal_expr " << *m_e1 << " " << *m_e2 << ')';
+    std::cout << "(== " << *m_e1 << " " << *m_e2 << ')';
 }
 
 // Not Equal Expression Operations
@@ -127,7 +127,7 @@ void Not_equal_expr::debug(std::ostream& os) const {
 }
 
 void Not_equal_expr::to_sexpr(std::ostream& os) const {
-    std::cout << "(Not_equal_expr " << *m_e1 << " " << *m_e2 << ')';
+    std::cout << "(!= " << *m_e1 << " " << *m_e2 << ')';
 }
 
 // Less Than Expression Operations
@@ -141,7 +141,7 @@ void Less_than_expr::debug(std::ostream& os) const {
 }
 
 void Less_than_expr::to_sexpr(std::ostream& os) const {
-    std::cout << "(Less_than_expr " << *m_e1 << " " << *m_e2 << ')';
+    std::cout << "(< " << *m_e1 << " " << *m_e2 << ')';
 }
 
 // Greater Than Expression Operations
@@ -155,7 +155,7 @@ void Greater_than_expr::debug(std::ostream& os) const {
 }
 
 void Greater_than_expr::to_sexpr(std::ostream& os) const {
-    std::cout << "(Greater_than_expr " << *m_e1 << " " << *m_e2 << ')';
+    std::cout << "(> " << *m_e1 << " " << *m_e2 << ')';
 }
 
 // Less Than Or Equal Expression Operations
@@ -169,7 +169,7 @@ void Less_than_or_equal_expr::debug(std::ostream& os) const {
 }
 
 void Less_than_or_equal_expr::to_sexpr(std::ostream& os) const {
-    std::cout << "(Less_than_or_equal_expr " << *m_e1 << " " << *m_e2 << ')';
+    std::cout << "(<= " << *m_e1 << " " << *m_e2 << ')';
 }
 
 // Greater Than Or Equal Expression Operations
@@ -183,7 +183,7 @@ void Greater_than_or_equal_expr::debug(std::ostream& os) const {
 }
 
 void Greater_than_or_equal_expr::to_sexpr(std::ostream& os) const {
-    std::cout << "(Greater_than_or_equal_expr " << *m_e1 << " " << *m_e2 << ')';
+    std::cout << "(>= " << *m_e1 << " " << *m_e2 << ')';
 }
 
 // Addition Expression Operations
@@ -197,7 +197,7 @@ void Add_expr::debug(std::ostream& os) const {
 }
 
 void Add_expr::to_sexpr(std::ostream& os) const {
-    std::cout << "(Add_expr " << *m_e1 << " " << *m_e2 << ')';
+    std::cout << "(+ " << *m_e1 << " " << *m_e2 << ')';
 }
 
 // Subtraction Expression Operations
@@ -211,7 +211,7 @@ void Sub_expr::debug(std::ostream& os) const {
 }
 
 void Sub_expr::to_sexpr(std::ostream& os) const {
-    std::cout << "(Sub_expr " << *m_e1 << " " << *m_e2 << ')';
+    std::cout << "(- " << *m_e1 << " " << *m_e2 << ')';
 }
 
 // Multiplication Expression Operations
@@ -225,7 +225,7 @@ void Mult_expr::debug(std::ostream& os) const {
 }
 
 void Mult_expr::to_sexpr(std::ostream& os) const {
-    std::cout << "(Mult_expr " << *m_e1 << " " << *m_e2 << ')';
+    std::cout << "(* " << *m_e1 << " " << *m_e2 << ')';
 }
 
 // Quotient Expression Operations
@@ -239,7 +239,7 @@ void Quot_expr::debug(std::ostream& os) const {
 }
 
 void Quot_expr::to_sexpr(std::ostream& os) const {
-    std::cout << "(Quot_expr " << *m_e1 << " " << *m_e2 << ')';
+    std::cout << "(/ " << *m_e1 << " " << *m_e2 << ')';
 }
 
 // Remainder Expression Operations
@@ -253,7 +253,7 @@ void Rem_expr::debug(std::ostream& os) const {
 }
 
 void Rem_expr::to_sexpr(std::ostream& os) const {
-    std::cout << "(Rem_expr " << *m_e1 << " " << *m_e2 << ')';
+    std::cout << "(% " << *m_e1 << " " << *m_e2 << ')';
 }
 
 // Negate Expression Operations
@@ -267,13 +267,13 @@ void Negate_expr::debug(std::ostream& os) const {
 }
 
 void Negate_expr::to_sexpr(std::ostream& os) const {
-    std::cout << "(Negate_expr " << *m_expr << ')';
+    std::cout << "(Negate " << *m_expr << ')';
 }
 
 // Reciprocal Expression Operations
 
 void Reciprocal_expr::print(std::ostream& os) const {
-    os << "1 / " <<  *m_expr;
+    os << "/ " <<  *m_expr;
 }
 
 void Reciprocal_expr::debug(std::ostream& os) const {
@@ -281,7 +281,7 @@ void Reciprocal_expr::debug(std::ostream& os) const {
 }
 
 void Reciprocal_expr::to_sexpr(std::ostream& os) const {
-    std::cout << "(Reciprocal_expr " << *m_expr << ')';
+    std::cout << "(Recip " << *m_expr << ')';
 }
 
 std::ostream& operator<<(std::ostream& os, Expr const& e) {

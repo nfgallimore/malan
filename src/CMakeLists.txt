@@ -1,1 +1,1 @@
-add_executable(main main.cpp expr.cpp type.cpp decl.cpp)
+add_executable(main main.cpp expr.cpp type.cpp decl.cpp name.cpp)

@@ -7,11 +7,14 @@
 
 void types();
 void exprs();
+void complex_expressions();
 
 int main(int argc, char** argv)
 {
     types();
     exprs();
+    complex_decl();
+    if_stmt();
 }
 
 void types()
@@ -298,5 +301,31 @@ void exprs()
     recipExpr.debug(std::cout << "debug: ");
     recipExpr.to_sexpr(std::cout << "s_expr: ");
     std::cout << "\n\n";
+
 }
 
+// Complex expression operations
+void complex_decl()
+{
+    // var x = 2 + 2;
+    Name name("x");
+    Type type = Int_type();
+
+    Int_literal operand1(2, &type);
+    Int_literal operand2(2, &type);
+
+    Add_expr add_expr(&operand1, &operand2, &type);
+    Sub_expr sub_expr(&operand1, &operand2, &type);
+
+    Mult_expr mult_expr(&add_expr, &sub_expr, &type);
+
+    Var_decl decl(&name, &type, &mult_expr);
+    std::cout << "print: " << decl << '\n';
+    decl.to_sexpr(std::cout << "s_expr: ");
+        
+}
+
+void if_stmt()
+{
+    
+}

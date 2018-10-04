@@ -114,6 +114,5 @@ void debug(std::ostream& os, Type const* t);
 /// Prints `t` as a symbolic expression to output stream
 void to_sexpr(std::ostream& os, Type const* t);
 
-
 /// Returns true when `a` and `b` denote the same type.
 bool equal(Type const* a, Type const* b);
