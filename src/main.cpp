@@ -7,7 +7,8 @@
 
 void types();
 void exprs();
-void complex_expressions();
+void complex_decl();
+void if_stmt();
 
 int main(int argc, char** argv)
 {
@@ -200,7 +201,7 @@ void exprs()
 
     // Equal expression operations
     std::cout << "Equal expression:\n";
-    Equal_expr equalExpr(&bl, &bl, &bt);
+    Equal_expr equalExpr(&il, &il, &bt);
     std::cout << "print: " << equalExpr << '\n';
     equalExpr.debug(std::cout << "debug: ");
     equalExpr.to_sexpr(std::cout << "s_expr: ");
@@ -208,7 +209,7 @@ void exprs()
 
     // Not equal expression operations
     std::cout << "Not equal expression:\n";
-    Not_equal_expr notEqExpr(&bl, &bl, &bt);
+    Not_equal_expr notEqExpr(&il, &il, &bt);
     std::cout << "print: " << notEqExpr << '\n';
     notEqExpr.debug(std::cout << "debug: ");
     notEqExpr.to_sexpr(std::cout << "s_expr: ");
@@ -216,7 +217,7 @@ void exprs()
 
     // Less than expression operations
     std::cout << "Less than expression:\n";
-    Less_than_expr lessExpr(&bl, &bl, &bt);
+    Less_than_expr lessExpr(&il, &il, &bt);
     std::cout << "print: " << lessExpr << '\n';
     lessExpr.debug(std::cout << "debug: ");
     lessExpr.to_sexpr(std::cout << "s_expr: ");
@@ -224,7 +225,7 @@ void exprs()
 
     // Greater than expression operations
     std::cout << "Greater than expression:\n";
-    Greater_than_expr greaterExpr(&bl, &bl, &bt);
+    Greater_than_expr greaterExpr(&il, &il, &bt);
     std::cout << "print: " << greaterExpr << '\n';
     greaterExpr.debug(std::cout << "debug: ");
     greaterExpr.to_sexpr(std::cout << "s_expr: ");
@@ -232,7 +233,7 @@ void exprs()
 
     // Less than or equal expression operations
     std::cout << "Less than or equal expression:\n";
-    Less_than_or_equal_expr lessOrEqExpr(&bl, &bl, &bt);
+    Less_than_or_equal_expr lessOrEqExpr(&il, &il, &bt);
     std::cout << "print: " << lessOrEqExpr << '\n';
     lessOrEqExpr.debug(std::cout << "debug: ");
     lessOrEqExpr.to_sexpr(std::cout << "s_expr: ");
@@ -240,7 +241,7 @@ void exprs()
 
     // Greater than or equal expression operations
     std::cout << "Greater than or equal expression:\n";
-    Greater_than_or_equal_expr greaterOrEqExpr(&bl, &bl, &bt);
+    Greater_than_or_equal_expr greaterOrEqExpr(&il, &il, &bt);
     std::cout << "print: " << greaterOrEqExpr << '\n';
     greaterOrEqExpr.debug(std::cout << "debug: ");
     greaterOrEqExpr.to_sexpr(std::cout << "s_expr: ");
@@ -322,10 +323,10 @@ void complex_decl()
     Var_decl decl(&name, &type, &mult_expr);
     std::cout << "print: " << decl << '\n';
     decl.to_sexpr(std::cout << "s_expr: ");
-        
+    
 }
 
 void if_stmt()
 {
-    
+
 }

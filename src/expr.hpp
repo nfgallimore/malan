@@ -121,8 +121,8 @@ public:
     }
 private:
     Expr* m_e1;
-    Expr* m_e2;
-    Expr* m_e3;
+    Expr* const m_e2;
+    Expr* const m_e3;
     Type* m_type;
 };
 
@@ -353,3 +353,15 @@ print(std::ostream& os, Expr const& e)
 {
     e.print(os);
 };
+
+inline void
+sexpr(std::ostream& os, Expr const& e)
+{
+    e.to_sexpr(os);
+}
+
+inlind void
+debug(std::ostream& os, Expr const& e)
+{
+    e.debug(os);
+}
