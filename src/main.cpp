@@ -200,11 +200,59 @@ void exprs()
     lessOrEqExpr.to_sexpr(std::cout << "s_expr: ");
     std::cout << "\n\n";
 
-    // Greater than or equal expression operations
-    std::cout << "Greater than or equal expression:\n";
-    Greater_than_or_equal_expr greaterOrEqExpr(&bl, &bl, &bt);
-    std::cout << "print: " << greaterOrEqExpr << '\n';
-    greaterOrEqExpr.debug(std::cout << "debug: ");
-    greaterOrEqExpr.to_sexpr(std::cout << "s_expr: ");
+    // Addition expression operations
+    std::cout << "Addition expression:\n";
+    Add_expr addExpr(&il, &il, &it);
+    std::cout << "print: " << addExpr << '\n';
+    addExpr.debug(std::cout << "debug: ");
+    addExpr.to_sexpr(std::cout << "s_expr: ");
+    std::cout << "\n\n";
+
+    // Subtraction expression operations
+    std::cout << "Subtraction expression:\n";
+    Sub_expr subExpr(&il, &il, &it);
+    std::cout << "print: " << subExpr << '\n';
+    subExpr.debug(std::cout << "debug: ");
+    subExpr.to_sexpr(std::cout << "s_expr: ");
+    std::cout << "\n\n";
+
+    // Multiplication expression operations
+    std::cout << "Multiplication expression:\n";
+    Mult_expr multExpr(&il, &il, &it);
+    std::cout << "print: " << multExpr << '\n';
+    multExpr.debug(std::cout << "debug: ");
+    multExpr.to_sexpr(std::cout << "s_expr: ");
+    std::cout << "\n\n";
+
+    // Quotient expression operations
+    std::cout << "Quotient expression:\n";
+    Quot_expr quotExpr(&il, &il, &it);
+    std::cout << "print: " << quotExpr << '\n';
+    quotExpr.debug(std::cout << "debug: ");
+    quotExpr.to_sexpr(std::cout << "s_expr: ");
+    std::cout << "\n\n";
+
+    // Remainder expression operations
+    std::cout << "Remainder expression:\n";
+    Rem_expr remExpr(&il, &il, &it);
+    std::cout << "print: " << remExpr << '\n';
+    remExpr.debug(std::cout << "debug: ");
+    remExpr.to_sexpr(std::cout << "s_expr: ");
+    std::cout << "\n\n";
+
+    // Negate expression operations
+    std::cout << "Negate expression:\n";
+    Negate_expr negExpr(&il, &it);
+    std::cout << "print: " << negExpr << '\n';
+    negExpr.debug(std::cout << "debug: ");
+    negExpr.to_sexpr(std::cout << "s_expr: ");
+    std::cout << "\n\n";
+
+    // Reciprocal expression operations
+    std::cout << "Reciprocal expression:\n";
+    Reciprocal_expr recipExpr(&il, &it);
+    std::cout << "print: " << recipExpr << '\n';
+    recipExpr.debug(std::cout << "debug: ");
+    recipExpr.to_sexpr(std::cout << "s_expr: ");
     std::cout << "\n\n";
 }

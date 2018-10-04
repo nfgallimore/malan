@@ -57,7 +57,7 @@ void Logical_and::debug(std::ostream& os) const {
 }
 
 void Logical_and::to_sexpr(std::ostream& os) const {
-    std::cout << "(AND " << *m_e1 << " " << *m_e2 << ")";
+    std::cout << "(AND " << *m_e1 << " " << *m_e2 << ')';
 }
 
 // Logical Or Operations
@@ -71,7 +71,7 @@ void Logical_or::debug(std::ostream& os) const {
 }
 
 void Logical_or::to_sexpr(std::ostream& os) const {
-    std::cout << "(OR " << *m_e1 << " " << *m_e2 << ")";
+    std::cout << "(OR " << *m_e1 << " " << *m_e2 << ')';
 }
 
 // Logical Not Operations
@@ -85,7 +85,7 @@ void Logical_not::debug(std::ostream& os) const {
 }
 
 void Logical_not::to_sexpr(std::ostream& os) const {
-    std::cout << "(NOT " << *m_expr << ")";
+    std::cout << "(NOT " << *m_expr << ')';
 }
 
 // Ternary Expression Operations
@@ -99,7 +99,7 @@ void Ternary_expr::debug(std::ostream& os) const {
 }
 
 void Ternary_expr::to_sexpr(std::ostream& os) const {
-    std::cout << "(Ternary_expr " << *m_e1 << " " << *m_e2 << " " << *m_e3 << ")";
+    std::cout << "(Ternary_expr " << *m_e1 << " " << *m_e2 << " " << *m_e3 << ')';
 }
 
 // Equal Expression Operations
@@ -113,7 +113,7 @@ void Equal_expr::debug(std::ostream& os) const {
 }
 
 void Equal_expr::to_sexpr(std::ostream& os) const {
-    std::cout << "(Equal_expr " << *m_e1 << " " << *m_e2 << ")";
+    std::cout << "(Equal_expr " << *m_e1 << " " << *m_e2 << ')';
 }
 
 // Not Equal Expression Operations
@@ -127,7 +127,7 @@ void Not_equal_expr::debug(std::ostream& os) const {
 }
 
 void Not_equal_expr::to_sexpr(std::ostream& os) const {
-    std::cout << "(Not_equal_expr " << *m_e1 << " " << *m_e2 << ")";
+    std::cout << "(Not_equal_expr " << *m_e1 << " " << *m_e2 << ')';
 }
 
 // Less Than Expression Operations
@@ -141,7 +141,7 @@ void Less_than_expr::debug(std::ostream& os) const {
 }
 
 void Less_than_expr::to_sexpr(std::ostream& os) const {
-    std::cout << "(Less_than_expr " << *m_e1 << " " << *m_e2 << ")";
+    std::cout << "(Less_than_expr " << *m_e1 << " " << *m_e2 << ')';
 }
 
 // Greater Than Expression Operations
@@ -155,7 +155,7 @@ void Greater_than_expr::debug(std::ostream& os) const {
 }
 
 void Greater_than_expr::to_sexpr(std::ostream& os) const {
-    std::cout << "(Greater_than_expr " << *m_e1 << " " << *m_e2 << ")";
+    std::cout << "(Greater_than_expr " << *m_e1 << " " << *m_e2 << ')';
 }
 
 // Less Than Or Equal Expression Operations
@@ -169,7 +169,7 @@ void Less_than_or_equal_expr::debug(std::ostream& os) const {
 }
 
 void Less_than_or_equal_expr::to_sexpr(std::ostream& os) const {
-    std::cout << "(Less_than_or_equal_expr " << *m_e1 << " " << *m_e2 << ")";
+    std::cout << "(Less_than_or_equal_expr " << *m_e1 << " " << *m_e2 << ')';
 }
 
 // Greater Than Or Equal Expression Operations
@@ -183,7 +183,105 @@ void Greater_than_or_equal_expr::debug(std::ostream& os) const {
 }
 
 void Greater_than_or_equal_expr::to_sexpr(std::ostream& os) const {
-    std::cout << "(Greater_than_or_equal_expr " << *m_e1 << " " << *m_e2 << ")";
+    std::cout << "(Greater_than_or_equal_expr " << *m_e1 << " " << *m_e2 << ')';
+}
+
+// Addition Expression Operations
+
+void Add_expr::print(std::ostream& os) const {
+    os << *m_e1 << " + " << *m_e2;
+}
+
+void Add_expr::debug(std::ostream& os) const {
+    std::cout << "Add_expr " << this << '\n';
+}
+
+void Add_expr::to_sexpr(std::ostream& os) const {
+    std::cout << "(Add_expr " << *m_e1 << " " << *m_e2 << ')';
+}
+
+// Subtraction Expression Operations
+
+void Sub_expr::print(std::ostream& os) const {
+    os << *m_e1 << " - " << *m_e2;
+}
+
+void Sub_expr::debug(std::ostream& os) const {
+    std::cout << "Sub_expr " << this << '\n';
+}
+
+void Sub_expr::to_sexpr(std::ostream& os) const {
+    std::cout << "(Sub_expr " << *m_e1 << " " << *m_e2 << ')';
+}
+
+// Multiplication Expression Operations
+
+void Mult_expr::print(std::ostream& os) const {
+    os << *m_e1 << " * " << *m_e2;
+}
+
+void Mult_expr::debug(std::ostream& os) const {
+    std::cout << "Mult_expr " << this << '\n';
+}
+
+void Mult_expr::to_sexpr(std::ostream& os) const {
+    std::cout << "(Mult_expr " << *m_e1 << " " << *m_e2 << ')';
+}
+
+// Quotient Expression Operations
+
+void Quot_expr::print(std::ostream& os) const {
+    os << *m_e1 << " / " << *m_e2;
+}
+
+void Quot_expr::debug(std::ostream& os) const {
+    std::cout << "Quot_expr " << this << '\n';
+}
+
+void Quot_expr::to_sexpr(std::ostream& os) const {
+    std::cout << "(Quot_expr " << *m_e1 << " " << *m_e2 << ')';
+}
+
+// Remainder Expression Operations
+
+void Rem_expr::print(std::ostream& os) const {
+    os << *m_e1 << " % " << *m_e2;
+}
+
+void Rem_expr::debug(std::ostream& os) const {
+    std::cout << "Rem_expr " << this << '\n';
+}
+
+void Rem_expr::to_sexpr(std::ostream& os) const {
+    std::cout << "(Rem_expr " << *m_e1 << " " << *m_e2 << ')';
+}
+
+// Negate Expression Operations
+
+void Negate_expr::print(std::ostream& os) const {
+    os << '-' <<  *m_expr;
+}
+
+void Negate_expr::debug(std::ostream& os) const {
+    std::cout << "Negate_expr " << this << '\n';
+}
+
+void Negate_expr::to_sexpr(std::ostream& os) const {
+    std::cout << "(Negate_expr " << *m_expr << ')';
+}
+
+// Reciprocal Expression Operations
+
+void Reciprocal_expr::print(std::ostream& os) const {
+    os << "1 / " <<  *m_expr;
+}
+
+void Reciprocal_expr::debug(std::ostream& os) const {
+    std::cout << "Reciprocal_expr " << this << '\n';
+}
+
+void Reciprocal_expr::to_sexpr(std::ostream& os) const {
+    std::cout << "(Reciprocal_expr " << *m_expr << ')';
 }
 
 std::ostream& operator<<(std::ostream& os, Expr const& e) {
