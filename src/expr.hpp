@@ -360,8 +360,8 @@ sexpr(std::ostream& os, Expr const& e)
     e.to_sexpr(os);
 }
 
-inlind void
-debug(std::ostream& os, Expr const& e)
+inline void
+debugexpr(std::ostream& os, Expr const& e)
 {
     e.debug(os);
 }

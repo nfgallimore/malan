@@ -9,6 +9,13 @@ void types();
 void exprs();
 void complex_decl();
 void if_stmt();
+void nested_debug_printing();
+
+/* This main file contains constructions of the abstract syntax tree
+to test the classes blow up when instantiated. Ideally these would be unit tests
+asserting that the proper value is being printed. But due to lack of time, and more of a focus on features,
+unit tests have been excluded and will need to be re-added.
+ */
 
 int main(int argc, char** argv)
 {
@@ -16,6 +23,7 @@ int main(int argc, char** argv)
     exprs();
     complex_decl();
     if_stmt();
+    nested_debug_printing();
 }
 
 void types()
@@ -144,7 +152,7 @@ void exprs()
     std::cout << "Integer literal:\n";
     Int_literal il(1, &it);
     std::cout << "print: " << il << '\n';
-    il.debug(std::cout << "debug: ");
+    il.debug(std::cout << "debug: \n");
     il.to_sexpr(std::cout << "s_expr: ");
     std::cout << "\n\n";
 
@@ -152,7 +160,7 @@ void exprs()
     std::cout << "Boolean literal:\n";
     Bool_literal bl(false, &bt);
     std::cout << "print: " << bl << '\n';
-    bl.debug(std::cout << "debug: ");
+    bl.debug(std::cout << "debug: \n");
     bl.to_sexpr(std::cout << "s_expr: ");
     std::cout << "\n\n";
 
@@ -163,7 +171,7 @@ void exprs()
     std::cout << "Identifier:\n";
     Identifier id(&vdecl, &it);
     std::cout << "print: " << id << '\n';
-    id.debug(std::cout << "debug: ");
+    id.debug(std::cout << "debug: \n");
     id.to_sexpr(std::cout << "s_expr: ");
     std::cout << "\n\n";
 
@@ -171,7 +179,7 @@ void exprs()
     std::cout << "Logical AND:\n";
     Logical_and andExp(&bl, &bl, &bt);
     std::cout << "print: " << andExp << '\n';
-    andExp.debug(std::cout << "debug: ");
+    andExp.debug(std::cout << "debug: \n");
     andExp.to_sexpr(std::cout << "s_expr: ");
     std::cout << "\nevaluate: " << andExp.evaluate().get_bool() << "\n\n";
 
@@ -179,7 +187,7 @@ void exprs()
     std::cout << "Logical OR:\n";
     Logical_or orExp(&bl, &bl, &bt);
     std::cout << "print: " << orExp << '\n';
-    orExp.debug(std::cout << "debug: ");
+    orExp.debug(std::cout << "debug: \n");
     orExp.to_sexpr(std::cout << "s_expr: ");
     std::cout << "\nevaluate: " << orExp.evaluate().get_bool() << "\n\n";
     
@@ -187,7 +195,7 @@ void exprs()
     std::cout << "Logical NOT:\n";
     Logical_not notExp(&bl, &bt);
     std::cout << "print: " << notExp << '\n';
-    notExp.debug(std::cout << "debug: ");
+    notExp.debug(std::cout << "debug: \n");
     notExp.to_sexpr(std::cout << "s_expr: ");
     std::cout << "\nevaluate: " << notExp.evaluate().get_bool() << "\n\n";
 
@@ -195,7 +203,7 @@ void exprs()
     std::cout << "Ternary expression:\n";
     Ternary_expr ternaryExpr(&bl, &bl, &bl, &bt);
     std::cout << "print: " << ternaryExpr << '\n';
-    ternaryExpr.debug(std::cout << "debug: ");
+    ternaryExpr.debug(std::cout << "debug: \n");
     ternaryExpr.to_sexpr(std::cout << "s_expr: ");
     std::cout << "\n\n";
 
@@ -203,7 +211,7 @@ void exprs()
     std::cout << "Equal expression:\n";
     Equal_expr equalExpr(&il, &il, &bt);
     std::cout << "print: " << equalExpr << '\n';
-    equalExpr.debug(std::cout << "debug: ");
+    equalExpr.debug(std::cout << "debug: \n");
     equalExpr.to_sexpr(std::cout << "s_expr: ");
     std::cout << "\n\n";
 
@@ -211,7 +219,7 @@ void exprs()
     std::cout << "Not equal expression:\n";
     Not_equal_expr notEqExpr(&il, &il, &bt);
     std::cout << "print: " << notEqExpr << '\n';
-    notEqExpr.debug(std::cout << "debug: ");
+    notEqExpr.debug(std::cout << "debug: \n");
     notEqExpr.to_sexpr(std::cout << "s_expr: ");
     std::cout << "\n\n";
 
@@ -219,7 +227,7 @@ void exprs()
     std::cout << "Less than expression:\n";
     Less_than_expr lessExpr(&il, &il, &bt);
     std::cout << "print: " << lessExpr << '\n';
-    lessExpr.debug(std::cout << "debug: ");
+    lessExpr.debug(std::cout << "debug: \n");
     lessExpr.to_sexpr(std::cout << "s_expr: ");
     std::cout << "\n\n";
 
@@ -227,7 +235,7 @@ void exprs()
     std::cout << "Greater than expression:\n";
     Greater_than_expr greaterExpr(&il, &il, &bt);
     std::cout << "print: " << greaterExpr << '\n';
-    greaterExpr.debug(std::cout << "debug: ");
+    greaterExpr.debug(std::cout << "debug: \n");
     greaterExpr.to_sexpr(std::cout << "s_expr: ");
     std::cout << "\n\n";
 
@@ -235,7 +243,7 @@ void exprs()
     std::cout << "Less than or equal expression:\n";
     Less_than_or_equal_expr lessOrEqExpr(&il, &il, &bt);
     std::cout << "print: " << lessOrEqExpr << '\n';
-    lessOrEqExpr.debug(std::cout << "debug: ");
+    lessOrEqExpr.debug(std::cout << "debug: \n");
     lessOrEqExpr.to_sexpr(std::cout << "s_expr: ");
     std::cout << "\n\n";
 
@@ -243,7 +251,7 @@ void exprs()
     std::cout << "Greater than or equal expression:\n";
     Greater_than_or_equal_expr greaterOrEqExpr(&il, &il, &bt);
     std::cout << "print: " << greaterOrEqExpr << '\n';
-    greaterOrEqExpr.debug(std::cout << "debug: ");
+    greaterOrEqExpr.debug(std::cout << "debug: \n");
     greaterOrEqExpr.to_sexpr(std::cout << "s_expr: ");
     std::cout << "\n\n";
 
@@ -251,7 +259,7 @@ void exprs()
     std::cout << "Addition expression:\n";
     Add_expr addExpr(&il, &il, &it);
     std::cout << "print: " << addExpr << '\n';
-    addExpr.debug(std::cout << "debug: ");
+    addExpr.debug(std::cout << "debug: \n");
     addExpr.to_sexpr(std::cout << "s_expr: ");
     std::cout << "\n\n";
 
@@ -259,7 +267,7 @@ void exprs()
     std::cout << "Subtraction expression:\n";
     Sub_expr subExpr(&il, &il, &it);
     std::cout << "print: " << subExpr << '\n';
-    subExpr.debug(std::cout << "debug: ");
+    subExpr.debug(std::cout << "debug: \n");
     subExpr.to_sexpr(std::cout << "s_expr: ");
     std::cout << "\n\n";
 
@@ -267,7 +275,7 @@ void exprs()
     std::cout << "Multiplication expression:\n";
     Mult_expr multExpr(&il, &il, &it);
     std::cout << "print: " << multExpr << '\n';
-    multExpr.debug(std::cout << "debug: ");
+    multExpr.debug(std::cout << "debug: \n");
     multExpr.to_sexpr(std::cout << "s_expr: ");
     std::cout << "\n\n";
 
@@ -275,7 +283,7 @@ void exprs()
     std::cout << "Quotient expression:\n";
     Quot_expr quotExpr(&il, &il, &it);
     std::cout << "print: " << quotExpr << '\n';
-    quotExpr.debug(std::cout << "debug: ");
+    quotExpr.debug(std::cout << "debug: \n");
     quotExpr.to_sexpr(std::cout << "s_expr: ");
     std::cout << "\n\n";
 
@@ -283,7 +291,7 @@ void exprs()
     std::cout << "Remainder expression:\n";
     Rem_expr remExpr(&il, &il, &it);
     std::cout << "print: " << remExpr << '\n';
-    remExpr.debug(std::cout << "debug: ");
+    remExpr.debug(std::cout << "debug: \n");
     remExpr.to_sexpr(std::cout << "s_expr: ");
     std::cout << "\n\n";
 
@@ -291,7 +299,7 @@ void exprs()
     std::cout << "Negate expression:\n";
     Negate_expr negExpr(&il, &it);
     std::cout << "print: " << negExpr << '\n';
-    negExpr.debug(std::cout << "debug: ");
+    negExpr.debug(std::cout << "debug: \n");
     negExpr.to_sexpr(std::cout << "s_expr: ");
     std::cout << "\n\n";
 
@@ -299,7 +307,7 @@ void exprs()
     std::cout << "Reciprocal expression:\n";
     Reciprocal_expr recipExpr(&il, &it);
     std::cout << "print: " << recipExpr << '\n';
-    recipExpr.debug(std::cout << "debug: ");
+    recipExpr.debug(std::cout << "debug: \n");
     recipExpr.to_sexpr(std::cout << "s_expr: ");
     std::cout << "\n\n";
 
@@ -308,6 +316,8 @@ void exprs()
 // Complex expression operations
 void complex_decl()
 {
+    std::cout << "Printing complex declaration:\n";
+
     // var x = 2 + 2;
     Name name("x");
     Type type = Int_type();
@@ -323,7 +333,25 @@ void complex_decl()
     Var_decl decl(&name, &type, &mult_expr);
     std::cout << "print: " << decl << '\n';
     decl.to_sexpr(std::cout << "s_expr: ");
-    
+    std::cout << "\n\n";
+}
+
+void nested_debug_printing()
+{
+    Type bt = Bool_type();
+
+    Bool_literal cierto(true, &bt);
+    Bool_literal falso(false, &bt);
+
+    Logical_and andExpr(&cierto, &cierto, &bt);;
+
+    // Create an OR expression
+    Logical_or orExp(&andExpr, new Logical_or(&cierto, &falso, &bt), &bt);
+    std::cout << "print:\n";
+    std::cout << "\nsexpr:\n";
+    orExp.to_sexpr(std::cout);
+    std::cout << "debug:\n";
+    orExp.debug(std::cout);
 }
 
 void if_stmt()

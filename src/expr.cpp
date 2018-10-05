@@ -4,6 +4,14 @@
 #include "decl.hpp"
 #include "name.hpp"
 
+
+/* Programming style:
+
+Always have std::ostream as first argument if included 
+
+*/
+
+
 // Integer literal expressions
 
 void Int_literal::print(std::ostream& os) const {
@@ -35,15 +43,16 @@ void Bool_literal::to_sexpr(std::ostream& os) const {
 // Identifier operations
 
 void Identifier::print(std::ostream& os) const {
+    // TODO use get_name() like in to_sexpr
     os << m_value->get_name()->get_str();
 }
 
 void Identifier::debug(std::ostream& os) const {
     os << "Identifier " << this << '\n';
-}
+} 
 
 void Identifier::to_sexpr(std::ostream& os) const {
-    os << '(' << m_value->get_name()->get_str() << ')';
+    os << '(' << *m_value->get_name() << ')';
 }
 
 // Logical And Operations
@@ -53,11 +62,19 @@ void Logical_and::print(std::ostream& os) const {
 }
 
 void Logical_and::debug(std::ostream& os) const {
-    os << "Logical_and " << this << '\n';
+    os << "Logical_and " << this;
+    os << "\n    ";
+    debugexpr(os, *m_e1);
+    os << "    ";
+    debugexpr(os, *m_e2);
 }
 
 void Logical_and::to_sexpr(std::ostream& os) const {
-    os << "(AND " << *m_e1 << " " << *m_e2 << ')';
+    os << "(AND ";
+    sexpr(os, *m_e1);
+    os << " ";
+    sexpr(os, *m_e2);
+    os << ')';
 }
 
 // Logical Or Operations
@@ -67,11 +84,19 @@ void Logical_or::print(std::ostream& os) const {
 }
 
 void Logical_or::debug(std::ostream& os) const {
-    os << "Logical_or " << this << '\n';
+    os << "Logical_or " << this;
+    os << "\n    ";
+    debugexpr(os, *m_e1);
+    os << "    ";
+    debugexpr(os, *m_e2);
 }
 
 void Logical_or::to_sexpr(std::ostream& os) const {
-    os << "(OR " << *m_e1 << " " << *m_e2 << ')';
+    os << "(OR ";
+    sexpr(os, *m_e1);
+    os << " ";
+    sexpr(os, *m_e2);
+    os << ')';
 }
 
 // Logical Not Operations
@@ -82,6 +107,7 @@ void Logical_not::print(std::ostream& os) const {
 
 void Logical_not::debug(std::ostream& os) const {
     os << "Logical_not " << this << '\n';
+    debugexpr(os, *m_expr);
 }
 
 void Logical_not::to_sexpr(std::ostream& os) const {

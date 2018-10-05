@@ -1,1 +1,7 @@
-add_executable(main main.cpp expr.cpp type.cpp decl.cpp name.cpp)
+add_executable(main 
+main.cpp 
+#printer.cpp 
+expr.cpp 
+type.cpp 
+decl.cpp 
+name.cpp)
