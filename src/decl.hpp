@@ -1,8 +1,9 @@
 #pragma once
 
 #include <iostream>
-#include <iosfwd>
 #include <vector>
+
+#include "printer.hpp"
 
 class Name;
 class Type;
@@ -13,38 +14,23 @@ class Decl;
 class Decl
 {
 public:
-    enum Kind
-    {
-        var,
-        ref,
-        func
-    };
-
-protected:
-    Decl(Kind k) : m_kind(k) { }
-
-public:
-    Kind get_kind() const { return m_kind; }
-    virtual void print(std::ostream& os) const = 0;
-    virtual void debug(std::ostream& os) const = 0;
-    virtual void to_sexpr(std::ostream& os) const = 0;
+    virtual void print(Printer& p) const = 0;
+    virtual void debug(Printer& p) const = 0;
+    virtual void to_sexpr(Printer& p) const = 0;
     virtual Name* get_name() const = 0;
-private:
-    Kind m_kind;
 };
 
 using Decl_seq = std::vector<Decl*>;
-using Stmt_seq = std::vector<Stmt*>;
 
 class Var_decl : public Decl
 {
 public:
     Var_decl(Name* name, Type* type, Expr* init) 
-        : Decl(var), m_name(name), m_type(type), m_init(init) 
+        : m_name(name), m_type(type), m_init(init) 
     { }
-    void print(std::ostream& os) const override;
-    void debug(std::ostream& os) const override;
-    void to_sexpr(std::ostream& os) const override;
+    void print(Printer& p) const override;
+    void debug(Printer& p) const override;
+    void to_sexpr(Printer& p) const override;
     Name* get_name() const override { return m_name; }
 private:
     Name* m_name;
@@ -56,11 +42,11 @@ class Ref_decl : public Decl
 {
 public:
     Ref_decl(Name* name, Type* type, Expr* init) 
-        :  Decl(ref), m_name(name), m_type(type), m_init(init) 
+        : m_name(name), m_type(type), m_init(init) 
     { }
-    void print(std::ostream& os) const override;
-    void debug(std::ostream& os) const override;
-    void to_sexpr(std::ostream& os) const override;
+    void print(Printer& p) const override;
+    void debug(Printer& p) const override;
+    void to_sexpr(Printer& p) const override;
     Name* get_name() const override { return m_name; }
 
 private:
@@ -73,11 +59,11 @@ struct Func_decl : public Decl
 {
 public:
     Func_decl(Name* name, Decl_seq* parms, Type* ret, Stmt* body) 
-        :  Decl(func), m_name(name), m_parms(parms), m_ret(ret), m_body(body)
+        : m_name(name), m_parms(parms), m_ret(ret), m_body(body)
     { }
-    void print(std::ostream& os) const override;
-    void debug(std::ostream& os) const override;
-    void to_sexpr(std::ostream& os) const override;
+    void print(Printer& p) const override;
+    void debug(Printer& p) const override;
+    void to_sexpr(Printer& p) const override;
     Name* get_name() const override { return m_name; }
 
 private:
@@ -87,22 +73,28 @@ private:
     Stmt* m_body;
 };
 
+
+// Operators
+
 std::ostream& operator<<(std::ostream& os, Decl const& d);
 
+
+// Operations
+
 inline void
-print(std::ostream& os, Decl const& d)
+print(Printer& p, Decl const& d)
 {
-    d.print(os);
+    p.get_stream() << d;
 };
 
 inline void
-to_sexpr(std::ostream& os, Decl const& d)
+to_sexpr(Printer& p, Decl const& d)
 {
-    d.to_sexpr(os);
+    d.to_sexpr(p);
 }
 
 inline void
-debug(std::ostream& os, Decl const& d)
+debug(Printer& p, Decl const& d)
 {
-    d.debug(os);
+    d.debug(p);
 }

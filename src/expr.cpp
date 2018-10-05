@@ -603,5 +603,5 @@ void Rec_expr::to_sexpr(Printer& p) const {
 std::ostream& operator<<(std::ostream& os, Expr const& e) {
     Printer p(os);
     e.print(p);
-    return os;
+    return p.get_stream();
 }

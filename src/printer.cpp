@@ -25,4 +25,3 @@ void Printer::print_string(char const* str) {
 void Printer::print_address(void const* ptr) {
     m_os << ptr;
 }
-

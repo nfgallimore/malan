@@ -372,22 +372,27 @@ void complex_decl()
 
     p.get_stream() << "Printing complex declaration:\n";
 
-    // var x = 2 + 2;
     Name name("x");
     Type type = Int_type();
 
     Int_lit operand1(2, &type);
     Int_lit operand2(2, &type);
 
+    // 2 + 2;
     Add_expr add_expr(&operand1, &operand2, &type);
+
+    // 2 - 2;
     Sub_expr sub_expr(&operand1, &operand2, &type);
 
+    //(2 + 2) * (2 - 2)
     Mul_expr mult_expr(&add_expr, &sub_expr, &type);
 
+    // var x = (2 + 2) * (2 - 2)
     Var_decl decl(&name, &type, &mult_expr);
-    p.get_stream() << "print: " << decl << '\n';
-    decl.to_sexpr(p.get_stream() << "s_expr: ");
-    p.get_stream() << "\n\n";
+    p.get_stream() << "print: " << decl << "\ns_expr: ";
+    decl.to_sexpr(p);
+    p.new_line();
+    decl.debug(p);
 }
 
 void nested_debug_printing()
