@@ -7,9 +7,13 @@
 
 /* Programming style:
 
-Always have std::ostream as first argument if included 
+Always have std::ostream as first argument if included.
 
 */
+
+// TODO add more generalized cases like defined 
+// in printer.hpp for unary, binary, k-ary expressions
+
 
 
 // Integer literal expressions

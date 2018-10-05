@@ -347,10 +347,10 @@ void nested_debug_printing()
 
     // Create an OR expression
     Logical_or orExp(&andExpr, new Logical_or(&cierto, &falso, &bt), &bt);
-    std::cout << "print:\n";
-    std::cout << "\nsexpr:\n";
+    std::cout << "print: " << orExp;
+    std::cout << "\nsexpr: ";
     orExp.to_sexpr(std::cout);
-    std::cout << "debug:\n";
+    std::cout << "\ndebug:\n";
     orExp.debug(std::cout);
 }
 
