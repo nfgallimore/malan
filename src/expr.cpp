@@ -79,10 +79,12 @@ void And_expr::debug(Printer& p) const {
 
 void And_expr::to_sexpr(Printer& p) const {
     p.get_stream() << "(AND ";
+
     m_e1->to_sexpr(p);
-    p.get_stream() << " ";
+    p.print_string(" ");
+
     m_e2->to_sexpr(p);
-    p.get_stream() << ')';
+    p.print_string(")");
 }
 
 
@@ -115,14 +117,14 @@ void Or_expr::to_sexpr(Printer& p) const {
     p.print_string(" ");
 
     m_e2->to_sexpr(p);
-    p.print_string(" ");
+    p.print_string(")");
 }
 
 
 // Logical Not Operations
 
 void Not_expr::print(Printer& p) const {
-    p.get_stream() << " NOT " << *m_expr;
+    p.get_stream() << "(NOT " << *m_expr << ")";
 }
 
 void Not_expr::debug(Printer& p) const {
@@ -134,7 +136,6 @@ void Not_expr::debug(Printer& p) const {
 
     p.print_tabs();
     m_expr->debug(p);
-    p.new_line();
 
     p.undent();
 }
@@ -185,7 +186,7 @@ void Con_expr::to_sexpr(Printer& p) const {
 // Equal Expression Operations
 
 void Eq_expr::print(Printer& p) const {
-    p.get_stream() << *m_e1 << " == " << *m_e2;
+    p.get_stream() << "(" << *m_e1 << " == " << *m_e2 << ")";
 }
 
 void Eq_expr::debug(Printer& p) const {
@@ -205,14 +206,20 @@ void Eq_expr::debug(Printer& p) const {
 }
 
 void Eq_expr::to_sexpr(Printer& p) const {
-    p.get_stream() << "(== " << *m_e1 << " " << *m_e2 << ')';
+    p.get_stream() << "(== ";
+
+    m_e1->to_sexpr(p);
+    p.print_string(" ");
+
+    m_e2->to_sexpr(p);
+    p.print_string(")");
 }
 
 
 // Not Equal Expression Operations
 
 void Ne_expr::print(Printer& p) const {
-    p.get_stream() << *m_e1 << " != " << *m_e2;
+    p.get_stream() << "(" << *m_e1 << " != " << *m_e2 << ")";
 }
 
 void Ne_expr::debug(Printer& p) const {
@@ -232,14 +239,20 @@ void Ne_expr::debug(Printer& p) const {
 }
 
 void Ne_expr::to_sexpr(Printer& p) const {
-    p.get_stream() << "(!= " << *m_e1 << " " << *m_e2 << ')';
+    p.get_stream() << "(!= ";
+
+    m_e1->to_sexpr(p);
+    p.print_string(" ");
+
+    m_e2->to_sexpr(p);
+    p.print_string(")");
 }
 
 
 // Less Than Expression Operations
 
 void Lt_expr::print(Printer& p) const {
-    p.get_stream() << *m_e1 << " < " << *m_e2;
+    p.get_stream() << "(" << *m_e1 << " < " << *m_e2 << ")";
 }
 
 void Lt_expr::debug(Printer& p) const {
@@ -259,14 +272,20 @@ void Lt_expr::debug(Printer& p) const {
 }
 
 void Lt_expr::to_sexpr(Printer& p) const {
-    p.get_stream() << "(< " << *m_e1 << " " << *m_e2 << ')';
+    p.get_stream() << "(< ";
+
+    m_e1->to_sexpr(p);
+    p.print_string(" ");
+
+    m_e2->to_sexpr(p);
+    p.print_string(")");
 }
 
 
 // Greater Than Expression Operations
 
 void Gt_expr::print(Printer& p) const {
-    p.get_stream() << *m_e1 << " > " << *m_e2;
+    p.get_stream() << "(" << *m_e1 << " > " << *m_e2 << ")";
 }
 
 void Gt_expr::debug(Printer& p) const {
@@ -286,14 +305,20 @@ void Gt_expr::debug(Printer& p) const {
 }
 
 void Gt_expr::to_sexpr(Printer& p) const {
-    p.get_stream() << "(> " << *m_e1 << " " << *m_e2 << ')';
+    p.get_stream() << "(> ";
+
+    m_e1->to_sexpr(p);
+    p.print_string(" ");
+
+    m_e2->to_sexpr(p);
+    p.print_string(")");
 }
 
 
 // Less Than Or Equal Expression Operations
 
 void Le_expr::print(Printer& p) const {
-    p.get_stream() << *m_e1 << " <= " << *m_e2;
+    p.get_stream() << "(" << *m_e1 << " <= " << *m_e2 << ")";
 }
 
 void Le_expr::debug(Printer& p) const {
@@ -313,14 +338,20 @@ void Le_expr::debug(Printer& p) const {
 }
 
 void Le_expr::to_sexpr(Printer& p) const {
-    p.get_stream() << "(<= " << *m_e1 << " " << *m_e2 << ')';
+    p.get_stream() << "(<= ";
+
+    m_e1->to_sexpr(p);
+    p.print_string(" ");
+
+    m_e2->to_sexpr(p);
+    p.print_string(")");
 }
 
 
 // Greater Than Or Equal Expression Operations
 
 void Ge_expr::print(Printer& p) const {
-    p.get_stream() << *m_e1 << " >= " << *m_e2;
+    p.get_stream() << "(" << *m_e1 << " >= " << *m_e2 << ")";
 }
 
 void Ge_expr::debug(Printer& p) const {
@@ -340,14 +371,20 @@ void Ge_expr::debug(Printer& p) const {
 }
 
 void Ge_expr::to_sexpr(Printer& p) const {
-    p.get_stream() << "(>= " << *m_e1 << " " << *m_e2 << ')';
+    p.get_stream() << "(>= ";
+
+    m_e1->to_sexpr(p);
+    p.print_string(" ");
+
+    m_e2->to_sexpr(p);
+    p.print_string(")");
 }
 
 
 // Addition Expression Operations
 
 void Add_expr::print(Printer& p) const {
-    p.get_stream() << *m_e1 << " + " << *m_e2;
+    p.get_stream() << "(" << *m_e1 << " + " << *m_e2 << ")";
 }
 
 void Add_expr::debug(Printer& p) const {
@@ -368,17 +405,19 @@ void Add_expr::debug(Printer& p) const {
 
 void Add_expr::to_sexpr(Printer& p) const {
     p.get_stream() << "(+ ";
+
     m_e1->to_sexpr(p);
-    p.get_stream() << " ";
+    p.print_string(" ");
+
     m_e2->to_sexpr(p);
-    p.get_stream() << ')';
+    p.print_string(")");
 }
 
 
 // Subtraction Expression Operations
 
 void Sub_expr::print(Printer& p) const {
-    p.get_stream() << *m_e1 << " - " << *m_e2;
+    p.get_stream() << "(" << *m_e1 << " - " << *m_e2 << ")";
 }
 
 void Sub_expr::debug(Printer& p) const {
@@ -398,14 +437,20 @@ void Sub_expr::debug(Printer& p) const {
 }
 
 void Sub_expr::to_sexpr(Printer& p) const {
-    p.get_stream() << "(- " << *m_e1 << " " << *m_e2 << ')';
+    p.get_stream() << "(- ";
+
+    m_e1->to_sexpr(p);
+    p.print_string(" ");
+
+    m_e2->to_sexpr(p);
+    p.print_string(")");
 }
 
 
 // Multiplication Expression Operations
 
 void Mul_expr::print(Printer& p) const {
-    p.get_stream() << *m_e1 << " * " << *m_e2;
+    p.get_stream() << "(" << *m_e1 << " * " << *m_e2 << ")";
 }
 
 void Mul_expr::debug(Printer& p) const {
@@ -425,14 +470,20 @@ void Mul_expr::debug(Printer& p) const {
 }
 
 void Mul_expr::to_sexpr(Printer& p) const {
-    p.get_stream() << "(* " << *m_e1 << " " << *m_e2 << ')';
+    p.get_stream() << "(* ";
+
+    m_e1->to_sexpr(p);
+    p.print_string(" ");
+
+    m_e2->to_sexpr(p);
+    p.print_string(")");
 }
 
 
 // Quotient Expression Operations
 
 void Quo_expr::print(Printer& p) const {
-    p.get_stream() << *m_e1 << " / " << *m_e2;
+    p.get_stream() << "(" << *m_e1 << " / " << *m_e2 << ")";
 }
 
 void Quo_expr::debug(Printer& p) const {
@@ -452,14 +503,20 @@ void Quo_expr::debug(Printer& p) const {
 }
 
 void Quo_expr::to_sexpr(Printer& p) const {
-    p.get_stream() << "(/ " << *m_e1 << " " << *m_e2 << ')';
+    p.get_stream() << "(/ ";
+
+    m_e1->to_sexpr(p);
+    p.print_string(" ");
+
+    m_e2->to_sexpr(p);
+    p.print_string(")");
 }
 
 
 // Remainder Expression Operations
 
 void Rem_expr::print(Printer& p) const {
-    p.get_stream() << *m_e1 << " % " << *m_e2;
+    p.get_stream() << "(" << *m_e1 << " % " << *m_e2 << ")";
 }
 
 void Rem_expr::debug(Printer& p) const {
@@ -479,14 +536,20 @@ void Rem_expr::debug(Printer& p) const {
 }
 
 void Rem_expr::to_sexpr(Printer& p) const {
-    p.get_stream() << "(% " << *m_e1 << " " << *m_e2 << ')';
+    p.get_stream() << "(% ";
+
+    m_e1->to_sexpr(p);
+    p.print_string(" ");
+
+    m_e2->to_sexpr(p);
+    p.print_string(")");
 }
 
 
 // Negate Expression Operations
 
 void Neg_expr::print(Printer& p) const {
-    p.get_stream() << '-' <<  *m_expr;
+    p.get_stream() << "(-" <<  *m_expr << ")";
 }
 
 void Neg_expr::debug(Printer& p) const {
@@ -503,14 +566,16 @@ void Neg_expr::debug(Printer& p) const {
 }
 
 void Neg_expr::to_sexpr(Printer& p) const {
-    p.get_stream() << "(- " << *m_expr << ')';
+    p.get_stream() << "(NEG ";
+    m_expr->to_sexpr(p);
+    p.get_stream() << ')';
 }
 
 
 // Reciprocal Expression Operations
 
 void Rec_expr::print(Printer& p) const {
-    p.get_stream() << "/ " <<  *m_expr;
+    p.get_stream() << "(1 / " <<  *m_expr << ")";
 }
 
 void Rec_expr::debug(Printer& p) const {
@@ -527,8 +592,13 @@ void Rec_expr::debug(Printer& p) const {
 }
 
 void Rec_expr::to_sexpr(Printer& p) const {
-    p.get_stream() << "(Recip " << *m_expr << ')';
+    p.get_stream() << "(REC ";
+    m_expr->to_sexpr(p);
+    p.get_stream() << ')';
 }
+
+
+// Operators
 
 std::ostream& operator<<(std::ostream& os, Expr const& e) {
     Printer p(os);
