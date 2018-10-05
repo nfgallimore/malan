@@ -4,4 +4,5 @@ main.cpp
 expr.cpp 
 type.cpp 
 decl.cpp 
-name.cpp)
+name.cpp
+stmt.cpp)

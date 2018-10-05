@@ -10,6 +10,8 @@ class Stmt
 {
 public:
     virtual void print(std::ostream& os) const = 0;
+    //virtual void debug(std::ostream& os) const = 0;
+    //virtual void to_sexpr(std::ostream& os) const = 0;
 };
 
 using Stmt_seq = std::vector<Stmt*>;
@@ -19,7 +21,7 @@ class Break_stmt : public Stmt
 {
 public:
     Break_stmt() { }
-    void print(std::ostream& os) const;
+    void print(std::ostream& os) const override; 
 };
 
 // Represents the `continue` statment
@@ -27,18 +29,18 @@ class Cont_stmt : public Stmt
 {
 public:
     Cont_stmt() { }
-    void print(std::ostream& os) const;
+    void print(std::ostream& os) const override; 
 };
 
 // Represents statements of the form `{ s1; s2; ... sn; }`
 class Block_stmt : public Stmt
 {
 public:
-    Block_stmt(Stmt_seq* seq) : m_stmts(seq) { }
-    void print(std::ostream& os) const;
-    Stmt_seq* get_stmts() const { return m_stmts; }
+    Block_stmt(Stmt_seq seq) : m_stmts(seq) { }
+    void print(std::ostream& os) const override; 
+    Stmt_seq get_stmts() const { return m_stmts; }
 private:
-    Stmt_seq* m_stmts;
+    Stmt_seq m_stmts;
 };
 
 // Represents statements of the form `while (e) s`
@@ -48,6 +50,7 @@ public:
     While_stmt(Expr* cond, Stmt* body) : m_cond(cond), m_body(body) { }
     Expr* get_cond() const { return m_cond; }
     Stmt* get_body() const { return m_body; }
+    void print(std::ostream& os) const override; 
 private:
     Expr* m_cond;
     Stmt* m_body;
@@ -61,6 +64,8 @@ public:
     Expr* get_cond() const { return m_cond; }
     Stmt* get_then() const { return m_then; }
     Stmt* get_else() const { return m_else; }
+    void print(std::ostream& os) const override; 
+
 private:
     Expr* m_cond;
     Stmt* m_then;
@@ -71,16 +76,18 @@ private:
 class Return_stmt : public Stmt
 {
 public:
-    Return_stmt(Stmt* stmt) : m_stmt(stmt) { }
-    Stmt* get_stmt() { return m_stmt; }
+    Return_stmt(Expr* expr) : m_expr(expr) { }
+    Expr* get_expr() { return m_expr; }
+    void print(std::ostream& os) const override; 
 private:
-    Stmt* m_stmt;
+    Expr* m_expr;
 };
 
 class Expression_stmt : public Stmt
 {
 public:
     Expr* expr;
+    void print(std::ostream& os) const override; 
 };
 
 // Definition for a local variable
@@ -89,6 +96,7 @@ class Local_defn_stmt : public Stmt
 public:
     Block_stmt* block;
     Decl* decl;
+    void print(std::ostream& os) const override; 
 };
 
 std::ostream& operator<<(std::ostream& os, Stmt const& s);

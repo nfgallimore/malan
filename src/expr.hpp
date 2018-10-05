@@ -21,6 +21,7 @@ public:
 
     // converts to sexpr
     virtual void to_sexpr(std::ostream& o) const = 0;
+
 };
 
 class Bool_literal : public Expr {

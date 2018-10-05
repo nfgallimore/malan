@@ -72,7 +72,7 @@ private:
 struct Func_decl : public Decl
 {
 public:
-    Func_decl(Name* name, Decl_seq* parms, Type* ret, Stmt_seq* body) 
+    Func_decl(Name* name, Decl_seq* parms, Type* ret, Stmt* body) 
         :  Decl(func), m_name(name), m_parms(parms), m_ret(ret), m_body(body)
     { }
     void print(std::ostream& os) const override;
@@ -84,7 +84,7 @@ private:
     Name* m_name;
     Decl_seq* m_parms;
     Type* m_ret;
-    Stmt_seq* m_body;
+    Stmt* m_body;
 };
 
 std::ostream& operator<<(std::ostream& os, Decl const& d);

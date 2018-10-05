@@ -19,8 +19,8 @@ print_ref(std::ostream& os, Ref_type const* t)
 static void
 print_fun(std::ostream& os, Fun_type const* t)
 {
-  auto params = t->get_params();
-  if (params.empty()) 
+  std::vector<Type*> params = t->get_params();
+  if (params.empty())
     os << "() -> " << *t->get_return_type();
 
   else 
@@ -29,7 +29,7 @@ print_fun(std::ostream& os, Fun_type const* t)
     for (int i = 0; i < params.size(); i++) 
     {
       if (i == params.size() - 1) 
-        os << *params[i] << ")";
+        os << (*params[i]) << ")";
       else 
         os << *params[i] << ",";
     }
@@ -156,8 +156,8 @@ equal_ref(Ref_type const* a, Ref_type const* b)
 static bool
 equal_fun(Fun_type const* a, Fun_type const* b)
 {
-  auto a_params = a->get_params();
-  auto b_params = b->get_params();
+  std::vector<Type*> a_params = a->get_params();
+  std::vector<Type*>  b_params = b->get_params();
 
   if (a_params.size() != b_params.size())
     return false;

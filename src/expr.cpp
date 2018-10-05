@@ -16,6 +16,16 @@ Always have std::ostream as first argument if included.
 
 
 
+// Used to print tabs for the debug printing *yuck*
+
+int tabs = 0;
+
+void print_tabs(std::ostream& os) {
+    for(int i = 0; i < tabs; i++) {
+        os << "    ";
+    }
+}
+
 // Integer literal expressions
 
 void Int_literal::print(std::ostream& os) const {
@@ -62,15 +72,18 @@ void Identifier::to_sexpr(std::ostream& os) const {
 // Logical And Operations
 
 void Logical_and::print(std::ostream& os) const {
-    os << *m_e1 << " AND " << *m_e2;
+    os << "(" << *m_e1 << " AND " << *m_e2 << ")";
 }
 
 void Logical_and::debug(std::ostream& os) const {
     os << "Logical_and " << this;
-    os << "\n    ";
+    os << "\n";
+    tabs++;
+    print_tabs(os);
     debugexpr(os, *m_e1);
-    os << "    ";
+    print_tabs(os);
     debugexpr(os, *m_e2);
+    tabs--;
 }
 
 void Logical_and::to_sexpr(std::ostream& os) const {
@@ -84,15 +97,18 @@ void Logical_and::to_sexpr(std::ostream& os) const {
 // Logical Or Operations
 
 void Logical_or::print(std::ostream& os) const {
-    os << *m_e1 << " OR " << *m_e2;
+    os << "(" << *m_e1 << " OR " << *m_e2 << ")";
 }
 
 void Logical_or::debug(std::ostream& os) const {
     os << "Logical_or " << this;
-    os << "\n    ";
+    os << "\n";
+    tabs++;
+    print_tabs(os);
     debugexpr(os, *m_e1);
-    os << "    ";
+    print_tabs(os);
     debugexpr(os, *m_e2);
+    tabs--;
 }
 
 void Logical_or::to_sexpr(std::ostream& os) const {
@@ -115,7 +131,9 @@ void Logical_not::debug(std::ostream& os) const {
 }
 
 void Logical_not::to_sexpr(std::ostream& os) const {
-    os << "(NOT " << *m_expr << ')';
+    os << "(NOT ";
+    sexpr(os, *m_expr);
+    os << ')';
 }
 
 // Ternary Expression Operations
@@ -126,6 +144,12 @@ void Ternary_expr::print(std::ostream& os) const {
 
 void Ternary_expr::debug(std::ostream& os) const {
     os << "Ternary_expr " << this << '\n';
+    debugexpr(os, *m_e1);
+    os << "    \n";
+    debugexpr(os, *m_e2);
+    os << "    \n";
+    debugexpr(os, *m_e3);
+    os << "    \n";
 }
 
 void Ternary_expr::to_sexpr(std::ostream& os) const {

@@ -4,12 +4,14 @@
 #include "expr.hpp"
 #include "decl.hpp"
 #include "name.hpp"
+#include "stmt.hpp"
 
 void types();
 void exprs();
 void complex_decl();
 void if_stmt();
 void nested_debug_printing();
+Decl* make_min();
 
 /* This main file contains constructions of the abstract syntax tree
 to test the classes blow up when instantiated. Ideally these would be unit tests
@@ -24,6 +26,8 @@ int main(int argc, char** argv)
     complex_decl();
     if_stmt();
     nested_debug_printing();
+    Decl* min = make_min();
+    std::cout << "\n\nmin: " << min;
 }
 
 void types()
@@ -36,8 +40,8 @@ void types()
     Ref_type rri(&ri);
 
     std::vector<Type*> params;
-    params.push_back(&b);
-    params.push_back(&i);
+    (params).push_back(&b);
+    (params).push_back(&i);
 
     Fun_type fun_p(params, &i);
     Fun_type fun_np(&i);
@@ -347,14 +351,60 @@ void nested_debug_printing()
 
     // Create an OR expression
     Logical_or orExp(&andExpr, new Logical_or(&cierto, &falso, &bt), &bt);
+
+    Logical_and hardAnd(&orExp, new Logical_and(&orExp, &cierto, &bt), &bt);
+
+    // 2 levels deep
     std::cout << "print: " << orExp;
     std::cout << "\nsexpr: ";
     orExp.to_sexpr(std::cout);
     std::cout << "\ndebug:\n";
     orExp.debug(std::cout);
+
+    // 3 levels deep
+    std::cout << "\n\nprint: " << hardAnd;
+    std::cout << "\nsexpr: ";
+    hardAnd.to_sexpr(std::cout);
+    std::cout << "\ndebug:\n";
+    hardAnd.debug(std::cout);
 }
 
 void if_stmt()
 {
 
+}
+
+Decl* make_min()
+{
+    Type* b = new Bool_type();
+    Type* z = new Int_type();
+    Decl* p1 = new Var_decl(new Name("a"), z, nullptr);
+    Decl* p2 = new Var_decl(new Name("b"), z, nullptr);
+    Decl* r = new Var_decl(nullptr, z, nullptr);
+
+      // p1 < p2 ? p1 : p2
+    Expr* expr = new Ternary_expr(
+        new Less_than_expr(new Identifier(p1, z), new Identifier(p2, z), b),
+        new Identifier(p1, z),
+        new Identifier(p2, z),
+        z
+    );
+
+
+    std::vector<Stmt*> stmts;
+    stmts.push_back(new Return_stmt(expr) );
+    Stmt* body = new Block_stmt(stmts);
+
+    // Build the function type.
+    std::vector<Type*> params;
+    params.push_back(z);
+    params.push_back(z);
+    Type* f = new Fun_type({params, z});
+
+
+    std::vector<Decl*>* func_decl_parms;
+    func_decl_parms->push_back(p1);
+    func_decl_parms->push_back(p2);
+    func_decl_parms->push_back(r);
+    return new Func_decl(new Name("min"), func_decl_parms, f, body);
 }
