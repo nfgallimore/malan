@@ -4,6 +4,7 @@
 
 #include "value.hpp"
 #include "type.hpp"
+#include "printer.hpp"
 
 class Decl;
 class Value;
@@ -14,58 +15,63 @@ public:
     virtual Value evaluate() const = 0;
 
     // prints an expression
-    virtual void print(std::ostream& os) const = 0;
+    virtual void print(Printer &p) const = 0;
 
     // debugs an expression with the name of class and memory address
-    virtual void debug(std::ostream& o) const = 0;
+    virtual void debug(Printer &p) const = 0;
 
     // converts to sexpr
-    virtual void to_sexpr(std::ostream& o) const = 0;
-
+    virtual void to_sexpr(Printer &p) const = 0;
 };
 
-class Bool_literal : public Expr {
+class Bool_lit : public Expr {
 public:    
-    Bool_literal(bool b, Type* t) : m_value(b), m_type(t) { }
-    void print(std::ostream& os) const override;
-    void debug(std::ostream& os) const override;
-    void to_sexpr(std::ostream& os) const override;
+    Bool_lit(bool b, Type* t) 
+        : m_value(b), m_type(t) 
+    { }
+    void print(Printer &p) const override;
+    void debug(Printer &p) const override;
+    void to_sexpr(Printer &p) const override;
     Value evaluate() const override { return Value(m_value); }
 private:
     bool m_value;
     Type* m_type;
 };
 
-class Int_literal : public Expr {
+class Int_lit : public Expr {
 public:    
-    Int_literal(int i, Type* t) : m_value(i), m_type(t) { }
-    void print(std::ostream& os) const override;
-    void debug(std::ostream& os) const override;
-    void to_sexpr(std::ostream& os) const override;
+    Int_lit(int i, Type* t) 
+        : m_value(i), m_type(t) 
+    { }
+    void print(Printer &p) const override;
+    void debug(Printer &p) const override;
+    void to_sexpr(Printer &p) const override;
     Value evaluate() const override { return Value(m_value); }
 private:
     int m_value;
     Type* m_type;
 };
 
-class Identifier : public Expr {
+class Id_expr : public Expr {
 public:
-    Identifier(Decl* d, Type* t) : m_value(d), m_type(t) { }
-    void print(std::ostream& os) const override;
-    void debug(std::ostream& os) const override;
-    void to_sexpr(std::ostream& os) const override;
+    Id_expr(Decl* d, Type* t) 
+        : m_value(d), m_type(t) 
+    { }
+    void print(Printer &p) const override;
+    void debug(Printer &p) const override;
+    void to_sexpr(Printer &p) const override;
     Value evaluate() const override { throw std::logic_error("Cannot evaluate an identifier."); }
 private:
     Decl* m_value;
     Type* m_type;
 };
 
-class Logical_and : public Expr {
+class And_expr : public Expr {
 public:
-    Logical_and(Expr* e1, Expr* e2, Type* t) : m_e1(e1), m_e2(e2), m_type(t) { }
-    void print(std::ostream& os) const override;
-    void debug(std::ostream& os) const override;
-    void to_sexpr(std::ostream& os) const override;
+    And_expr(Expr* e1, Expr* e2, Type* t) : m_e1(e1), m_e2(e2), m_type(t) { }
+    void print(Printer &p) const override;
+    void debug(Printer &p) const override;
+    void to_sexpr(Printer &p) const override;
     Value evaluate() const override {
         return Value(m_e1->evaluate().get_bool() && m_e2->evaluate().get_bool());
     }
@@ -77,12 +83,14 @@ private:
     Type* m_type;
 };
 
-class Logical_or : public Expr {
+class Or_expr : public Expr {
 public:
-    Logical_or(Expr* e1, Expr* e2, Type* t) : m_e1(e1), m_e2(e2), m_type(t) { }
-    void print(std::ostream& os) const override;
-    void debug(std::ostream& os) const override;
-    void to_sexpr(std::ostream& os) const override;
+    Or_expr(Expr* e1, Expr* e2, Type* t) 
+        : m_e1(e1), m_e2(e2), m_type(t) 
+    { }
+    void print(Printer &p) const override;
+    void debug(Printer &p) const override;
+    void to_sexpr(Printer &p) const override;
     Value evaluate() const override {
         return Value(m_e1->evaluate().get_bool() || m_e2->evaluate().get_bool());
     }
@@ -94,12 +102,14 @@ private:
     Type* m_type;
 };
 
-class Logical_not : public Expr {
+class Not_expr : public Expr {
 public:
-    Logical_not(Expr* e, Type* t) : m_expr(e), m_type(t) { }
-    void print(std::ostream& os) const override;
-    void debug(std::ostream& os) const override;
-    void to_sexpr(std::ostream& os) const override;
+    Not_expr(Expr* e, Type* t) 
+        : m_expr(e), m_type(t) 
+    { }
+    void print(Printer &p) const override;
+    void debug(Printer &p) const override;
+    void to_sexpr(Printer &p) const override;
     Value evaluate() const override {
         return Value(!m_expr->evaluate().get_bool());
     }
@@ -109,14 +119,14 @@ private:
     Type* m_type;
 };
 
-class Ternary_expr : public Expr {
+class Con_expr : public Expr {
 public:
-    Ternary_expr(Expr* e1, Expr* e2, Expr* e3, Type* t) 
+    Con_expr(Expr* e1, Expr* e2, Expr* e3, Type* t) 
         : m_e1(e1), m_e2(e2), m_e3(e3), m_type(t) 
     { }
-    void print(std::ostream& os) const override;
-    void debug(std::ostream& os) const override;
-    void to_sexpr(std::ostream& os) const override;
+    void print(Printer &p) const override;
+    void debug(Printer &p) const override;
+    void to_sexpr(Printer &p) const override;
     Value evaluate() const override {
         throw std::logic_error("Cannot evaluate ternary expression.");
     }
@@ -127,14 +137,14 @@ private:
     Type* m_type;
 };
 
-class Equal_expr : public Expr {
+class Eq_expr : public Expr {
 public:
-    Equal_expr(Expr* e1, Expr* e2, Type* t) 
+    Eq_expr(Expr* e1, Expr* e2, Type* t) 
         : m_e1(e1), m_e2(e2), m_type(t) 
     { }
-    void print(std::ostream& os) const override;
-    void debug(std::ostream& os) const override;
-    void to_sexpr(std::ostream& os) const override;
+    void print(Printer &p) const override;
+    void debug(Printer &p) const override;
+    void to_sexpr(Printer &p) const override;
     Value evaluate() const override {
         throw std::logic_error("Not implemented");
     }
@@ -144,14 +154,14 @@ private:
     Type* m_type;
 };
 
-class Not_equal_expr : public Expr {
+class Ne_expr : public Expr {
 public:
-    Not_equal_expr(Expr* e1, Expr* e2, Type* t) 
+    Ne_expr(Expr* e1, Expr* e2, Type* t) 
         : m_e1(e1), m_e2(e2), m_type(t) 
     { }
-    void print(std::ostream& os) const override;
-    void debug(std::ostream& os) const override;
-    void to_sexpr(std::ostream& os) const override;
+    void print(Printer &p) const override;
+    void debug(Printer &p) const override;
+    void to_sexpr(Printer &p) const override;
     Value evaluate() const override {
         throw std::logic_error("Not implemented");
     }
@@ -161,14 +171,14 @@ private:
     Type* m_type;
 };
 
-class Less_than_expr : public Expr {
+class Lt_expr : public Expr {
 public:
-    Less_than_expr(Expr* e1, Expr* e2, Type* t) 
+    Lt_expr(Expr* e1, Expr* e2, Type* t) 
         : m_e1(e1), m_e2(e2), m_type(t) 
     { }
-    void print(std::ostream& os) const override;
-    void debug(std::ostream& os) const override;
-    void to_sexpr(std::ostream& os) const override;
+    void print(Printer &p) const override;
+    void debug(Printer &p) const override;
+    void to_sexpr(Printer &p) const override;
     Value evaluate() const override {
         throw std::logic_error("Not implemented");
     }
@@ -178,14 +188,14 @@ private:
     Type* m_type;
 };
 
-class Greater_than_expr : public Expr {
+class Gt_expr : public Expr {
 public:
-    Greater_than_expr(Expr* e1, Expr* e2, Type* t) 
+    Gt_expr(Expr* e1, Expr* e2, Type* t) 
         : m_e1(e1), m_e2(e2), m_type(t) 
     { }
-    void print(std::ostream& os) const override;
-    void debug(std::ostream& os) const override;
-    void to_sexpr(std::ostream& os) const override;
+    void print(Printer &p) const override;
+    void debug(Printer &p) const override;
+    void to_sexpr(Printer &p) const override;
     Value evaluate() const override {
         throw std::logic_error("Not implemented");
     }
@@ -195,14 +205,14 @@ private:
     Type* m_type;
 };
 
-class Less_than_or_equal_expr : public Expr {
+class Le_expr : public Expr {
 public:
-    Less_than_or_equal_expr(Expr* e1, Expr* e2, Type* t) 
+    Le_expr(Expr* e1, Expr* e2, Type* t) 
         : m_e1(e1), m_e2(e2), m_type(t) 
     { }
-    void print(std::ostream& os) const override;
-    void debug(std::ostream& os) const override;
-    void to_sexpr(std::ostream& os) const override;
+    void print(Printer &p) const override;
+    void debug(Printer &p) const override;
+    void to_sexpr(Printer &p) const override;
     Value evaluate() const override {
         throw std::logic_error("Not implemented");
     }
@@ -212,14 +222,14 @@ private:
     Type* m_type;
 };
 
-class Greater_than_or_equal_expr : public Expr {
+class Ge_expr : public Expr {
 public:
-    Greater_than_or_equal_expr(Expr* e1, Expr* e2, Type* t) 
+    Ge_expr(Expr* e1, Expr* e2, Type* t) 
         : m_e1(e1), m_e2(e2), m_type(t) 
     { }
-    void print(std::ostream& os) const override;
-    void debug(std::ostream& os) const override;
-    void to_sexpr(std::ostream& os) const override;
+    void print(Printer &p) const override;
+    void debug(Printer &p) const override;
+    void to_sexpr(Printer &p) const override;
     Value evaluate() const override {
         throw std::logic_error("Not implemented");
     }
@@ -234,9 +244,9 @@ public:
     Add_expr(Expr* e1, Expr* e2, Type* t) 
         : m_e1(e1), m_e2(e2), m_type(t) 
     { }
-    void print(std::ostream& os) const override;
-    void debug(std::ostream& os) const override;
-    void to_sexpr(std::ostream& os) const override;
+    void print(Printer &p) const override;
+    void debug(Printer &p) const override;
+    void to_sexpr(Printer &p) const override;
     Value evaluate() const override {
         throw std::logic_error("Not implemented");
     }
@@ -251,9 +261,9 @@ public:
     Sub_expr(Expr* e1, Expr* e2, Type* t) 
         : m_e1(e1), m_e2(e2), m_type(t) 
     { }
-    void print(std::ostream& os) const override;
-    void debug(std::ostream& os) const override;
-    void to_sexpr(std::ostream& os) const override;
+    void print(Printer &p) const override;
+    void debug(Printer &p) const override;
+    void to_sexpr(Printer &p) const override;
     Value evaluate() const override {
         throw std::logic_error("Not implemented");
     }
@@ -263,14 +273,14 @@ private:
     Type* m_type;
 };
 
-class Mult_expr : public Expr {
+class Mul_expr : public Expr {
 public:
-    Mult_expr(Expr* e1, Expr* e2, Type* t) 
+    Mul_expr(Expr* e1, Expr* e2, Type* t) 
         : m_e1(e1), m_e2(e2), m_type(t) 
     { }
-    void print(std::ostream& os) const override;
-    void debug(std::ostream& os) const override;
-    void to_sexpr(std::ostream& os) const override;
+    void print(Printer &p) const override;
+    void debug(Printer &p) const override;
+    void to_sexpr(Printer &p) const override;
     Value evaluate() const override {
         throw std::logic_error("Not implemented");
     }
@@ -280,14 +290,14 @@ private:
     Type* m_type;
 };
 
-class Quot_expr : public Expr {
+class Quo_expr : public Expr {
 public:
-    Quot_expr(Expr* e1, Expr* e2, Type* t) 
+    Quo_expr(Expr* e1, Expr* e2, Type* t) 
         : m_e1(e1), m_e2(e2), m_type(t) 
     { }
-    void print(std::ostream& os) const override;
-    void debug(std::ostream& os) const override;
-    void to_sexpr(std::ostream& os) const override;
+    void print(Printer &p) const override;
+    void debug(Printer &p) const override;
+    void to_sexpr(Printer &p) const override;
     Value evaluate() const override {
         throw std::logic_error("Not implemented");
     }
@@ -302,9 +312,9 @@ public:
     Rem_expr(Expr* e1, Expr* e2, Type* t) 
         : m_e1(e1), m_e2(e2), m_type(t) 
     { }
-    void print(std::ostream& os) const override;
-    void debug(std::ostream& os) const override;
-    void to_sexpr(std::ostream& os) const override;
+    void print(Printer &p) const override;
+    void debug(Printer &p) const override;
+    void to_sexpr(Printer &p) const override;
     Value evaluate() const override {
         throw std::logic_error("Not implemented");
     }
@@ -314,14 +324,14 @@ private:
     Type* m_type;
 };
 
-class Negate_expr : public Expr {
+class Neg_expr : public Expr {
 public:
-    Negate_expr(Expr* e, Type* t) 
+    Neg_expr(Expr* e, Type* t) 
         : m_expr(e), m_type(t) 
     { }
-    void print(std::ostream& os) const override;
-    void debug(std::ostream& os) const override;
-    void to_sexpr(std::ostream& os) const override;
+    void print(Printer &p) const override;
+    void debug(Printer &p) const override;
+    void to_sexpr(Printer &p) const override;
     Value evaluate() const override {
         throw std::logic_error("Not implemented");
     }
@@ -330,14 +340,14 @@ private:
     Type* m_type;
 };
 
-class Reciprocal_expr : public Expr {
+class Rec_expr : public Expr {
 public:
-    Reciprocal_expr(Expr* e, Type* t) 
+    Rec_expr(Expr* e, Type* t) 
         : m_expr(e), m_type(t) 
     { }
-    void print(std::ostream& os) const override;
-    void debug(std::ostream& os) const override;
-    void to_sexpr(std::ostream& os) const override;
+    void print(Printer &p) const override;
+    void debug(Printer &p) const override;
+    void to_sexpr(Printer &p) const override;
     Value evaluate() const override {
         throw std::logic_error("Not implemented");
     }
@@ -347,22 +357,6 @@ private:
 };
 
 
-std::ostream& operator<<(std::ostream& os, Expr const& e);
+// Operators
 
-inline void
-print(std::ostream& os, Expr const& e)
-{
-    e.print(os);
-};
-
-inline void
-sexpr(std::ostream& os, Expr const& e)
-{
-    e.to_sexpr(os);
-}
-
-inline void
-debugexpr(std::ostream& os, Expr const& e)
-{
-    e.debug(os);
-}
+std::ostream& operator<<(std::ostream &os, Expr const& e);

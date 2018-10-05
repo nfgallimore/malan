@@ -1,6 +1,6 @@
 add_executable(main 
 main.cpp 
-#printer.cpp 
+printer.cpp
 expr.cpp 
 type.cpp 
 decl.cpp 

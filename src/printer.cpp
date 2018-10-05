@@ -1,39 +1,28 @@
 #include <iostream>
 
 #include "printer.hpp"
-#include "expr.hpp"
 
-// Nullary operations
-
-template <typename T>
-void print_nullary(std::ostream& os, T value) {
-    os << value;
+void Printer::new_line() {
+    m_os << '\n';
 }
 
-void debug_nullary(std::ostream& os, char const* str, Expr const* expr) {
-    os << str << " " << expr << '\n';
+void Printer::new_line(int n) {
+    for(int i = 0; i < n; i++) {
+        m_os << '\n';
+    }
 }
 
-template <typename T>
-void sexpr_nullary(std::ostream& os, T value) {
-    os << '(' << value << ')';
+void Printer::print_tabs() {
+    for(int i = 0; i < m_tabs; i++) {
+        m_os << "    ";
+    }
 }
 
-// Unary operations
-
-void print_unary(std::ostream& os, Expr const* expr, char const* str) {
-    os << str << " " << *expr;
+void Printer::print_string(char const* str) {
+    m_os << str;
 }
 
-void debug_unary(std::ostream& os, char const* str, Expr const* expr, Expr const* child) {
-    os << str << " " << expr << '\n';
-    debugexpr(os, *child);
+void Printer::print_address(void const* ptr) {
+    m_os << ptr;
 }
 
-/*
-template <typename T>
-void sexpr_unary(std::ostream& os, char const* str, Expr const* expr, Expr const* child) {
-    os << '(' << str;
-    sexpr(child)')';
-}
-*/

@@ -4,347 +4,534 @@
 #include "decl.hpp"
 #include "name.hpp"
 
-
-/* Programming style:
-
-Always have std::ostream as first argument if included.
-
-*/
-
-// TODO add more generalized cases like defined 
-// in printer.hpp for unary, binary, k-ary expressions
-
-
-
-// Used to print tabs for the debug printing *yuck*
-
-int tabs = 0;
-
-void print_tabs(std::ostream& os) {
-    for(int i = 0; i < tabs; i++) {
-        os << "    ";
-    }
-}
-
 // Integer literal expressions
 
-void Int_literal::print(std::ostream& os) const {
-    os << m_value;
+void Int_lit::print(Printer& p) const {
+    p.get_stream() << m_value;
 }
 
-void Int_literal::debug(std::ostream& os) const {
-    os << "Int_literal " << this << '\n';
+void Int_lit::debug(Printer& p) const {
+    p.print_string("Int_lit ");
+    p.print_address(this);
+    p.new_line();
 }
 
-void Int_literal::to_sexpr(std::ostream& os) const {
-    os << '(' << m_value << ')';
+void Int_lit::to_sexpr(Printer& p) const {
+    p.get_stream() << '(' << m_value << ')';
 }
+
 
 // Boolean literal operations
 
-void Bool_literal::print(std::ostream& os) const {
-    os << std::boolalpha << m_value;
+void Bool_lit::print(Printer& p) const {
+    p.get_stream() << std::boolalpha << m_value;
 }
 
-void Bool_literal::debug(std::ostream& os) const {
-    os << "Bool_literal " << this << '\n';
+void Bool_lit::debug(Printer& p) const {
+    p.print_string("Int_lit ");
+    p.print_address(this);
+    p.new_line();
 }
 
-void Bool_literal::to_sexpr(std::ostream& os) const {
-    os << '(' << m_value << ')';
+void Bool_lit::to_sexpr(Printer& p) const {
+    p.get_stream() << '(' << m_value << ')';
 }
+
 
 // Identifier operations
 
-void Identifier::print(std::ostream& os) const {
-    // TODO use get_name() like in to_sexpr
-    os << m_value->get_name()->get_str();
+void Id_expr::print(Printer& p) const {
+    p.get_stream() << m_value->get_name()->get_str();
 }
 
-void Identifier::debug(std::ostream& os) const {
-    os << "Identifier " << this << '\n';
+void Id_expr::debug(Printer& p) const {
+    p.print_string("Id_expr ");
+    p.print_address(this);
+    p.new_line();
 } 
 
-void Identifier::to_sexpr(std::ostream& os) const {
-    os << '(' << *m_value->get_name() << ')';
+void Id_expr::to_sexpr(Printer& p) const {
+    p.get_stream() << '(' << m_value->get_name()->get_str() << ')';
 }
+
 
 // Logical And Operations
 
-void Logical_and::print(std::ostream& os) const {
-    os << "(" << *m_e1 << " AND " << *m_e2 << ")";
+void And_expr::print(Printer& p) const {
+    p.get_stream() << "(" << *m_e1 << " AND " << *m_e2 << ")";
 }
 
-void Logical_and::debug(std::ostream& os) const {
-    os << "Logical_and " << this;
-    os << "\n";
-    tabs++;
-    print_tabs(os);
-    debugexpr(os, *m_e1);
-    print_tabs(os);
-    debugexpr(os, *m_e2);
-    tabs--;
+void And_expr::debug(Printer& p) const {
+    p.get_stream() << "And_expr ";
+    p.print_address(this);
+    p.new_line();
+    
+    p.indent();
+
+    p.print_tabs();
+    m_e1->debug(p);
+
+    p.print_tabs();
+    m_e2->debug(p);
+  
+    p.undent();
 }
 
-void Logical_and::to_sexpr(std::ostream& os) const {
-    os << "(AND ";
-    sexpr(os, *m_e1);
-    os << " ";
-    sexpr(os, *m_e2);
-    os << ')';
+void And_expr::to_sexpr(Printer& p) const {
+    p.get_stream() << "(AND ";
+    m_e1->to_sexpr(p);
+    p.get_stream() << " ";
+    m_e2->to_sexpr(p);
+    p.get_stream() << ')';
 }
+
 
 // Logical Or Operations
 
-void Logical_or::print(std::ostream& os) const {
-    os << "(" << *m_e1 << " OR " << *m_e2 << ")";
+void Or_expr::print(Printer& p) const {
+    p.get_stream() << "(" << *m_e1 << " OR " << *m_e2 << ")";
 }
 
-void Logical_or::debug(std::ostream& os) const {
-    os << "Logical_or " << this;
-    os << "\n";
-    tabs++;
-    print_tabs(os);
-    debugexpr(os, *m_e1);
-    print_tabs(os);
-    debugexpr(os, *m_e2);
-    tabs--;
+void Or_expr::debug(Printer& p) const {
+    p.get_stream() << "Or_expr ";
+    p.print_address(this);
+    p.new_line();
+
+    p.indent();
+
+    p.print_tabs();
+    m_e1->debug(p);
+
+    p.print_tabs();
+    m_e2->debug(p);
+ 
+    p.undent();
 }
 
-void Logical_or::to_sexpr(std::ostream& os) const {
-    os << "(OR ";
-    sexpr(os, *m_e1);
-    os << " ";
-    sexpr(os, *m_e2);
-    os << ')';
+void Or_expr::to_sexpr(Printer& p) const {
+    p.get_stream() << "(OR ";
+
+    m_e1->to_sexpr(p);
+    p.print_string(" ");
+
+    m_e2->to_sexpr(p);
+    p.print_string(" ");
 }
+
 
 // Logical Not Operations
 
-void Logical_not::print(std::ostream& os) const {
-    os << " NOT " << *m_expr;
+void Not_expr::print(Printer& p) const {
+    p.get_stream() << " NOT " << *m_expr;
 }
 
-void Logical_not::debug(std::ostream& os) const {
-    os << "Logical_not " << this << '\n';
-    debugexpr(os, *m_expr);
+void Not_expr::debug(Printer& p) const {
+    p.get_stream() << "Not_expr ";
+    p.print_address(this);
+    p.new_line();
+
+    p.indent();
+
+    p.print_tabs();
+    m_expr->debug(p);
+    p.new_line();
+
+    p.undent();
 }
 
-void Logical_not::to_sexpr(std::ostream& os) const {
-    os << "(NOT ";
-    sexpr(os, *m_expr);
-    os << ')';
+void Not_expr::to_sexpr(Printer& p) const {
+    p.get_stream() << "(NOT ";
+    m_expr->to_sexpr(p);
+    p.get_stream() << ')';
 }
 
-// Ternary Expression Operations
 
-void Ternary_expr::print(std::ostream& os) const {
-    os << "if (" << *m_e1 << ") then " << *m_e2 << " else " << *m_e3;
+// Conditional Expression Operations
+
+void Con_expr::print(Printer& p) const {
+    p.get_stream() << "if (" << *m_e1 << ") then " << *m_e2 << " else " << *m_e3;
 }
 
-void Ternary_expr::debug(std::ostream& os) const {
-    os << "Ternary_expr " << this << '\n';
-    debugexpr(os, *m_e1);
-    os << "    \n";
-    debugexpr(os, *m_e2);
-    os << "    \n";
-    debugexpr(os, *m_e3);
-    os << "    \n";
+void Con_expr::debug(Printer& p) const {
+    p.get_stream() << "Con_expr ";
+    p.print_address(this);
+    p.new_line();
+    p.indent();
+
+    p.print_tabs();
+    m_e1->debug(p);
+
+    p.print_tabs();
+    m_e2->debug(p);
+
+    p.print_tabs();
+    m_e3->debug(p);
+    p.new_line();
+
+    p.undent();
 }
 
-void Ternary_expr::to_sexpr(std::ostream& os) const {
-    os << "(if-expr ";
-    sexpr(os, *m_e1);
-    os << " (then ";
-    sexpr(os, *m_e2);
-    os << ") (else ";
-    sexpr(os, *m_e3);
-    os << "))";
+void Con_expr::to_sexpr(Printer& p) const {
+    p.get_stream() << "(if-expr ";
+    m_e1->to_sexpr(p);
+    p.get_stream() << " (then ";
+    m_e2->to_sexpr(p);
+    p.get_stream() << ") (else ";
+    m_e3->to_sexpr(p);
+    p.get_stream() << "))";
 }
+
 
 // Equal Expression Operations
 
-void Equal_expr::print(std::ostream& os) const {
-    os << *m_e1 << " == " << *m_e2;
+void Eq_expr::print(Printer& p) const {
+    p.get_stream() << *m_e1 << " == " << *m_e2;
 }
 
-void Equal_expr::debug(std::ostream& os) const {
-    os << "Equal_expr " << this << '\n';
+void Eq_expr::debug(Printer& p) const {
+    p.get_stream() << "Eq_expr ";
+    p.print_address(this);
+    p.new_line();
+
+    p.indent();
+
+    p.print_tabs();
+    m_e1->debug(p);
+
+    p.print_tabs();
+    m_e2->debug(p);
+
+    p.undent();
 }
 
-void Equal_expr::to_sexpr(std::ostream& os) const {
-    os << "(== " << *m_e1 << " " << *m_e2 << ')';
+void Eq_expr::to_sexpr(Printer& p) const {
+    p.get_stream() << "(== " << *m_e1 << " " << *m_e2 << ')';
 }
+
 
 // Not Equal Expression Operations
 
-void Not_equal_expr::print(std::ostream& os) const {
-    os << *m_e1 << " != " << *m_e2;
+void Ne_expr::print(Printer& p) const {
+    p.get_stream() << *m_e1 << " != " << *m_e2;
 }
 
-void Not_equal_expr::debug(std::ostream& os) const {
-    os << "Not_equal_expr " << this << '\n';
+void Ne_expr::debug(Printer& p) const {
+    p.get_stream() << "Ne_expr ";
+    p.print_address(this);
+    p.new_line();
+
+    p.indent();
+
+    p.print_tabs();
+    m_e1->debug(p);
+
+    p.print_tabs();
+    m_e2->debug(p);
+
+    p.undent();
 }
 
-void Not_equal_expr::to_sexpr(std::ostream& os) const {
-    os << "(!= " << *m_e1 << " " << *m_e2 << ')';
+void Ne_expr::to_sexpr(Printer& p) const {
+    p.get_stream() << "(!= " << *m_e1 << " " << *m_e2 << ')';
 }
+
 
 // Less Than Expression Operations
 
-void Less_than_expr::print(std::ostream& os) const {
-    os << *m_e1 << " < " << *m_e2;
+void Lt_expr::print(Printer& p) const {
+    p.get_stream() << *m_e1 << " < " << *m_e2;
 }
 
-void Less_than_expr::debug(std::ostream& os) const {
-    os << "Less_than_expr " << this << '\n';
+void Lt_expr::debug(Printer& p) const {
+    p.get_stream() << "Lt_expr ";
+    p.print_address(this);
+    p.new_line();
+
+    p.indent();
+
+    p.print_tabs();
+    m_e1->debug(p);
+
+    p.print_tabs();
+    m_e2->debug(p);
+ 
+    p.undent();
 }
 
-void Less_than_expr::to_sexpr(std::ostream& os) const {
-    os << "(< " << *m_e1 << " " << *m_e2 << ')';
+void Lt_expr::to_sexpr(Printer& p) const {
+    p.get_stream() << "(< " << *m_e1 << " " << *m_e2 << ')';
 }
+
 
 // Greater Than Expression Operations
 
-void Greater_than_expr::print(std::ostream& os) const {
-    os << *m_e1 << " > " << *m_e2;
+void Gt_expr::print(Printer& p) const {
+    p.get_stream() << *m_e1 << " > " << *m_e2;
 }
 
-void Greater_than_expr::debug(std::ostream& os) const {
-    os << "Greater_than_expr " << this << '\n';
+void Gt_expr::debug(Printer& p) const {
+    p.get_stream() << "Gt_expr ";
+    p.print_address(this);
+    p.new_line();
+
+    p.indent();
+
+    p.print_tabs();
+    m_e1->debug(p);
+
+    p.print_tabs();
+    m_e2->debug(p);
+
+    p.undent();
 }
 
-void Greater_than_expr::to_sexpr(std::ostream& os) const {
-    os << "(> " << *m_e1 << " " << *m_e2 << ')';
+void Gt_expr::to_sexpr(Printer& p) const {
+    p.get_stream() << "(> " << *m_e1 << " " << *m_e2 << ')';
 }
+
 
 // Less Than Or Equal Expression Operations
 
-void Less_than_or_equal_expr::print(std::ostream& os) const {
-    os << *m_e1 << " <= " << *m_e2;
+void Le_expr::print(Printer& p) const {
+    p.get_stream() << *m_e1 << " <= " << *m_e2;
 }
 
-void Less_than_or_equal_expr::debug(std::ostream& os) const {
-    os << "Less_than_or_equal_expr " << this << '\n';
+void Le_expr::debug(Printer& p) const {
+    p.get_stream() << "Le_expr ";
+    p.print_address(this);
+    p.new_line();
+
+    p.indent();
+
+    p.print_tabs();
+    m_e1->debug(p);
+
+    p.print_tabs();
+    m_e2->debug(p);
+
+    p.undent();
 }
 
-void Less_than_or_equal_expr::to_sexpr(std::ostream& os) const {
-    os << "(<= " << *m_e1 << " " << *m_e2 << ')';
+void Le_expr::to_sexpr(Printer& p) const {
+    p.get_stream() << "(<= " << *m_e1 << " " << *m_e2 << ')';
 }
+
 
 // Greater Than Or Equal Expression Operations
 
-void Greater_than_or_equal_expr::print(std::ostream& os) const {
-    os << *m_e1 << " >= " << *m_e2;
+void Ge_expr::print(Printer& p) const {
+    p.get_stream() << *m_e1 << " >= " << *m_e2;
 }
 
-void Greater_than_or_equal_expr::debug(std::ostream& os) const {
-    os << "Greater_than_or_equal_expr " << this << '\n';
+void Ge_expr::debug(Printer& p) const {
+    p.get_stream() << "Ge_expr ";
+    p.print_address(this);
+    p.new_line();
+
+    p.indent();
+
+    p.print_tabs();
+    m_e1->debug(p);
+
+    p.print_tabs();
+    m_e2->debug(p);
+
+    p.undent();
 }
 
-void Greater_than_or_equal_expr::to_sexpr(std::ostream& os) const {
-    os << "(>= " << *m_e1 << " " << *m_e2 << ')';
+void Ge_expr::to_sexpr(Printer& p) const {
+    p.get_stream() << "(>= " << *m_e1 << " " << *m_e2 << ')';
 }
+
 
 // Addition Expression Operations
 
-void Add_expr::print(std::ostream& os) const {
-    os << *m_e1 << " + " << *m_e2;
+void Add_expr::print(Printer& p) const {
+    p.get_stream() << *m_e1 << " + " << *m_e2;
 }
 
-void Add_expr::debug(std::ostream& os) const {
-    os << "Add_expr " << this << '\n';
+void Add_expr::debug(Printer& p) const {
+    p.get_stream() << "Add_expr ";
+    p.print_address(this);
+    p.new_line();
+
+    p.indent();
+
+    p.print_tabs();
+    m_e1->debug(p);
+
+    p.print_tabs();
+    m_e2->debug(p);
+
+    p.undent();
 }
 
-void Add_expr::to_sexpr(std::ostream& os) const {
-    os << "(+ " << *m_e1 << " " << *m_e2 << ')';
+void Add_expr::to_sexpr(Printer& p) const {
+    p.get_stream() << "(+ ";
+    m_e1->to_sexpr(p);
+    p.get_stream() << " ";
+    m_e2->to_sexpr(p);
+    p.get_stream() << ')';
 }
+
 
 // Subtraction Expression Operations
 
-void Sub_expr::print(std::ostream& os) const {
-    os << *m_e1 << " - " << *m_e2;
+void Sub_expr::print(Printer& p) const {
+    p.get_stream() << *m_e1 << " - " << *m_e2;
 }
 
-void Sub_expr::debug(std::ostream& os) const {
-    os << "Sub_expr " << this << '\n';
+void Sub_expr::debug(Printer& p) const {
+    p.get_stream() << "Sub_expr ";
+    p.print_address(this);
+    p.new_line();
+
+    p.indent();
+
+    p.print_tabs();
+    m_e1->debug(p);
+
+    p.print_tabs();
+    m_e2->debug(p);
+
+    p.undent();
 }
 
-void Sub_expr::to_sexpr(std::ostream& os) const {
-    os << "(- " << *m_e1 << " " << *m_e2 << ')';
+void Sub_expr::to_sexpr(Printer& p) const {
+    p.get_stream() << "(- " << *m_e1 << " " << *m_e2 << ')';
 }
+
 
 // Multiplication Expression Operations
 
-void Mult_expr::print(std::ostream& os) const {
-    os << *m_e1 << " * " << *m_e2;
+void Mul_expr::print(Printer& p) const {
+    p.get_stream() << *m_e1 << " * " << *m_e2;
 }
 
-void Mult_expr::debug(std::ostream& os) const {
-    os << "Mult_expr " << this << '\n';
+void Mul_expr::debug(Printer& p) const {
+    p.get_stream() << "Mul_expr ";
+    p.print_address(this);
+    p.new_line();
+
+    p.indent();
+
+    p.print_tabs();
+    m_e1->debug(p);
+
+    p.print_tabs();
+    m_e2->debug(p);
+
+    p.undent();
 }
 
-void Mult_expr::to_sexpr(std::ostream& os) const {
-    os << "(* " << *m_e1 << " " << *m_e2 << ')';
+void Mul_expr::to_sexpr(Printer& p) const {
+    p.get_stream() << "(* " << *m_e1 << " " << *m_e2 << ')';
 }
+
 
 // Quotient Expression Operations
 
-void Quot_expr::print(std::ostream& os) const {
-    os << *m_e1 << " / " << *m_e2;
+void Quo_expr::print(Printer& p) const {
+    p.get_stream() << *m_e1 << " / " << *m_e2;
 }
 
-void Quot_expr::debug(std::ostream& os) const {
-    os << "Quot_expr " << this << '\n';
+void Quo_expr::debug(Printer& p) const {
+    p.get_stream() << "Quo_expr ";
+    p.print_address(this);
+    p.new_line();
+
+    p.indent();
+
+    p.print_tabs();
+    m_e1->debug(p);
+
+    p.print_tabs();
+    m_e2->debug(p);
+
+    p.undent();
 }
 
-void Quot_expr::to_sexpr(std::ostream& os) const {
-    os << "(/ " << *m_e1 << " " << *m_e2 << ')';
+void Quo_expr::to_sexpr(Printer& p) const {
+    p.get_stream() << "(/ " << *m_e1 << " " << *m_e2 << ')';
 }
+
 
 // Remainder Expression Operations
 
-void Rem_expr::print(std::ostream& os) const {
-    os << *m_e1 << " % " << *m_e2;
+void Rem_expr::print(Printer& p) const {
+    p.get_stream() << *m_e1 << " % " << *m_e2;
 }
 
-void Rem_expr::debug(std::ostream& os) const {
-    os << "Rem_expr " << this << '\n';
+void Rem_expr::debug(Printer& p) const {
+    p.get_stream() << "Rem_expr ";
+    p.print_address(this);
+    p.new_line();
+
+    p.indent();
+
+    p.print_tabs();
+    m_e1->debug(p);
+
+    p.print_tabs();
+    m_e2->debug(p);
+
+    p.undent();
 }
 
-void Rem_expr::to_sexpr(std::ostream& os) const {
-    os << "(% " << *m_e1 << " " << *m_e2 << ')';
+void Rem_expr::to_sexpr(Printer& p) const {
+    p.get_stream() << "(% " << *m_e1 << " " << *m_e2 << ')';
 }
+
 
 // Negate Expression Operations
 
-void Negate_expr::print(std::ostream& os) const {
-    os << '-' <<  *m_expr;
+void Neg_expr::print(Printer& p) const {
+    p.get_stream() << '-' <<  *m_expr;
 }
 
-void Negate_expr::debug(std::ostream& os) const {
-    os << "Negate_expr " << this << '\n';
+void Neg_expr::debug(Printer& p) const {
+    p.get_stream() << "Neg_expr ";
+    p.print_address(this);
+    p.new_line();
+
+    p.indent();
+
+    p.print_tabs();
+    m_expr->debug(p);
+
+    p.undent();
 }
 
-void Negate_expr::to_sexpr(std::ostream& os) const {
-    os << "(Negate " << *m_expr << ')';
+void Neg_expr::to_sexpr(Printer& p) const {
+    p.get_stream() << "(- " << *m_expr << ')';
 }
+
 
 // Reciprocal Expression Operations
 
-void Reciprocal_expr::print(std::ostream& os) const {
-    os << "/ " <<  *m_expr;
+void Rec_expr::print(Printer& p) const {
+    p.get_stream() << "/ " <<  *m_expr;
 }
 
-void Reciprocal_expr::debug(std::ostream& os) const {
-    os << "Reciprocal_expr " << this << '\n';
+void Rec_expr::debug(Printer& p) const {
+    p.get_stream() << "Rec_expr ";
+    p.print_address(this);
+    p.new_line();
+
+    p.indent();
+
+    p.print_tabs();
+    m_expr->debug(p);
+
+    p.undent();
 }
 
-void Reciprocal_expr::to_sexpr(std::ostream& os) const {
-    os << "(Recip " << *m_expr << ')';
+void Rec_expr::to_sexpr(Printer& p) const {
+    p.get_stream() << "(Recip " << *m_expr << ')';
 }
 
 std::ostream& operator<<(std::ostream& os, Expr const& e) {
-    e.print(os);
+    Printer p(os);
+    e.print(p);
     return os;
 }
