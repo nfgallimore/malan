@@ -455,14 +455,14 @@ void make_min()
     );
 
     std::vector<Stmt*> stmts;
-    stmts.push_back(new Ret_stmt(expr) );
-    Stmt* body = new Block_stmt(stmts);
+    stmts.push_back(new Ret_stmt(expr));
+    Stmt* body = new Block_stmt(&stmts);
 
     // Build the function type.
     std::vector<Type*> params;
     params.push_back(z);
     params.push_back(z);
-    Type* f = new Fun_type({params, z});
+    Type* f = new Fun_type(params, z);
 
 
     std::vector<Decl*> func_decl_parms;

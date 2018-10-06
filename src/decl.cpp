@@ -76,7 +76,8 @@ void Func_decl::print(Printer& p) const {
         // begin statements
         p.print_string(" {\n");
         p.indent();
-        p.get_stream() << *m_body;
+        p.print_tabs();
+        m_body->print(p);
         p.undent();
         p.print_string("\n}");
 

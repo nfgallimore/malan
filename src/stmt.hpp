@@ -11,9 +11,9 @@ class Decl;
 class Stmt
 {
 public:
-    virtual void print(std::ostream& os) const = 0;
-    virtual void debug(std::ostream& os) const = 0;
-    virtual void to_sexpr(std::ostream& os) const = 0;
+    virtual void print(Printer& p) const = 0;
+    virtual void debug(Printer& p) const = 0;
+    virtual void to_sexpr(Printer& p) const = 0;
 };
 
 using Stmt_seq = std::vector<Stmt*>;
@@ -24,9 +24,9 @@ class Break_stmt : public Stmt
 {
 public:
     Break_stmt() { }
-    void print(std::ostream& os) const override;
-    void debug(std::ostream& os) const override;
-    void to_sexpr(std::ostream& os) const override;
+    void print(Printer& p) const override;
+    void debug(Printer& p) const override;
+    void to_sexpr(Printer& p) const override;
 };
 
 
@@ -35,9 +35,9 @@ class Cont_stmt : public Stmt
 {
 public:
     Cont_stmt() { }
-    void print(std::ostream& os) const override;
-    void debug(std::ostream& os) const override;
-    void to_sexpr(std::ostream& os) const override;
+    void print(Printer& p) const override;
+    void debug(Printer& p) const override;
+    void to_sexpr(Printer& p) const override;
 };
 
 
@@ -45,13 +45,13 @@ public:
 class Block_stmt : public Stmt
 {
 public:
-    Block_stmt(Stmt_seq seq) : m_stmts(seq) { }
-    void print(std::ostream& os) const override;
-    void debug(std::ostream& os) const override;
-    void to_sexpr(std::ostream& os) const override;
-    Stmt_seq get_stmts() const { return m_stmts; }
+    Block_stmt(Stmt_seq* seq) : m_stmts(seq) { }
+    void print(Printer& p) const override;
+    void debug(Printer& p) const override;
+    void to_sexpr(Printer& p) const override;
+    Stmt_seq* get_stmts() const { return m_stmts; }
 private:
-    Stmt_seq m_stmts;
+    Stmt_seq* m_stmts;
 };
 
 
@@ -62,9 +62,9 @@ public:
     While_stmt(Expr* cond, Stmt* body) 
         : m_cond(cond), m_body(body) 
     { }
-    void print(std::ostream& os) const override; 
-    void debug(std::ostream& os) const override;
-    void to_sexpr(std::ostream& os) const override;
+    void print(Printer& p) const override; 
+    void debug(Printer& p) const override;
+    void to_sexpr(Printer& p) const override;
     Expr* get_cond() const { return m_cond; }
     Stmt* get_body() const { return m_body; }
 private:
@@ -80,9 +80,9 @@ public:
     If_stmt(Expr* cond, Stmt* then, Stmt* els) 
         : m_cond(cond), m_then(then), m_else(els) 
     { }
-    void print(std::ostream& os) const override; 
-    void debug(std::ostream& os) const override;
-    void to_sexpr(std::ostream& os) const override;
+    void print(Printer& p) const override; 
+    void debug(Printer& p) const override;
+    void to_sexpr(Printer& p) const override;
     Expr* get_cond() const { return m_cond; }
     Stmt* get_then() const { return m_then; }
     Stmt* get_else() const { return m_else; }
@@ -98,9 +98,9 @@ class Ret_stmt : public Stmt
 {
 public:
     Ret_stmt(Expr* e) : m_expr(e) { }
-    void print(std::ostream& os) const override; 
-    void debug(std::ostream& os) const override;
-    void to_sexpr(std::ostream& os) const override;
+    void print(Printer& p) const override; 
+    void debug(Printer& p) const override;
+    void to_sexpr(Printer& p) const override;
     Expr* get_expr() { return m_expr; }
 private:
     Expr* m_expr;
@@ -112,9 +112,9 @@ class Expr_stmt : public Stmt
 {
 public:
     Expr* expr;
-    void print(std::ostream& os) const override;
-    void debug(std::ostream& os) const override;
-    void to_sexpr(std::ostream& os) const override;
+    void print(Printer& p) const override;
+    void debug(Printer& p) const override;
+    void to_sexpr(Printer& p) const override;
 };
 
 
@@ -123,9 +123,9 @@ class Decl_stmt : public Stmt
 {
 public:
     Decl_stmt(Decl* d) : m_decl(d) { }
-    void print(std::ostream& os) const override;
-    void debug(std::ostream& os) const override;
-    void to_sexpr(std::ostream& os) const override;
+    void print(Printer& p) const override;
+    void debug(Printer& p) const override;
+    void to_sexpr(Printer& p) const override;
 private:
     Decl* m_decl;
 };
@@ -139,19 +139,19 @@ std::ostream& operator<<(std::ostream& os, Stmt const& s);
 // Operations
 
 inline void
-print(std::ostream& os, Stmt const& s)
+print(Printer& p, Stmt const& s)
 {
-    s.print(os);
+    s.print(p);
 };
 
 inline void
-debug(std::ostream& os, Stmt const& s)
+debug(Printer& p, Stmt const& s)
 {
-    s.debug(os);
+    s.debug(p);
 };
 
 inline void
-to_sexpr(std::ostream& os, Stmt const& s)
+to_sexpr(Printer& p, Stmt const& s)
 {
-    s.to_sexpr(os);
+    s.to_sexpr(p);
 };
