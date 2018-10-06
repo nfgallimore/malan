@@ -38,6 +38,23 @@ void Bool_lit::to_sexpr(Printer& p) const {
 }
 
 
+// Float literal expressions
+
+void Float_lit::print(Printer& p) const {
+    p.get_stream() << m_value;
+}
+
+void Float_lit::debug(Printer& p) const {
+    p.print_string("Float_lit ");
+    p.print_address(this);
+    p.new_line();
+}
+
+void Float_lit::to_sexpr(Printer& p) const {
+    p.get_stream() << '(' << m_value << ')';
+}
+
+
 // Identifier operations
 
 void Id_expr::print(Printer& p) const {

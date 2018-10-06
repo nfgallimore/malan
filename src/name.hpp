@@ -6,7 +6,7 @@ class Name
 {
 public:
     Name(std::string name) : m_name(name) { }
-    std::string get_str() const { return m_name; }
+    std::string get_str() { return m_name; }
     void print(std::ostream& os) const;
     
 private:

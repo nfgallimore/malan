@@ -39,14 +39,48 @@ void Var_decl::debug(Printer& p) const {
 }
 
 void Var_decl::to_sexpr(Printer& p) const {
-
+    p.get_stream() << "(var ";
+    m_type->to_sexpr(p);
+    p.get_stream() << " " << m_name->get_str() << " ";
+    p.get_stream() << m_init;
 }
 
 
 // Function declaration printing operations
-
+// Prints like the following:
+    // func f : (x : int, y : int) -> bool {
+    //     return x < y;
+    // }
 void Func_decl::print(Printer& p) const {
+    p.print_string("func ");
+    p.get_stream() << m_name->get_str() << " : (";
+    if (m_parms->empty()) {
+        p.print_string(")");
+    }
+    else {
+        for (int i = 0, len = m_parms->size(); i < len; i++) {
 
+            Decl* d = (*m_parms)[i];
+            p.get_stream() << d->get_name()->get_str() << " : " << *d->get_type();
+        
+            // print `,` if not the last param
+            if (i != len - 1) {
+                p.print_string(", ");
+            }
+        }
+        p.print_string(") -> ");
+        
+        // :O
+        p.get_stream() << *static_cast<Fun_type const*>(m_ret)->get_return_type();
+
+        // begin statements
+        p.print_string(" {\n");
+        p.indent();
+        p.get_stream() << *m_body;
+        p.undent();
+        p.print_string("\n}");
+
+    }
 }
 
 void Func_decl::debug(Printer& p) const {

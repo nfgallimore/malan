@@ -52,6 +52,20 @@ private:
     Type* m_type;
 };
 
+class Float_lit : public Expr {
+public:    
+    Float_lit(float f, Type* t) 
+        : m_value(f), m_type(t) 
+    { }
+    void print(Printer &p) const override;
+    void debug(Printer &p) const override;
+    void to_sexpr(Printer &p) const override;
+    Value evaluate() const override { return Value(m_value); }
+private:
+    float m_value;
+    Type* m_type;
+};
+
 class Id_expr : public Expr {
 public:
     Id_expr(Decl* d, Type* t) 

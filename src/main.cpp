@@ -12,7 +12,7 @@ void exprs();
 void complex_decl();
 void if_stmt();
 void nested_debug_printing();
-Decl* make_min();
+void make_min();
 
 /* This main file contains constructions of the abstract syntax tree
 to test the classes blow up when instantiated. Ideally these would be unit tests
@@ -27,10 +27,7 @@ int main(int argc, char** argv)
     complex_decl();
     if_stmt();
     nested_debug_printing();
-    Decl* min = make_min();
-
-    Printer p(std::cout);
-    p.get_stream() << "\n\nmin: " << min;
+    make_min();
 }
 
 void types()
@@ -61,68 +58,68 @@ void types()
     p.get_stream() << fun_np << '\n';
     p.get_stream() << '\n';
 
-    p.get_stream() << b << " == " << b << " -> " << equal(&b, &b) << '\n';
-    p.get_stream() << b << " == " << i << " -> " << equal(&b, &i) << '\n';
-    p.get_stream() << b << " == " << f << " -> " << equal(&b, &f) << '\n';
-    p.get_stream() << b << " == " << rb << " -> " << equal(&b, &rb) << '\n';
-    p.get_stream() << b << " == " << ri << " -> " << equal(&b, &ri) << '\n';
-    p.get_stream() << b << " == " << fun_p << " -> " << equal(&b, &fun_p) << '\n';
-    p.get_stream() << b << " == " << fun_p << " -> " << equal(&b, &fun_np) << '\n';
-    p.get_stream() << '\n';
+    // p.get_stream() << b << " == " << b << " -> " << equal(&b, &b) << '\n';
+    // p.get_stream() << b << " == " << i << " -> " << equal(&b, &i) << '\n';
+    // p.get_stream() << b << " == " << f << " -> " << equal(&b, &f) << '\n';
+    // p.get_stream() << b << " == " << rb << " -> " << equal(&b, &rb) << '\n';
+    // p.get_stream() << b << " == " << ri << " -> " << equal(&b, &ri) << '\n';
+    // p.get_stream() << b << " == " << fun_p << " -> " << equal(&b, &fun_p) << '\n';
+    // p.get_stream() << b << " == " << fun_p << " -> " << equal(&b, &fun_np) << '\n';
+    // p.get_stream() << '\n';
 
-    p.get_stream() << i << " == " << b << " -> " << equal(&i, &b) << '\n';
-    p.get_stream() << i << " == " << i << " -> " << equal(&i, &i) << '\n';
-    p.get_stream() << i << " == " << f << " -> " << equal(&i, &f) << '\n';
-    p.get_stream() << i << " == " << rb << " -> " << equal(&i, &rb) << '\n';
-    p.get_stream() << i << " == " << ri << " -> " << equal(&i, &ri) << '\n';
-    p.get_stream() << i << " == " << fun_p << " -> " << equal(&i, &fun_p) << '\n';
-    p.get_stream() << i << " == " << fun_np << " -> " << equal(&i, &fun_np) << '\n';
-    p.get_stream() << '\n';
+    // p.get_stream() << i << " == " << b << " -> " << equal(&i, &b) << '\n';
+    // p.get_stream() << i << " == " << i << " -> " << equal(&i, &i) << '\n';
+    // p.get_stream() << i << " == " << f << " -> " << equal(&i, &f) << '\n';
+    // p.get_stream() << i << " == " << rb << " -> " << equal(&i, &rb) << '\n';
+    // p.get_stream() << i << " == " << ri << " -> " << equal(&i, &ri) << '\n';
+    // p.get_stream() << i << " == " << fun_p << " -> " << equal(&i, &fun_p) << '\n';
+    // p.get_stream() << i << " == " << fun_np << " -> " << equal(&i, &fun_np) << '\n';
+    // p.get_stream() << '\n';
 
-    p.get_stream() << f << " == " << b << " -> " << equal(&f, &b) << '\n';
-    p.get_stream() << f << " == " << f << " -> " << equal(&f, &i) << '\n';
-    p.get_stream() << f << " == " << f << " -> " << equal(&f, &f) << '\n';
-    p.get_stream() << f << " == " << rb << " -> " << equal(&f, &rb) << '\n';
-    p.get_stream() << f << " == " << ri << " -> " << equal(&f, &ri) << '\n';
-    p.get_stream() << f << " == " << fun_p << " -> " << equal(&f, &fun_p) << '\n';
-    p.get_stream() << f << " == " << fun_np << " -> " << equal(&f, &fun_np) << '\n';
-    p.get_stream() << '\n';
+    // p.get_stream() << f << " == " << b << " -> " << equal(&f, &b) << '\n';
+    // p.get_stream() << f << " == " << f << " -> " << equal(&f, &i) << '\n';
+    // p.get_stream() << f << " == " << f << " -> " << equal(&f, &f) << '\n';
+    // p.get_stream() << f << " == " << rb << " -> " << equal(&f, &rb) << '\n';
+    // p.get_stream() << f << " == " << ri << " -> " << equal(&f, &ri) << '\n';
+    // p.get_stream() << f << " == " << fun_p << " -> " << equal(&f, &fun_p) << '\n';
+    // p.get_stream() << f << " == " << fun_np << " -> " << equal(&f, &fun_np) << '\n';
+    // p.get_stream() << '\n';
 
-    p.get_stream() << rb << " == " << b << " -> " << equal(&rb, &b) << '\n';
-    p.get_stream() << rb << " == " << i << " -> " << equal(&rb, &i) << '\n';
-    p.get_stream() << rb << " == " << f << " -> " << equal(&rb, &f) << '\n';
-    p.get_stream() << rb << " == " << rb << " -> " << equal(&rb, &rb) << '\n';
-    p.get_stream() << rb << " == " << ri << " -> " << equal(&rb, &ri) << '\n';
-    p.get_stream() << rb << " == " << fun_p << " -> " << equal(&rb, &fun_p) << '\n';
-    p.get_stream() << rb << " == " << fun_np << " -> " << equal(&rb, &fun_np) << '\n';
-    p.get_stream() << '\n';
+    // p.get_stream() << rb << " == " << b << " -> " << equal(&rb, &b) << '\n';
+    // p.get_stream() << rb << " == " << i << " -> " << equal(&rb, &i) << '\n';
+    // p.get_stream() << rb << " == " << f << " -> " << equal(&rb, &f) << '\n';
+    // p.get_stream() << rb << " == " << rb << " -> " << equal(&rb, &rb) << '\n';
+    // p.get_stream() << rb << " == " << ri << " -> " << equal(&rb, &ri) << '\n';
+    // p.get_stream() << rb << " == " << fun_p << " -> " << equal(&rb, &fun_p) << '\n';
+    // p.get_stream() << rb << " == " << fun_np << " -> " << equal(&rb, &fun_np) << '\n';
+    // p.get_stream() << '\n';
 
-    p.get_stream() << ri << " == " << b << " -> " << equal(&ri, &b) << '\n';
-    p.get_stream() << ri << " == " << i << " -> " << equal(&ri, &i) << '\n';
-    p.get_stream() << ri << " == " << f << " -> " << equal(&ri, &f) << '\n';
-    p.get_stream() << ri << " == " << rb << " -> " << equal(&ri, &rb) << '\n';
-    p.get_stream() << ri << " == " << ri << " -> " << equal(&ri, &ri) << '\n';
-    p.get_stream() << ri << " == " << fun_p << " -> " << equal(&ri, &fun_p) << '\n';
-    p.get_stream() << ri << " == " << fun_np << " -> " << equal(&ri, &fun_np) << '\n';
-    p.get_stream() << '\n';
+    // p.get_stream() << ri << " == " << b << " -> " << equal(&ri, &b) << '\n';
+    // p.get_stream() << ri << " == " << i << " -> " << equal(&ri, &i) << '\n';
+    // p.get_stream() << ri << " == " << f << " -> " << equal(&ri, &f) << '\n';
+    // p.get_stream() << ri << " == " << rb << " -> " << equal(&ri, &rb) << '\n';
+    // p.get_stream() << ri << " == " << ri << " -> " << equal(&ri, &ri) << '\n';
+    // p.get_stream() << ri << " == " << fun_p << " -> " << equal(&ri, &fun_p) << '\n';
+    // p.get_stream() << ri << " == " << fun_np << " -> " << equal(&ri, &fun_np) << '\n';
+    // p.get_stream() << '\n';
 
-    p.get_stream() << fun_p << " == " << b << " -> " << equal(&fun_p, &b) << '\n';
-    p.get_stream() << fun_p << " == " << i << " -> " << equal(&fun_p, &i) << '\n';
-    p.get_stream() << fun_p << " == " << f << " -> " << equal(&fun_p, &f) << '\n';
-    p.get_stream() << fun_p << " == " << rb << " -> " << equal(&fun_p, &rb) << '\n';
-    p.get_stream() << fun_p << " == " << ri << " -> " << equal(&fun_p, &ri) << '\n';
-    p.get_stream() << fun_p << " == " << fun_p << " -> " << equal(&fun_p, &fun_p) << '\n';
-    p.get_stream() << fun_p << " == " << fun_np << " -> " << equal(&fun_p, &fun_np) << '\n';
-    p.get_stream() << '\n';
+    // p.get_stream() << fun_p << " == " << b << " -> " << equal(&fun_p, &b) << '\n';
+    // p.get_stream() << fun_p << " == " << i << " -> " << equal(&fun_p, &i) << '\n';
+    // p.get_stream() << fun_p << " == " << f << " -> " << equal(&fun_p, &f) << '\n';
+    // p.get_stream() << fun_p << " == " << rb << " -> " << equal(&fun_p, &rb) << '\n';
+    // p.get_stream() << fun_p << " == " << ri << " -> " << equal(&fun_p, &ri) << '\n';
+    // p.get_stream() << fun_p << " == " << fun_p << " -> " << equal(&fun_p, &fun_p) << '\n';
+    // p.get_stream() << fun_p << " == " << fun_np << " -> " << equal(&fun_p, &fun_np) << '\n';
+    // p.get_stream() << '\n';
 
-    p.get_stream() << fun_np << " == " << b << " -> " << equal(&fun_np, &b) << '\n';
-    p.get_stream() << fun_np << " == " << i << " -> " << equal(&fun_np, &i) << '\n';
-    p.get_stream() << fun_np << " == " << f << " -> " << equal(&fun_np, &f) << '\n';
-    p.get_stream() << fun_np << " == " << rb << " -> " << equal(&fun_np, &rb) << '\n';
-    p.get_stream() << fun_np << " == " << ri << " -> " << equal(&fun_np, &ri) << '\n';
-    p.get_stream() << fun_np << " == " << fun_p << " -> " << equal(&fun_np, &fun_p) << '\n';
-    p.get_stream() << fun_np << " == " << fun_np << " -> " << equal(&fun_np, &fun_np) << '\n';
-    p.get_stream() << '\n';
+    // p.get_stream() << fun_np << " == " << b << " -> " << equal(&fun_np, &b) << '\n';
+    // p.get_stream() << fun_np << " == " << i << " -> " << equal(&fun_np, &i) << '\n';
+    // p.get_stream() << fun_np << " == " << f << " -> " << equal(&fun_np, &f) << '\n';
+    // p.get_stream() << fun_np << " == " << rb << " -> " << equal(&fun_np, &rb) << '\n';
+    // p.get_stream() << fun_np << " == " << ri << " -> " << equal(&fun_np, &ri) << '\n';
+    // p.get_stream() << fun_np << " == " << fun_p << " -> " << equal(&fun_np, &fun_p) << '\n';
+    // p.get_stream() << fun_np << " == " << fun_np << " -> " << equal(&fun_np, &fun_np) << '\n';
+    // p.get_stream() << '\n';
 
     p.get_stream() << "Debugging types:\n";
     debug(p.get_stream(), &b);
@@ -154,8 +151,8 @@ void types()
 
 void exprs()
 {    
-    Type it = Int_type();
-    Type bt = Bool_type();
+    Int_type it;
+    Bool_type bt;
 
     Printer p(std::cout);
     // Int literal operations
@@ -176,6 +173,16 @@ void exprs()
     bl.debug(p);
     p.get_stream() << "s_expr: ";
     bl.to_sexpr(p);
+    p.new_line(2);
+
+    // Float literal operations
+    p.get_stream() << "Boolean literal:\n";
+    Float_lit fl(1.3f, &bt);
+    p.get_stream() << "print: " << fl << '\n';
+    p.get_stream() << "debug: \n";
+    fl.debug(p);
+    p.get_stream() << "s_expr: ";
+    fl.to_sexpr(p);
     p.new_line(2);
 
     // Identifier operations
@@ -373,7 +380,7 @@ void complex_decl()
     p.get_stream() << "Printing complex declaration:\n";
 
     Name name("x");
-    Type type = Int_type();
+    Int_type type;
 
     Int_lit operand1(2, &type);
     Int_lit operand2(2, &type);
@@ -397,7 +404,7 @@ void complex_decl()
 
 void nested_debug_printing()
 {
-    Type bt = Bool_type();
+    Bool_type bt;
 
     Bool_lit cierto(true, &bt);
     Bool_lit falso(false, &bt);
@@ -431,13 +438,13 @@ void if_stmt()
 
 }
 
-Decl* make_min()
+void make_min()
 {
     Type* b = new Bool_type();
     Type* z = new Int_type();
     Decl* p1 = new Var_decl(new Name("a"), z, nullptr);
     Decl* p2 = new Var_decl(new Name("b"), z, nullptr);
-    Decl* r = new Var_decl(nullptr, z, nullptr);
+    Decl* r = new Var_decl(new Name("r"), z, nullptr);
 
       // p1 < p2 ? p1 : p2
     Expr* expr = new Con_expr(
@@ -462,5 +469,9 @@ Decl* make_min()
     func_decl_parms.push_back(p1);
     func_decl_parms.push_back(p2);
     func_decl_parms.push_back(r);
-    return new Func_decl(new Name("min"), &func_decl_parms, f, body);
+    Func_decl* fundecl =  new Func_decl(new Name("min"), &func_decl_parms, f, body);
+
+    Printer p(std::cout);
+    p.new_line(2);
+    fundecl->print(p);
 }

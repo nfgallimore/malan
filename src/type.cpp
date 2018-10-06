@@ -1,199 +1,161 @@
-#include "type.hpp"
-
 #include <iostream>
 
-// Printing type operations
+#include "type.hpp"
+#include "printer.hpp"
 
-static void
-print_str(std::ostream& os, char const* str)
-{
-  os << str;
+
+// Bool type printing operations
+
+void Bool_type::print(Printer& p) const {
+    p.print_string("bool");
 }
 
-static void
-print_ref(std::ostream& os, Ref_type const* t)
-{
-  os << "ref " << *t->get_referent_type();
+void Bool_type::debug(Printer& p) const {
+    p.print_string("Bool_type ");
+    p.print_address(this);
+    p.new_line();
 }
 
-static void
-print_fun(std::ostream& os, Fun_type const* t)
-{
-  std::vector<Type*> params = t->get_params();
-  if (params.empty())
-    os << "() -> " << *t->get_return_type();
+void Bool_type::to_sexpr(Printer& p) const {
+    p.print_string("(bool)");
+}
 
-  else 
-  {
-    os << "(";
-    for (int i = 0; i < params.size(); i++) 
-    {
-      if (i == params.size() - 1) 
-        os << (*params[i]) << ")";
-      else 
-        os << *params[i] << ",";
+
+// Integer type printing operations
+
+void Int_type::print(Printer& p) const {
+    p.print_string("int");
+}
+
+void Int_type::debug(Printer& p) const {
+    p.print_string("Int_type ");
+    p.print_address(this);
+    p.new_line();
+}
+
+void Int_type::to_sexpr(Printer& p) const {
+    p.print_string("(int)");
+}
+
+
+// Float type printing operations
+
+void Float_type::print(Printer& p) const {
+    p.print_string("float");
+}
+
+void Float_type::debug(Printer& p) const {
+    p.print_string("Float_type ");
+    p.print_address(this);
+    p.new_line();
+}
+
+void Float_type::to_sexpr(Printer& p) const {
+    p.print_string("(float)");
+}
+
+
+// Reference type printing operations
+
+void Ref_type::print(Printer& p) const {
+    p.get_stream() << "ref " << *get_ref_type();
+}
+
+void Ref_type::debug(Printer& p) const {
+    p.print_string("Ref_type ");
+    p.print_address(this);
+    p.new_line();
+}
+
+void Ref_type::to_sexpr(Printer& p) const {
+    p.get_stream() << "(Ref_type " << *this << ')';
+}
+
+// Function type printing operations
+
+void Fun_type::print(Printer& p) const {
+    std::vector<Type*> params = get_params();
+    if (params.empty())
+        p.get_stream() << "() -> " << *get_return_type();
+    else {
+        p.get_stream() << "(";
+        for (int i = 0; i < params.size(); i++) {
+            if (i == params.size() - 1) 
+                p.get_stream() << (*params[i]) << ")";
+            else
+                p.get_stream() << *params[i] << ",";
+        }
+        p.get_stream() << " -> " << *get_return_type();
     }
-    os << " -> " << *t->get_return_type();
-  }
 }
 
-void
-print(std::ostream& os, Type const* t)
-{
-  switch (t->get_kind()) {
-  case Type::bool_type:
-    return print_str(os, "bool");
-  
-  case Type::int_type:
-    return print_str(os, "int");
-  
-  case Type::float_type:
-    return print_str(os, "float");
-  
-  case Type::ref_type:
-    return print_ref(os, static_cast<Ref_type const*>(t));
+void Fun_type::debug(Printer& p) const {
+    p.print_string("Fun_type ");
+    p.print_address(this);
+    p.new_line();
+    p.indent();
 
-  case Type::fun_type:
-    return print_fun(os, static_cast<Fun_type const*>(t));
-  }
+    if (!m_params.empty()) {
+        for (int i = 0; i < m_params.size(); i++) {
+            p.print_tabs();
+            m_params[i]->debug(p);
+        }
+    }
+    p.print_tabs();
+    p.print_string("Ret_type: ");
+    
+    p.indent();
+    m_ret_type->debug(p);
+    p.undent();
+
+    p.undent();
 }
 
-// Debugging type operations
-
-static void
-debug_str(std::ostream& os, char const* str, Type const* t) 
-{
-  os << str << ' ' << t << '\n';;
+void Fun_type::to_sexpr(Printer& p) const {
+    p.print_string("(Fun");
+    if (!m_params.empty()) {
+        p.print_string(" Params(");
+        for (int i = 0; i < m_params.size(); i++) {
+            m_params[i]->to_sexpr(p);
+        }
+        p.print_string(")");
+    }
+    p.print_string(" Ret");
+    m_ret_type->to_sexpr(p);
+    p.print_string(")");
 }
 
-static void
-debug_ref(std::ostream& os, Ref_type const* t)
-{
-  os << "Ref_type " << t << '\n';
+
+// Operators
+
+std::ostream& operator<<(std::ostream& os, Type const& t) {
+    Printer p(os);
+    t.print(p);
+    return p.get_stream();
 }
 
-static void
-debug_fun(std::ostream& os, Fun_type const* t)
-{
-  os << "Fun_type " << t << '\n';
+
+// Operations
+
+/// Prints `t` to the output stream.
+void print(std::ostream& os, Type const* t) {
+    Printer p(os);
+    t->print(p);
 }
 
-void
-debug(std::ostream& os, Type const* t)
-{
-  switch (t->get_kind()) {
-  case Type::bool_type:
-    return debug_str(os, "bool", t);
-  
-  case Type::int_type:
-    return debug_str(os, "int", t);
-  
-  case Type::float_type:
-    return debug_str(os, "float", t);
-  
-  case Type::ref_type:
-    return debug_ref(os, static_cast<Ref_type const*>(t));
-
-  case Type::fun_type:
-    return debug_fun(os, static_cast<Fun_type const*>(t));
-  }
+/// Prints the kind of type `t` and its address to output stream
+void debug(std::ostream& os, Type const* t) {
+    Printer p(os);
+    t->debug(p);
 }
 
-// Converting to symbolic expression operations
-
-static void
-to_sexpr_str(std::ostream& os, char const* str) 
-{
-  os << '(' << str << ')';;
+/// Prints `t` as a symbolic expression to output stream
+void to_sexpr(std::ostream& os, Type const* t) {
+    Printer p(os);
+    t->print(p);
 }
 
-static void
-to_sexpr_ref(std::ostream& os, Ref_type const* t)
-{
-  os << "(Ref_type " << *t << ')';
-}
-
-static void
-to_sexpr_fun(std::ostream& os, Fun_type const* t)
-{
-  os << "(Fun_type " << *t << ')';
-}
-
-void
-to_sexpr(std::ostream& os, Type const* t)
-{
-  switch (t->get_kind()) {
-  case Type::bool_type:
-    return to_sexpr_str(os, "bool");
-  
-  case Type::int_type:
-    return to_sexpr_str(os, "int");
-  
-  case Type::float_type:
-    return to_sexpr_str(os, "float");
-  
-  case Type::ref_type:
-    return to_sexpr_ref(os, static_cast<Ref_type const*>(t));
-
-  case Type::fun_type:
-    return to_sexpr_fun(os, static_cast<Fun_type const*>(t));
-  }
-}
-
-std::ostream&
-operator<<(std::ostream& os, Type const& t)
-{
-  print(os, &t);
-  return os;
-}
-
-static bool
-equal_ref(Ref_type const* a, Ref_type const* b)
-{
-  return equal(a->get_referent_type(), b->get_referent_type());
-}
-
-static bool
-equal_fun(Fun_type const* a, Fun_type const* b)
-{
-  std::vector<Type*> a_params = a->get_params();
-  std::vector<Type*>  b_params = b->get_params();
-
-  if (a_params.size() != b_params.size())
-    return false;
-
-  for(int i = 0; i < a->get_params().size(); i++) {
-    if (!equal(a_params[i], b_params[i]))
-      return false;
-  }
-
-  return (equal(a->get_return_type(), b->get_return_type()));
-}
-
-bool
-equal(Type const* a, Type const* b)
-{
-  // Different kinds of types are not equal.
-  if (a->get_kind() != b->get_kind())
-    return false;
-
-  // Compare similar types.
-  switch (a->get_kind()) {
-  case Type::bool_type:
-    return true;
-  
-  case Type::int_type:
-    return true;
-
-  case Type::float_type:
-    return true;
-  
-  case Type::ref_type:
-    return equal_ref(static_cast<Ref_type const*>(a), 
-                     static_cast<Ref_type const*>(b));
-
-  case Type::fun_type:
-    return equal_fun(static_cast<Fun_type const*>(a),
-                     static_cast<Fun_type const*>(b));
-  }
+/// Returns true when `a` and `b` denote the same type.
+bool equal(Type const* a, Type const* b) {
+    throw std::logic_error("Not implemented");
 }

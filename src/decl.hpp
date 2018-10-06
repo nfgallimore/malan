@@ -18,6 +18,7 @@ public:
     virtual void debug(Printer& p) const = 0;
     virtual void to_sexpr(Printer& p) const = 0;
     virtual Name* get_name() const = 0;
+    virtual Type* get_type() const = 0;
 };
 
 using Decl_seq = std::vector<Decl*>;
@@ -32,6 +33,7 @@ public:
     void debug(Printer& p) const override;
     void to_sexpr(Printer& p) const override;
     Name* get_name() const override { return m_name; }
+    Type* get_type() const override { return m_type; }
 private:
     Name* m_name;
     Type* m_type;
@@ -48,7 +50,7 @@ public:
     void debug(Printer& p) const override;
     void to_sexpr(Printer& p) const override;
     Name* get_name() const override { return m_name; }
-
+    Type* get_type() const override { return m_type; }
 private:
     Name* m_name;
     Type* m_type;
@@ -65,7 +67,8 @@ public:
     void debug(Printer& p) const override;
     void to_sexpr(Printer& p) const override;
     Name* get_name() const override { return m_name; }
-
+    Type* get_type() const override { return m_ret; }
+    Stmt* get_body() const { return m_body; }
 private:
     Name* m_name;
     Decl_seq* m_parms;
