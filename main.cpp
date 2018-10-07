@@ -10,9 +10,9 @@
 void types();
 void exprs();
 void complex_decl();
-void if_stmt();
 void nested_debug_printing();
 void make_min();
+void print_ref_decl();
 
 /* This main file contains constructions of the abstract syntax tree
 to test the classes blow up when instantiated. Ideally these would be unit tests
@@ -25,9 +25,9 @@ int main(int argc, char** argv)
     types();
     exprs();
     complex_decl();
-    if_stmt();
     nested_debug_printing();
     make_min();
+    print_ref_decl();
 }
 
 void types()
@@ -433,11 +433,6 @@ void nested_debug_printing()
     hardAnd.debug(p);
 }
 
-void if_stmt()
-{
-
-}
-
 void make_min()
 {
     Type* b = new Bool_type();
@@ -463,7 +458,6 @@ void make_min()
     params.push_back(z);
     Type* f = new Fun_type(params, z);
 
-
     std::vector<Decl*> func_decl_parms;
     func_decl_parms.push_back(p1);
     func_decl_parms.push_back(p2);
@@ -471,5 +465,24 @@ void make_min()
 
     Printer p(std::cout);
     p.new_line(2);
-    fundecl->print(p);
+    p.get_stream() << "Printing function:\n\n" << *fundecl;
+    p.new_line();
+    p.print_string("\nPrinting function sexpr:\n\n");
+    fundecl->to_sexpr(p);
+    p.print_string("\n\nPrinting function debugging:\n\n");
+    p.new_line();
+    fundecl->debug(p);
+}
+
+void print_ref_decl()
+{
+    Printer p(std::cout);
+    p.new_line(2);
+    Int_type it = Int_type();
+    Ref_decl* refDecl = new Ref_decl(new Name("foo"), new Int_type(), new Int_lit(1, &it));
+    p.get_stream() << *refDecl;
+    p.new_line(2);
+    refDecl->to_sexpr(p);
+    p.new_line(2);
+    refDecl->debug(p);
 }

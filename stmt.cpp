@@ -37,26 +37,34 @@ void Cont_stmt::to_sexpr(Printer& p) const {
 
 void Block_stmt::print(Printer& p) const {
     for(int i = 0, len = m_stmts->size(); i < len; i++) {
+        p.print_string("\n{\n");
+        p.indent();
+        p.print_tabs();
         (*m_stmts)[i]->print(p);
-        // TODO stream is printing address
-        // p.get_stream() << stmt;
+        p.undent();
+        p.print_string("\n}");
     }
 }
 
 void Block_stmt::debug(Printer& p) const {
     p.print_string("Block_stmt ");
     p.print_address(this);
+    p.indent();
     for(int i = 0, len = m_stmts->size(); i < len; i++) {
+        p.new_line();
+        p.print_tabs();
         (*m_stmts)[i]->debug(p);
     }
+    p.new_line();
+    p.undent();
 }
 
 void Block_stmt::to_sexpr(Printer& p) const {
-    p.print_string("(Block_stmt)");
-    p.print_address(this);
+    p.print_string("((Block_stmt)");
     for(int i = 0, len = m_stmts->size(); i < len; i++) {
         (*m_stmts)[i]->to_sexpr(p);
     }
+    p.print_string(")");
 }
 
 
@@ -97,27 +105,42 @@ void Ret_stmt::print(Printer& p) const {
 }
 
 void Ret_stmt::debug(Printer& p) const {
-    p.get_stream() << "return ";
+    p.get_stream() << "Return_stmt ";
     p.print_address(this);
+    p.new_line();
+    p.indent();
+    p.print_tabs();
+    m_expr->debug(p);
+    p.undent();
 }
 
 void Ret_stmt::to_sexpr(Printer& p) const {
-
+    p.print_string("(Return_stmt ");
+    m_expr->to_sexpr(p);
+    p.print_string(")");
 }
 
 
 // Expression statement printing operations
 
 void Expr_stmt::print(Printer& p) const {
-
+    p.get_stream() << *m_expr << ";";
 }
 
 void Expr_stmt::debug(Printer& p) const {
-
+    p.get_stream() << "Expr_stmt ";
+    p.print_address(this);
+    p.new_line();
+    p.indent();
+    p.print_tabs();
+    m_expr->debug(p);
+    p.undent();
 }
 
 void Expr_stmt::to_sexpr(Printer& p) const {
-
+    p.print_string("(Expr_stmt ");
+    m_expr->to_sexpr(p);
+    p.print_string(")");
 }
 
 

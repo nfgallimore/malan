@@ -111,10 +111,13 @@ private:
 class Expr_stmt : public Stmt
 {
 public:
-    Expr* expr;
+    Expr_stmt(Expr* e) : m_expr(e) { }
     void print(Printer& p) const override;
     void debug(Printer& p) const override;
     void to_sexpr(Printer& p) const override;
+    Expr* get_expr() { return m_expr; }
+private:
+    Expr* m_expr;
 };
 
 
