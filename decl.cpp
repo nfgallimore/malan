@@ -14,7 +14,6 @@ void Var_decl::print(Printer& p) const {
     if (m_init != nullptr) {
         p.get_stream() << " = " << *m_init;
     }
-    p.print_string(";");
 }
 
 void Var_decl::debug(Printer& p) const {
@@ -37,7 +36,10 @@ void Var_decl::debug(Printer& p) const {
         p.print_tabs();
         p.print_string("Expr ");
         p.print_address(m_init);
+        p.new_line();
+        p.indent();
         m_init->debug(p);
+        p.undent();
         p.new_line();
     }
 

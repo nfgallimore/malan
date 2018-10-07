@@ -405,6 +405,7 @@ void Add_expr::print(Printer& p) const {
 }
 
 void Add_expr::debug(Printer& p) const {
+    p.print_tabs();
     p.get_stream() << "Add_expr ";
     p.print_address(this);
     p.new_line();
@@ -438,6 +439,7 @@ void Sub_expr::print(Printer& p) const {
 }
 
 void Sub_expr::debug(Printer& p) const {
+    p.print_tabs();
     p.get_stream() << "Sub_expr ";
     p.print_address(this);
     p.new_line();

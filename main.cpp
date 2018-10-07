@@ -15,6 +15,8 @@ void make_min();
 void print_ref_decl();
 void if_stmt();
 void while_stmt();
+void test();
+void Identifier_if_stmt();
 
 /* This main file contains constructions of the abstract syntax tree
 to test the classes blow up when instantiated. Ideally these would be unit tests
@@ -31,7 +33,8 @@ int main(int argc, char** argv)
     make_min();
     print_ref_decl();
     if_stmt();
-    while_stmt();
+    //while_stmt();
+    Identifier_if_stmt();
 }
 
 void types()
@@ -552,22 +555,69 @@ void factorial()
     );
     
 
-    Fun_decl* fact = new Func_decl(
-        new Name("fact"),
-        new std::vector<Decl*>(0),
-        it,
-        new Block_stmt(
-            new std::vector<Stmt*>(
-                new Decl_stmt(n),
-                new While_stmt(
-                    new Gt_expr(
-                        new Id_expr(n, it),
-                        new Int_lit(0, it),
-                        it
-                    )
-                    new Mul_expr
-                )
-            )
+    // Fun_decl* fact = new Func_decl(
+    //     new Name("fact"),
+    //     new std::vector<Decl*>(0),
+    //     it,
+    //     new Block_stmt(
+    //         new std::vector<Stmt*>(
+    //             new Decl_stmt(n),
+    //             new While_stmt(
+    //                 new Gt_expr(
+    //                     new Id_expr(n, it),
+    //                     new Int_lit(0, it),
+    //                     it
+    //                 )
+    //                 new Mul_expr
+    //             )
+    //         )
+    //     )
+    // );
+}
+
+void Identifier_if_stmt()
+{
+    Int_type it = Int_type();
+    Bool_type bt = Bool_type();
+
+    Decl_stmt* x = new Decl_stmt(new Var_decl(
+        new Name("x"),
+        &it,
+        new Add_expr(
+            new Int_lit(1, &it),
+            new Int_lit(1, &it),
+            &it
         )
+    ));
+    // if (x < 2) then true; else false;
+
+    If_stmt* ifstmt = new If_stmt(
+        new Lt_expr(
+            new Id_expr(
+                x->get_decl(),
+                &it
+            ),
+            new Int_lit(2, &it),
+            &it
+        ),
+        new Expr_stmt(new Bool_lit(false, &bt)),
+        new Expr_stmt(new Bool_lit(true, &bt))
     );
+
+    Printer p(std::cout);
+    p.new_line(2);
+    x->debug(p);
+    p.new_line(2);
+    x->print(p);
+    p.new_line(2);
+    x->to_sexpr(p);
+    p.new_line();
+
+        p.new_line(2);
+    ifstmt->debug(p);
+    p.new_line(2);
+    ifstmt->print(p);
+    p.new_line(2);
+    ifstmt->to_sexpr(p);
+    p.new_line();
 }
