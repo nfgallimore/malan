@@ -28,7 +28,7 @@ void Bool_lit::print(Printer& p) const {
 }
 
 void Bool_lit::debug(Printer& p) const {
-    p.print_string("Int_lit ");
+    p.print_string("Bool_lit ");
     p.print_address(this);
     p.new_line();
 }

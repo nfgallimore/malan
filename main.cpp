@@ -13,6 +13,8 @@ void complex_decl();
 void nested_debug_printing();
 void make_min();
 void print_ref_decl();
+void if_stmt();
+void while_stmt();
 
 /* This main file contains constructions of the abstract syntax tree
 to test the classes blow up when instantiated. Ideally these would be unit tests
@@ -28,6 +30,8 @@ int main(int argc, char** argv)
     nested_debug_printing();
     make_min();
     print_ref_decl();
+    if_stmt();
+    while_stmt();
 }
 
 void types()
@@ -485,4 +489,42 @@ void print_ref_decl()
     refDecl->to_sexpr(p);
     p.new_line(2);
     refDecl->debug(p);
+}
+
+void if_stmt()
+{
+    Printer p(std::cout);
+    p.new_line(2);
+    Int_type it = Int_type();
+
+    If_stmt* ifstmt = new If_stmt(
+        new Lt_expr(new Int_lit(2, &it), new Int_lit(3, &it), &it),
+        new Expr_stmt(new Int_lit(1, &it)),
+        new Expr_stmt(new Int_lit(1, &it))
+    );
+
+    p.get_stream() << *ifstmt;
+    p.new_line(2);
+    ifstmt->debug(p);
+    p.new_line(2);
+    ifstmt->to_sexpr(p);
+}
+
+void while_stmt()
+{
+    Printer p(std::cout);
+    p.new_line(2);
+    Bool_type bt = Bool_type();
+
+    While_stmt* whilestmt = new While_stmt(
+        new Bool_lit(true, &bt),
+        new Expr_stmt(new Bool_lit(false, &bt))
+    );
+    
+    p.get_stream() << *whilestmt;
+    p.new_line(2);
+    whilestmt->debug(p);
+    p.new_line(2);
+    whilestmt->to_sexpr(p);
+    p.new_line(2);
 }

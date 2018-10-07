@@ -129,6 +129,7 @@ public:
     void print(Printer& p) const override;
     void debug(Printer& p) const override;
     void to_sexpr(Printer& p) const override;
+    Decl* get_decl() { return m_decl; }
 private:
     Decl* m_decl;
 };

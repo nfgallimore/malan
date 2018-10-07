@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "stmt.hpp"
-
+#include "decl.hpp"
 
 // Break statement printing operations
 
@@ -60,7 +60,7 @@ void Block_stmt::debug(Printer& p) const {
 }
 
 void Block_stmt::to_sexpr(Printer& p) const {
-    p.print_string("((Block_stmt)");
+    p.print_string("(Block_stmt ");
     for(int i = 0, len = m_stmts->size(); i < len; i++) {
         (*m_stmts)[i]->to_sexpr(p);
     }
@@ -75,26 +75,66 @@ void While_stmt::print(Printer& p) const {
 }
 
 void While_stmt::debug(Printer& p) const {
+    p.print_string("While_stmt ");
+    p.print_address(this);
+    p.indent();
+    p.new_line();
+    
+    p.print_tabs();
+    m_cond->debug(p);
 
+    p.print_tabs();
+    m_body->debug(p);
+
+    p.undent();
 }
 
 void While_stmt::to_sexpr(Printer& p) const {
-
+    p.get_stream() << "(While_stmt ";
+    m_cond->to_sexpr(p);
+    m_body->to_sexpr(p);
+    p.print_string(")");
 }
 
 
 // If statement printing operations
 
 void If_stmt::print(Printer& p) const {
-
+    p.get_stream() << "if " << *m_cond << " then\n{\n";
+    p.indent();
+    p.print_tabs();
+    p.get_stream() << *m_then << "\n}\nelse\n{\n";
+    p.print_tabs();
+    p.get_stream() << *m_else << "\n}";
+    p.undent();
 }
 
 void If_stmt::debug(Printer& p) const {
+    p.print_string("If_stmt ");
+    p.print_address(this);
+    p.indent();
+    p.new_line();
+    
+    p.print_tabs();
+    m_cond->debug(p);
 
+    p.print_tabs();
+    m_then->debug(p);
+
+    p.print_tabs();
+    m_else->debug(p);
+
+    p.undent();
 }
 
 void If_stmt::to_sexpr(Printer& p) const {
-
+    p.get_stream() << "(If_stmt ";
+    m_cond->to_sexpr(p);
+    p.get_stream() << " (then ";
+    m_then->to_sexpr(p);
+    p.get_stream() << ") (else ";
+    m_else->to_sexpr(p);
+    p.get_stream() << "))";
 }
 
 
@@ -147,15 +187,23 @@ void Expr_stmt::to_sexpr(Printer& p) const {
 // Declaration statement printing operations
 
 void Decl_stmt::print(Printer& p) const {
-
+    p.get_stream() << m_decl << ";";
 }
 
 void Decl_stmt::debug(Printer& p) const {
-
+    p.get_stream() << "Decl_stmt ";
+    p.print_address(this);
+    p.new_line();
+    p.indent();
+    p.print_tabs();
+    m_decl->debug(p);
+    p.undent();
 }
 
 void Decl_stmt::to_sexpr(Printer& p) const {
-
+    p.print_string("(Decl_stmt ");
+    m_decl->to_sexpr(p);
+    p.print_string(")");
 }
 
 
