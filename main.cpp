@@ -528,3 +528,46 @@ void while_stmt()
     whilestmt->to_sexpr(p);
     p.new_line(2);
 }
+
+// Implemented using while loop due to lack of call stmt
+void factorial()
+{
+    Printer p(std::cout);
+    p.new_line(2);
+    Int_type* it;
+
+    int factSize = 10;
+
+    Var_decl* n = new Var_decl(
+        new Name("n"), 
+        it, 
+        new Int_lit(10, it)
+    );
+
+    // how can we update variables?
+    Var_decl* product = new Var_decl(
+        new Name("product"), 
+        it, 
+        new Int_lit(0, it)
+    );
+    
+
+    Fun_decl* fact = new Func_decl(
+        new Name("fact"),
+        new std::vector<Decl*>(0),
+        it,
+        new Block_stmt(
+            new std::vector<Stmt*>(
+                new Decl_stmt(n),
+                new While_stmt(
+                    new Gt_expr(
+                        new Id_expr(n, it),
+                        new Int_lit(0, it),
+                        it
+                    )
+                    new Mul_expr
+                )
+            )
+        )
+    );
+}
