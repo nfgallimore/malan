@@ -80,7 +80,6 @@ void Func_decl::print(Printer& p) const {
         m_body->print(p);
         p.undent();
         p.print_string("\n}");
-
     }
 }
 

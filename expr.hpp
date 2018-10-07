@@ -25,7 +25,7 @@ public:
 };
 
 class Bool_lit : public Expr {
-public:    
+public:   
     Bool_lit(bool b, Type* t) 
         : m_value(b), m_type(t) 
     { }

@@ -444,7 +444,6 @@ void make_min()
     Type* z = new Int_type();
     Decl* p1 = new Var_decl(new Name("a"), z, nullptr);
     Decl* p2 = new Var_decl(new Name("b"), z, nullptr);
-    Decl* r = new Var_decl(new Name("r"), z, nullptr);
 
       // p1 < p2 ? p1 : p2
     Expr* expr = new Con_expr(
@@ -468,7 +467,6 @@ void make_min()
     std::vector<Decl*> func_decl_parms;
     func_decl_parms.push_back(p1);
     func_decl_parms.push_back(p2);
-    func_decl_parms.push_back(r);
     Func_decl* fundecl =  new Func_decl(new Name("min"), &func_decl_parms, f, body);
 
     Printer p(std::cout);

@@ -6,30 +6,30 @@
 // Break statement printing operations
 
 void Break_stmt::print(Printer& p) const {
-
+    p.print_string("break;");
 }
 
 void Break_stmt::debug(Printer& p) const {
-
+    p.print_address(this);
 }
 
 void Break_stmt::to_sexpr(Printer& p) const {
-
+    p.print_string("(break)");
 }
 
 
 // Continue statement printing operations
 
 void Cont_stmt::print(Printer& p) const {
-
+    p.print_string("continue;");
 }
 
 void Cont_stmt::debug(Printer& p) const {
-
+    p.print_address(this);
 }
 
 void Cont_stmt::to_sexpr(Printer& p) const {
-
+    p.print_string("(continue)");
 }
 
 
@@ -37,26 +37,33 @@ void Cont_stmt::to_sexpr(Printer& p) const {
 
 void Block_stmt::print(Printer& p) const {
     for(int i = 0, len = m_stmts->size(); i < len; i++) {
-        auto stmt = (*m_stmts)[i];
-        stmt->print(p);
+        (*m_stmts)[i]->print(p);
         // TODO stream is printing address
         // p.get_stream() << stmt;
     }
 }
 
 void Block_stmt::debug(Printer& p) const {
-
+    p.print_string("Block_stmt ");
+    p.print_address(this);
+    for(int i = 0, len = m_stmts->size(); i < len; i++) {
+        (*m_stmts)[i]->debug(p);
+    }
 }
 
 void Block_stmt::to_sexpr(Printer& p) const {
-
+    p.print_string("(Block_stmt)");
+    p.print_address(this);
+    for(int i = 0, len = m_stmts->size(); i < len; i++) {
+        (*m_stmts)[i]->to_sexpr(p);
+    }
 }
 
 
 // While statement printing operations
 
 void While_stmt::print(Printer& p) const {
-
+    p.get_stream() << "while (" << *get_cond() << ")" << *get_body();
 }
 
 void While_stmt::debug(Printer& p) const {
@@ -90,7 +97,8 @@ void Ret_stmt::print(Printer& p) const {
 }
 
 void Ret_stmt::debug(Printer& p) const {
-
+    p.get_stream() << "return ";
+    p.print_address(this);
 }
 
 void Ret_stmt::to_sexpr(Printer& p) const {
