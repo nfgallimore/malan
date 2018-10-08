@@ -386,6 +386,22 @@ private:
     std::vector<Expr*>* m_exprs;
 };
 
+class Ass_expr : public Expr {
+public:
+    Ass_expr(Expr* src, Expr* tar, Type* t)
+        : m_src(src), m_tar(tar), m_type(t)
+    { }
+    void print(Printer &p) const override;
+    void debug(Printer &p) const override;
+    void to_sexpr(Printer &p) const override;
+    Value evaluate() const override {
+        throw std::logic_error("Not implemented");
+    }
+private:
+    Type* m_type;
+    Expr* m_src;
+    Expr* m_tar;
+};
 
 // Operators
 

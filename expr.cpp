@@ -647,6 +647,34 @@ void Call_expr::to_sexpr(Printer& p) const {
     p.get_stream() << ')';
 }
 
+
+// Assignment Expression Operations
+
+void Ass_expr::print(Printer& p) const {
+    p.get_stream() << *m_tar << " = " << *m_src;
+}
+
+void Ass_expr::debug(Printer& p) const {
+    p.get_stream() << "Ass_expr ";
+    p.print_address(this);
+    p.new_line();
+
+    p.indent();
+    p.print_tabs();
+    m_src->debug(p);
+    m_tar->debug(p);
+    
+    p.undent();
+}
+
+void Ass_expr::to_sexpr(Printer& p) const {
+    p.get_stream() << "(Ass_expr ";
+    m_src->to_sexpr(p);
+    m_tar->to_sexpr(p);
+    p.get_stream() << ')';
+}
+
+
 // Operators
 
 std::ostream& operator<<(std::ostream& os, Expr const& e) {

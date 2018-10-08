@@ -639,5 +639,5 @@ void factorial()
     p.new_line(2);
     fact->debug(p);
     p.new_line(2);
-    //fact->to_sexpr(p);
+    fact->to_sexpr(p);
 }
