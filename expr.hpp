@@ -370,6 +370,22 @@ private:
     Type* m_type;
 };
 
+class Call_expr : public Expr {
+public:
+    Call_expr(std::vector<Expr*>* exprs, Type* t)
+        : m_exprs(exprs), m_type(t)
+    { }
+    void print(Printer &p) const override;
+    void debug(Printer &p) const override;
+    void to_sexpr(Printer &p) const override;
+    Value evaluate() const override {
+        throw std::logic_error("Not implemented");
+    }
+private:
+    Type* m_type;
+    std::vector<Expr*>* m_exprs;
+};
+
 
 // Operators
 

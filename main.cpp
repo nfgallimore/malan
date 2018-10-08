@@ -16,7 +16,8 @@ void print_ref_decl();
 void if_stmt();
 void while_stmt();
 void test();
-void Identifier_if_stmt();
+void identifier_if_stmt();
+void factorial();
 
 /* This main file contains constructions of the abstract syntax tree
 to test the classes blow up when instantiated. Ideally these would be unit tests
@@ -33,8 +34,9 @@ int main(int argc, char** argv)
     make_min();
     print_ref_decl();
     if_stmt();
-    //while_stmt();
-    Identifier_if_stmt();
+    while_stmt();
+    identifier_if_stmt();
+    factorial();
 }
 
 void types()
@@ -532,50 +534,8 @@ void while_stmt()
     p.new_line(2);
 }
 
-// Implemented using while loop due to lack of call stmt
-void factorial()
-{
-    Printer p(std::cout);
-    p.new_line(2);
-    Int_type* it;
 
-    int factSize = 10;
-
-    Var_decl* n = new Var_decl(
-        new Name("n"), 
-        it, 
-        new Int_lit(10, it)
-    );
-
-    // how can we update variables?
-    Var_decl* product = new Var_decl(
-        new Name("product"), 
-        it, 
-        new Int_lit(0, it)
-    );
-    
-
-    // Fun_decl* fact = new Func_decl(
-    //     new Name("fact"),
-    //     new std::vector<Decl*>(0),
-    //     it,
-    //     new Block_stmt(
-    //         new std::vector<Stmt*>(
-    //             new Decl_stmt(n),
-    //             new While_stmt(
-    //                 new Gt_expr(
-    //                     new Id_expr(n, it),
-    //                     new Int_lit(0, it),
-    //                     it
-    //                 )
-    //                 new Mul_expr
-    //             )
-    //         )
-    //     )
-    // );
-}
-
-void Identifier_if_stmt()
+void identifier_if_stmt()
 {
     Int_type it = Int_type();
     Bool_type bt = Bool_type();
@@ -612,12 +572,72 @@ void Identifier_if_stmt()
     p.new_line(2);
     x->to_sexpr(p);
     p.new_line();
-
-        p.new_line(2);
+    p.new_line(2);
     ifstmt->debug(p);
     p.new_line(2);
     ifstmt->print(p);
     p.new_line(2);
     ifstmt->to_sexpr(p);
     p.new_line();
+}
+
+// Recursive implementation
+void factorial()
+{
+    Printer p(std::cout);
+    p.new_line(2);
+    Int_type* it;
+
+    int factSize = 10;
+
+    Var_decl* n = new Var_decl(
+        new Name("n"), 
+        it, 
+        new Int_lit(10, it)
+    );
+
+    Func_decl* fact = new Func_decl(nullptr, nullptr, nullptr, nullptr);
+
+    fact = new Func_decl(
+        new Name("fact"),
+        new std::vector<Decl*>(0),
+        it,
+        new Block_stmt(
+            new std::vector<Stmt*>{
+                new If_stmt(
+                    new Gt_expr(
+                        new Id_expr(n, it),
+                        new Int_lit(0, it),
+                        it
+                    ),
+                    new Ret_stmt(
+                        new Mul_expr(
+                            new Id_expr(n, it),
+                            new Call_expr(
+                                new std::vector<Expr*>{
+                                    new Id_expr(fact, it),
+                                    new Sub_expr(
+                                        new Id_expr(n, it),
+                                        new Int_lit(1, it),
+                                        it
+                                    )
+                                },
+                                it
+                            ),
+                            it
+                        )
+                    ),
+                    new Ret_stmt(
+                        new Int_lit(1, it)
+                    )
+                )
+            }
+        )
+    );
+    p.new_line(2);
+    p.get_stream() << *fact;
+    p.new_line(2);
+    fact->debug(p);
+    p.new_line(2);
+    //fact->to_sexpr(p);
 }

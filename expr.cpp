@@ -617,6 +617,38 @@ void Rec_expr::to_sexpr(Printer& p) const {
 }
 
 
+// Call Expression Operations
+
+void Call_expr::print(Printer& p) const {
+    for (int i = 0, len = m_exprs->size(); i < len; i++) {
+        (*m_exprs)[i]->print(p);
+    }
+}
+
+void Call_expr::debug(Printer& p) const {
+    p.get_stream() << "Call_expr ";
+    p.print_address(this);
+    p.new_line();
+
+    p.indent();
+
+    for (int i = 0, len = m_exprs->size(); i < len; i++) {
+        p.print_tabs();
+        (*m_exprs)[i]->debug(p);
+        p.new_line();
+    }
+    
+    p.undent();
+}
+
+void Call_expr::to_sexpr(Printer& p) const {
+    p.get_stream() << "(Call_expr ";
+    for (int i = 0, len = m_exprs->size(); i < len; i++) {
+        (*m_exprs)[i]->to_sexpr(p);
+    }
+    p.get_stream() << ')';
+}
+
 // Operators
 
 std::ostream& operator<<(std::ostream& os, Expr const& e) {
