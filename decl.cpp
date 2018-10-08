@@ -65,10 +65,7 @@ void Var_decl::to_sexpr(Printer& p) const {
 void Func_decl::print(Printer& p) const {
     p.print_string("func ");
     p.get_stream() << m_name->get_str() << " : (";
-    if (m_parms->empty()) {
-        p.print_string(")");
-    }
-    else {
+    if (!m_parms->empty()) {
         for (int i = 0, len = m_parms->size(); i < len; i++) {
 
             Decl* d = (*m_parms)[i];
@@ -79,14 +76,12 @@ void Func_decl::print(Printer& p) const {
                 p.print_string(", ");
             }
         }
-        p.print_string(") -> ");
-        
-        // :O
-        p.get_stream() << *static_cast<Fun_type const*>(m_ret)->get_return_type();
-
-        // begin statements
-        m_body->print(p);
     }
+    // prints return type
+    p.get_stream() << ") -> " << *m_ret;
+
+    // begin statements
+    m_body->print(p);
 }
 
 void Func_decl::debug(Printer& p) const {

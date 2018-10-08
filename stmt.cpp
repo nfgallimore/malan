@@ -100,12 +100,39 @@ void While_stmt::to_sexpr(Printer& p) const {
 // If statement printing operations
 
 void If_stmt::print(Printer& p) const {
-    p.get_stream() << "if " << *m_cond << " then\n{\n";
+    p.get_stream() << "if " << *m_cond << " then";
+    p.new_line();
+
+    p.print_tabs();
+    p.print_string("{");
+    p.new_line();
+
     p.indent();
     p.print_tabs();
-    p.get_stream() << *m_then << "\n}\nelse\n{\n";
+    p.get_stream() << *m_then;
+    p.new_line();
+    
+    p.undent();
     p.print_tabs();
-    p.get_stream() << *m_else << "\n}";
+    p.get_stream() << "}";
+    p.new_line();
+
+    p.print_tabs();
+    p.get_stream() << "else";
+    p.new_line();
+    
+    p.print_tabs();
+    p.print_string("{");
+    p.new_line();
+
+    p.indent();
+    p.print_tabs();
+    p.get_stream() << *m_else;
+    p.new_line();
+
+    p.undent();
+    p.print_tabs();
+    p.print_string("}");
     p.undent();
 }
 

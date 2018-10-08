@@ -631,11 +631,9 @@ void Call_expr::debug(Printer& p) const {
     p.new_line();
 
     p.indent();
-
+    p.print_tabs();
     for (int i = 0, len = m_exprs->size(); i < len; i++) {
-        p.print_tabs();
         (*m_exprs)[i]->debug(p);
-        p.new_line();
     }
     
     p.undent();

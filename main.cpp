@@ -586,7 +586,7 @@ void factorial()
 {
     Printer p(std::cout);
     p.new_line(2);
-    Int_type* it;
+    Int_type* it = new Int_type();
 
     int factSize = 10;
 
@@ -596,11 +596,11 @@ void factorial()
         new Int_lit(10, it)
     );
 
-    Func_decl* fact = new Func_decl(nullptr, nullptr, nullptr, nullptr);
+    Func_decl* fact = new Func_decl(new Name("fact"), nullptr, nullptr, nullptr);
 
     fact = new Func_decl(
         new Name("fact"),
-        new std::vector<Decl*>(0),
+        new std::vector<Decl*> { new Var_decl(new Name("n"), it, nullptr)},
         it,
         new Block_stmt(
             new std::vector<Stmt*>{
@@ -635,7 +635,7 @@ void factorial()
         )
     );
     p.new_line(2);
-    p.get_stream() << *fact;
+    fact->print(p);;
     p.new_line(2);
     fact->debug(p);
     p.new_line(2);
