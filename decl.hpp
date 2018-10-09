@@ -35,7 +35,6 @@ public:
     /// Returns the type of the declaration, if any.
 };
 
-using Decl_seq = std::vector<Decl*>;
 
 /// Represents object declarations of the form `var x : t = e`
 class Var_decl : public Decl
@@ -115,6 +114,11 @@ Ref_decl::Ref_decl(Name* name, Type* type, Expr* init)
 { }
 
 
+/// Represents a declaration sequence
+using Decl_seq = std::vector<Decl*>;
+
+
+/// Represents function declaration of the type: `fun x (decl-seq) -> t s`
 class Func_decl : public Decl
 {
 public:
@@ -163,22 +167,26 @@ Func_decl::Func_decl(Name* name, Decl_seq* parms, Type* ret, Stmt* body)
 // Operators
 
 std::ostream& operator<<(std::ostream& os, Decl const& d);
+/// Write `d` to the output stream.
 
 
 // Operations
 
+/// Prints the declaration in `pretty print`.
 inline void
 print(Printer& p, Decl const& d)
 {
     p.get_stream() << d;
 };
 
+/// Prints the declaration as a symbolic expression.
 inline void
 to_sexpr(Printer& p, Decl const& d)
 {
     d.to_sexpr(p);
 }
 
+/// Prints the declaration's associated addresses in memory.
 inline void
 debug(Printer& p, Decl const& d)
 {
