@@ -183,7 +183,7 @@ Value Id_expr::evaluate() const
 }
 
 
-/// Represents the logical AND expression of the form `e1 and e2`.
+/// Represents the logical and expression of the form `e1 and e2`.
 class And_expr : public Expr 
 {
 public:
@@ -231,7 +231,7 @@ Value And_expr::evaluate() const
 }
 
 
-/// Represents the logical OR expression of the form `e1 or e2`.
+/// Represents the logical or expression of the form `e1 or e2`.
 class Or_expr : public Expr 
 {
 public:
@@ -279,12 +279,12 @@ Value Or_expr::evaluate() const
 }
 
 
-/// Represents the logical NOT expression of the form `not e1`.
-class Not_expr : public Expr {
+/// Represents the logical not expression of the form `not e1`.
+class Not_expr : public Expr
+{
 public:
-    Not_expr(Expr* e, Type* t) 
-        : m_expr(e), m_type(t) 
-    { }
+    Not_expr(Expr* e, Type* t);
+    /// Constructs a not expression with the given arguments.
 
     void print(Printer& p) const override;
     /// `Pretty prints` the expression.
@@ -295,23 +295,38 @@ public:
     void to_sexpr(Printer& p) const override;
     /// Prints the expression as a symbolic expression.
 
-    Value evaluate() const override {
-        return Value(!m_expr->evaluate().get_bool());
-    }
+    Value evaluate() const override;
+    /// Evaluates the not expression.
+
     Expr* get_exp() { return m_expr; }
+    /// Gets the expression not is being applied to.
+
 private:
     Expr* m_expr;
+    /// The expression not is being applied to.
+
     Type* m_type;
+    /// The type of the not expression.
 };
+
+inline
+Not_expr::Not_expr(Expr* e, Type* t) 
+    : m_expr(e), m_type(t) 
+{ }
+
+inline
+Value Not_expr::evaluate() const
+{
+    return Value(!m_expr->evaluate().get_bool());
+}
 
 
 /// Represents the conditional expression of the form `if e1 then e2 else e3`.
 class Con_expr : public Expr 
 {
 public:
-    Con_expr(Expr* e1, Expr* e2, Expr* e3, Type* t) 
-        : m_e1(e1), m_e2(e2), m_e3(e3), m_type(t) 
-    { }
+    Con_expr(Expr* e1, Expr* e2, Expr* e3, Type* t);
+    /// Constructs a conditional expression with the given arguments.
 
     void print(Printer& p) const override;
     /// `Pretty prints` the expression.
@@ -322,24 +337,42 @@ public:
     void to_sexpr(Printer& p) const override;
     /// Prints the expression as a symbolic expression.
 
-    Value evaluate() const override {
-        throw std::logic_error("Cannot evaluate ternary expression.");
-    }
+    Value evaluate() const override;
+    /// Evalutes the conditional expression.
+
 private:
     Expr* m_e1;
+    /// The if expression of the conditional expression.
+
     Expr* const m_e2;
+    /// The then expression of the conditional expression.
+
     Expr* const m_e3;
+    /// The else expression of the conditional expression.
+
     Type* m_type;
+    /// The type of the conditional expression.
 };
+
+inline
+Con_expr::Con_expr(Expr* e1, Expr* e2, Expr* e3, Type* t) 
+    : m_e1(e1), m_e2(e2), m_e3(e3), m_type(t) 
+{ }
+
+inline
+Value Con_expr::evaluate() const
+{
+    throw std::logic_error("Cannot evaluate a conditional expression.");
+}
 
 
 /// Represents the equality expression of the form `e1 = e2`.
 class Eq_expr : public Expr
 {
 public:
-    Eq_expr(Expr* e1, Expr* e2, Type* t) 
-        : m_e1(e1), m_e2(e2), m_type(t) 
-    { }
+    Eq_expr(Expr* e1, Expr* e2, Type* t);
+    /// Constructs the equality expression.
+
     void print(Printer& p) const override;
     /// `Pretty prints` the expression.
 
@@ -349,23 +382,44 @@ public:
     void to_sexpr(Printer& p) const override;
     /// Prints the expression as a symbolic expression.
 
-    Value evaluate() const override {
-        throw std::logic_error("Not implemented");
-    }
+    Value evaluate() const override;
+    /// Evaluates the equality expression.
+
+    Expr* get_lhs() { return m_e1; }
+    /// Gets the left hand side of the equality expression.
+
+    Expr* get_rhs() { return m_e2; }
+    /// Gets the right hand side of the equality expression.
+
 private:
     Expr* m_e1;
+    /// The left hand side of the equality expression.
+
     Expr* m_e2;
+    /// The right hand side of the equality expression.
+
     Type* m_type;
+    /// The type of the equality expression.
 };
 
+inline
+Eq_expr::Eq_expr(Expr* e1, Expr* e2, Type* t) 
+    : m_e1(e1), m_e2(e2), m_type(t) 
+{ }
 
-/// Represents the not equal expression of the form `e1 != e2`.
+inline
+Value Eq_expr::evaluate() const
+{
+    throw std::logic_error("Not implemented");
+}
+
+
+/// Represents the inequality expression of the form `e1 != e2`.
 class Ne_expr : public Expr
 {
 public:
-    Ne_expr(Expr* e1, Expr* e2, Type* t) 
-        : m_e1(e1), m_e2(e2), m_type(t) 
-    { }
+    Ne_expr(Expr* e1, Expr* e2, Type* t);
+    /// Constructs an inequality expression with the given arguments.
 
     void print(Printer& p) const override;
     /// `Pretty prints` the expression.
@@ -376,14 +430,36 @@ public:
     void to_sexpr(Printer& p) const override;
     /// Prints the expression as a symbolic expression.
 
-    Value evaluate() const override {
-        throw std::logic_error("Not implemented");
-    }
+    Value evaluate() const override;
+    /// Evalutes the inequality expression.
+
+    Expr* get_lhs() { return m_e1; }
+    /// Gets the left hand side of the inequality expression.
+
+    Expr* get_rhs() { return m_e2; }
+    /// Gets the right hand side of the inequality expression.
+
 private:
     Expr* m_e1;
+    /// The left hand side of the inequality expression.
+
     Expr* m_e2;
+    /// The right hand side of the inequality expression.
+
     Type* m_type;
+    /// The type of the inequality expression.
 };
+
+inline
+Ne_expr::Ne_expr(Expr* e1, Expr* e2, Type* t) 
+    : m_e1(e1), m_e2(e2), m_type(t) 
+{ }
+
+inline
+Value Ne_expr::evaluate() const
+{
+    throw std::logic_error("Not implemented");
+}
 
 
 /// Represents the less than expression of the form `e1 < e2`.
