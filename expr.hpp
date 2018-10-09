@@ -16,6 +16,9 @@ public:
     virtual Value evaluate() const = 0;
     /// Evaluates the expression.
 
+    virtual Type* get_type() const = 0;
+    /// Gets the type of the expression.
+
     virtual void print(Printer& p) const = 0;
     /// `Pretty prints` the expression.
 
@@ -38,18 +41,18 @@ public:
     /// `Pretty prints` the expression.
 
     void debug(Printer& p) const override;
-    /// Prints the expression's associated addresses in memory.
+    /// Prints the boolean literal expression's associated addresses in memory.
 
     void to_sexpr(Printer& p) const override;
-    /// Prints the expression as a symbolic expression.
+    /// Prints the boolean literal expression as a symbolic expression.
 
     Value evaluate() const override;
-    /// Evaluates the expression.
+    /// Evaluates the boolean literal expression.
 
-    bool get_bool() { return m_value; }
+    bool get_value() { return m_value; }
     /// Returns the boolean value of the boolean literal expression.
 
-    Type* get_type() { return m_type; }
+    Type* get_type() const override { return m_type; }
     /// Returns the type of the boolean literal expression.
 
 private:
@@ -80,23 +83,29 @@ public:
     /// Constructs an integer literal expression with the given arguments.
 
     void print(Printer& p) const override;
-    /// `Pretty prints` the expression.
+    /// `Pretty prints` the integer literal expression.
 
     void debug(Printer& p) const override;
-    /// Prints the expression's associated addresses in memory.
+    /// Prints the integer literal expression's associated addresses in memory.
 
     void to_sexpr(Printer& p) const override;
-    /// Prints the expression as a symbolic expression.
+    /// Prints the integer literal expression as a symbolic expression.
 
     Value evaluate() const override;
-    /// Evaluates the expression.
+    /// Evaluates the integer literal expression.
+
+    int get_value() { return m_value; }
+    /// Returns the integer value of the integer literal expression.
+
+    Type* get_type() const override { return m_type; }
+    /// Returns the type of the integer literal expression.
 
 private:
     int m_value;
     /// The integer value of the integer literal expression.
 
     Type* m_type;
-    /// The type of the integer litearl expression.
+    /// The type of the integer literal expression.
 };
 
 inline
@@ -119,16 +128,22 @@ public:
     /// Constructs a float literal expression with the given arguments.
 
     void print(Printer& p) const override;
-    /// `Pretty prints` the expression.
+    /// `Pretty prints` the float literal expression.
 
     void debug(Printer& p) const override;
-    /// Prints the expression's associated addresses in memory.
+    /// Prints the float literal expression's associated addresses in memory.
 
     void to_sexpr(Printer& p) const override;
-    /// Prints the expression as a symbolic expression.
+    /// Prints the float literal expression as a symbolic expression.
 
     Value evaluate() const override;
-    /// Evaluates the expression.
+    /// Evaluates the float literal expression.
+    
+    Type* get_type() const override { return m_type; }
+    /// Returns the type of the float literal expression.
+
+    float get_value() { return m_value; }
+    /// Returns the float value of the float literal expression.
 
 private:
     float m_value;
@@ -158,16 +173,22 @@ public:
     /// Constructs an identifier expression with the given arguments.
 
     void print(Printer& p) const override;
-    /// `Pretty prints` the expression.
+    /// `Pretty prints` the identifier expression.
 
     void debug(Printer& p) const override;
-    /// Prints the expression's associated addresses in memory.
+    /// Prints the identifier expression's associated addresses in memory.
 
     void to_sexpr(Printer& p) const override;
-    /// Prints the expression as a symbolic expression.
+    /// Prints the identifier expression as a symbolic expression.
 
     Value evaluate() const override;
-    /// Evaluates the expression.
+    /// Evaluates the identifier expression.
+
+    Type* get_type() const override { return m_type; }
+    /// Returns the type of the identifier expression.
+
+    Decl* get_decl() { return m_value; }
+    /// Gets the declaration of the identifier expression.
 
 private:
     Decl* m_value;
@@ -197,22 +218,26 @@ public:
     /// Constructs an and expression with the given arguments.
 
     void print(Printer& p) const override;
-    /// `Pretty prints` the expression.
+    /// `Pretty prints` the and expression.
 
     void debug(Printer& p) const override;
-    /// Prints the expression's associated addresses in memory.
+    /// Prints the and expression's associated addresses in memory.
 
     void to_sexpr(Printer& p) const override;
-    /// Prints the expression as a symbolic expression.
+    /// Prints the and expression as a symbolic expression.
 
     Value evaluate() const override;
-    /// Evaluates the expression.
+    /// Evaluates the and expression.
+
+   Type* get_type() const override { return m_type; }
+    /// Returns the type of the and expression.
 
     Expr* get_lhs() { return m_e1; }
     /// Gets the left hand side expression of the and expression.
 
     Expr* get_rhs() { return m_e2; }
     /// Gets the right hand side expression of the and expression.
+
 
 private:
     Expr* m_e1;
@@ -245,16 +270,19 @@ public:
     /// Constructs an or expression with the given arguments.
 
     void print(Printer& p) const override;
-    /// `Pretty prints` the expression.
+    /// `Pretty prints` the or expression.
 
     void debug(Printer& p) const override;
-    /// Prints the expression's associated addresses in memory.
+    /// Prints the or expression's associated addresses in memory.
 
     void to_sexpr(Printer& p) const override;
-    /// Prints the expression as a symbolic expression.
+    /// Prints the or expression as a symbolic expression.
 
     Value evaluate() const override;
     /// Evaluates the or expression.
+    
+    Type* get_type() const override { return m_type; }
+    /// Returns the type of the or expression.
 
     Expr* get_lhs() { return m_e1; }
     /// Gets the left hand side of the or expression.
@@ -293,19 +321,25 @@ public:
     /// Constructs a not expression with the given arguments.
 
     void print(Printer& p) const override;
-    /// `Pretty prints` the expression.
+    /// `Pretty prints` the not expression.
 
     void debug(Printer& p) const override;
-    /// Prints the expression's associated addresses in memory.
+    /// Prints the not expression's associated addresses in memory.
 
     void to_sexpr(Printer& p) const override;
-    /// Prints the expression as a symbolic expression.
+    /// Prints the not expression as a symbolic expression.
 
     Value evaluate() const override;
     /// Evaluates the not expression.
 
+    Type* get_type() const override { return m_type; }
+    /// Returns the type of the not expression.
+
     Expr* get_exp() { return m_expr; }
     /// Gets the expression not is being applied to.
+
+    Type* get_type() { return m_type; }
+    /// Returns the type of the not expression.
 
 private:
     Expr* m_expr;
@@ -346,6 +380,18 @@ public:
     Value evaluate() const override;
     /// Evalutes the conditional expression.
 
+    Type* get_type() const override { return m_type; }
+    /// Returns the type of the conditional expression.
+
+    Expr* get_if() { return m_e1; }
+    /// Returns the if expression of the conditional expression.
+
+    Expr* get_then() { return m_e2; }
+    /// Returns the then expression of the conditional expression.
+
+    Expr* get_else() { return m_e3; }
+    /// Returns the else expression of the conditional expression.
+
 private:
     Expr* m_e1;
     /// The if expression of the conditional expression.
@@ -380,16 +426,19 @@ public:
     /// Constructs an equality expression with the given arguments.
 
     void print(Printer& p) const override;
-    /// `Pretty prints` the expression.
+    /// `Pretty prints` the equality expression.
 
     void debug(Printer& p) const override;
-    /// Prints the expression's associated addresses in memory.
+    /// Prints the equality expression's associated addresses in memory.
 
     void to_sexpr(Printer& p) const override;
-    /// Prints the expression as a symbolic expression.
+    /// Prints the equality expression as a symbolic expression.
 
     Value evaluate() const override;
     /// Evaluates the equality expression.
+
+    Type* get_type() const override { return m_type; }
+    /// Returns the type of the equality expression.
 
     Expr* get_lhs() { return m_e1; }
     /// Gets the left hand side of the equality expression.
@@ -428,16 +477,19 @@ public:
     /// Constructs an inequality expression with the given arguments.
 
     void print(Printer& p) const override;
-    /// `Pretty prints` the expression.
+    /// `Pretty prints` the inequality expression.
 
     void debug(Printer& p) const override;
-    /// Prints the expression's associated addresses in memory.
+    /// Prints the inequality expression's associated addresses in memory.
 
     void to_sexpr(Printer& p) const override;
-    /// Prints the expression as a symbolic expression.
+    /// Prints the inequality expression as a symbolic expression.
 
     Value evaluate() const override;
     /// Evalutes the inequality expression.
+
+    Type* get_type() const override { return m_type; }
+    /// Returns the type of the inequality expression.
 
     Expr* get_lhs() { return m_e1; }
     /// Gets the left hand side of the inequality expression.
@@ -476,16 +528,19 @@ public:
     /// Constructs a less than expression with the given arguments.
      
     void print(Printer& p) const override;
-    /// `Pretty prints` the expression.
+    /// `Pretty prints` the less than expression.
 
     void debug(Printer& p) const override;
-    /// Prints the expression's associated addresses in memory.
+    /// Prints the less than expression's associated addresses in memory.
 
     void to_sexpr(Printer& p) const override;
-    /// Prints the expression as a symbolic expression.
+    /// Prints the less than expression as a symbolic expression.
 
     Value evaluate() const override;
     /// Evaluates the less than expression.
+
+    Type* get_type() const override { return m_type; }
+    /// Returns the type of the less than expression.
 
     Expr* get_lhs() { return m_e1; }
     /// Gets the left hand side of the less than expression expression.
@@ -524,16 +579,19 @@ public:
     /// Constructs a greater than expression with the given arguments.
 
     void print(Printer& p) const override;
-    /// `Pretty prints` the expression.
+    /// `Pretty prints` the greater than expression.
 
     void debug(Printer& p) const override;
-    /// Prints the expression's associated addresses in memory.
+    /// Prints the greater than expression's associated addresses in memory.
 
     void to_sexpr(Printer& p) const override;
-    /// Prints the expression as a symbolic expression.
+    /// Prints the greater than expression as a symbolic expression.
 
     Value evaluate() const override;
     /// Evaluates the greater than expression.
+
+    Type* get_type() const override { return m_type; }
+    /// Returns the type of the greater than expression.
 
     Expr* get_lhs() { return m_e1; }
     /// Gets the left hand side of the greater than expression.
@@ -572,16 +630,19 @@ public:
     /// Constructs a less than or equal expression with the given arguments.
 
     void print(Printer& p) const override;
-    /// `Pretty prints` the expression.
+    /// `Pretty prints` the less than or equal expression.
 
     void debug(Printer& p) const override;
-    /// Prints the expression's associated addresses in memory.
+    /// Prints the less than or equal expression's associated addresses in memory.
 
     void to_sexpr(Printer& p) const override;
-    /// Prints the expression as a symbolic expression.
+    /// Prints the less than or equal expression as a symbolic expression.
 
     Value evaluate() const override;
     /// Evaluates the less than or equal expression.
+
+    Type* get_type() const override { return m_type; }
+    /// Returns the type of the less than or equal  expression.
 
     Expr* get_lhs() { return m_e1; }
     /// Gets the left hand side of the less than or equal expression.
@@ -620,16 +681,19 @@ public:
     /// Constructs a greater than or equal expression with the given arguments.
 
     void print(Printer& p) const override;
-    /// `Pretty prints` the expression.
+    /// `Pretty prints` the greater than or equal expression.
 
     void debug(Printer& p) const override;
-    /// Prints the expression's associated addresses in memory.
+    /// Prints the greater than or equal expression's associated addresses in memory.
 
     void to_sexpr(Printer& p) const override;
-    /// Prints the expression as a symbolic expression.
+    /// Prints the greater than or equal expression as a symbolic expression.
 
     Value evaluate() const override;
     /// Evaluates the greater than or equal expression.
+
+    Type* get_type() const override { return m_type; }
+    /// Returns the type of the greater than or equal expression.
 
     Expr* get_lhs() { return m_e1; }
     /// Gets the left hand side of the greater than or equal expression.
@@ -665,19 +729,22 @@ class Add_expr : public Expr
 {
 public:
     Add_expr(Expr* e1, Expr* e2, Type* t);
-    /// Constructs an add expression with the given arguments.
+    /// Constructs an addition expression with the given arguments.
 
     void print(Printer& p) const override;
-    /// `Pretty prints` the expression.
+    /// `Pretty prints` the addition expression.
 
     void debug(Printer& p) const override;
-    /// Prints the expression's associated addresses in memory.
+    /// Prints the addition expression's associated addresses in memory.
 
     void to_sexpr(Printer& p) const override;
-    /// Prints the expression as a symbolic expression.
+    /// Prints the addition expression as a symbolic expression.
 
     Value evaluate() const override;
     /// Evaluates the addition expression.
+
+    Type* get_type() const override { return m_type; }
+    /// Returns the type of the addition expression.
 
     Expr* get_lhs() { return m_e1; }
     /// Gets the left hand side of the addition expression.
@@ -716,17 +783,20 @@ public:
     /// Constructs a subtraction expression with the given arguments.
 
     void print(Printer& p) const override;
-    /// `Pretty prints` the expression.
+    /// `Pretty prints` the subtraction expression.
 
     void debug(Printer& p) const override;
-    /// Prints the expression's associated addresses in memory.
+    /// Prints the subtraction expression's associated addresses in memory.
 
     void to_sexpr(Printer& p) const override;
-    /// Prints the expression as a symbolic expression.
+    /// Prints the subtraction expression as a symbolic expression.
 
     Value evaluate() const override;
     /// Evaluates the subtraction expression.
     
+    Type* get_type() const override { return m_type; }
+    /// Returns the type of the subtraction expression.
+
     Expr* get_lhs() { return m_e1; }
     /// Gets the left hand side of the subtraction expression.
 
@@ -764,16 +834,19 @@ public:
     /// Constructs a multiplication expression with the given arugments.
 
     void print(Printer& p) const override;
-    /// `Pretty prints` the expression.
+    /// `Pretty prints` the multiplication expression.
 
     void debug(Printer& p) const override;
-    /// Prints the expression's associated addresses in memory.
+    /// Prints the multiplication expression's associated addresses in memory.
 
     void to_sexpr(Printer& p) const override;
-    /// Prints the expression as a symbolic expression.
+    /// Prints the multiplication expression as a symbolic expression.
 
     Value evaluate() const override;
     /// Evaluates the multiplication expression.
+
+    Type* get_type() const override { return m_type; }
+    /// Returns the type of the multiplication expression.
 
     Expr* get_lhs() { return m_e1; }
     /// Gets the left hand side of the multiplication expression.
@@ -812,17 +885,20 @@ public:
     /// Constructs a quotient expression with the given arguments.
 
     void print(Printer& p) const override;
-    /// `Pretty prints` the expression.
+    /// `Pretty prints` the quotient expression.
 
     void debug(Printer& p) const override;
-    /// Prints the expression's associated addresses in memory.
+    /// Prints the quotient expression's associated addresses in memory.
 
     void to_sexpr(Printer& p) const override;
-    /// Prints the expression as a symbolic expression.
+    /// Prints the quotient expression as a symbolic expression.
 
     Value evaluate() const override;
     /// Evaluates the quotient expression.
     
+    Type* get_type() const override { return m_type; }
+    /// Returns the type of the quotient expression.
+
     Expr* get_lhs() { return m_e1; }
     /// Gets the left hand side of the quotient expression.
 
@@ -860,16 +936,19 @@ public:
     /// Constructs a remainder expression with the given arguments.
 
     void print(Printer& p) const override;
-    /// `Pretty prints` the expression.
+    /// `Pretty prints` the remainder expression.
 
     void debug(Printer& p) const override;
-    /// Prints the expression's associated addresses in memory.
+    /// Prints the remainder expression's associated addresses in memory.
 
     void to_sexpr(Printer& p) const override;
-    /// Prints the expression as a symbolic expression.
+    /// Prints the remainder expression as a symbolic expression.
 
     Value evaluate() const override;
     /// Evaluates the remainder expression.
+
+    Type* get_type() const override { return m_type; }
+    /// Returns the type of the remainder expression.
 
     Expr* get_lhs() { return m_e1; }
     /// Gets the left hand side of the remainder expression.
@@ -908,19 +987,22 @@ public:
     /// Constructs a negation expression with the given arguments.
 
     void print(Printer& p) const override;
-    /// `Pretty prints` the expression.
+    /// `Pretty prints` the negation expression.
 
     void debug(Printer& p) const override;
-    /// Prints the expression's associated addresses in memory.
+    /// Prints the negation expression's associated addresses in memory.
 
     void to_sexpr(Printer& p) const override;
-    /// Prints the expression as a symbolic expression.
+    /// Prints the negation expression as a symbolic expression.
 
     Value evaluate() const override;
     /// Evaluates the negation expression.
 
+    Type* get_type() const override { return m_type; }
+    /// Returns the type of the negation expression.
+
     Expr* get_expr() { return m_expr; }
-    /// Gets the expression being negated
+    /// Gets the negated expression.
 
 private:
     Expr* m_expr;
@@ -950,16 +1032,19 @@ public:
     /// Constructs a reciprocal expression with the given arguments.
 
     void print(Printer& p) const override;
-    /// `Pretty prints` the expression.
+    /// `Pretty prints` the reciprocal expression.
 
     void debug(Printer& p) const override;
-    /// Prints the expression's associated addresses in memory.
+    /// Prints the reciprocal expression's associated addresses in memory.
 
     void to_sexpr(Printer& p) const override;
-    /// Prints the expression as a symbolic expression.
+    /// Prints the reciprocal expression as a symbolic expression.
 
     Value evaluate() const override;
     /// Evaluates the reciprocal expression.
+
+    Type* get_type() const override { return m_type; }
+    /// Returns the type of the reciprocal expression.
 
     Expr* get_expr() { return m_expr; }
     /// Gets the expression the reciprocal is being applied to.
@@ -992,25 +1077,25 @@ public:
     /// Constructs an assignment expression with the given arguments.
     
     void print(Printer& p) const override;
-    /// `Pretty prints` the expression.
+    /// `Pretty prints` the assignment expression.
 
     void debug(Printer& p) const override;
-    /// Prints the expression's associated addresses in memory.
+    /// Prints the assignment expression's associated addresses in memory.
 
     void to_sexpr(Printer& p) const override;
-    /// Prints the expression as a symbolic expression.
+    /// Prints the assignment expression as a symbolic expression.
 
     Value evaluate() const override;
     /// Evaluates the assignment expression.
 
+    Type* get_type() const override { return m_type; }
+    /// Returns the type of the assignment expression.
+
     Expr* get_src() { return m_src; }
-    /// Gets the source expression.
+    /// Gets the source expression of the assignment expresion.
     
     Expr* get_tar() { return m_tar; }
-    /// Gets the target expression.
-
-    Type* get_type() { return m_type; }
-    /// Returns the type of the assignmente expression.
+    /// Gets the target expression of the assignment expression.
 
 private:
     Type* m_type;
@@ -1031,7 +1116,7 @@ Ass_expr::Ass_expr(Expr* src, Expr* tar, Type* t)
 inline
 Value Ass_expr::evaluate() const 
 {
-    throw std::logic_error("Not implemented");
+    throw std::logic_error("Cannot evaluate an assignment expression.");
 }
 
 
@@ -1043,22 +1128,22 @@ public:
     /// Constructs a function call expression with the given arguments.
 
     void print(Printer& p) const override;
-    /// `Pretty prints` the expression.
+    /// `Pretty prints` the function call expression.
 
     void debug(Printer& p) const override;
-    /// Prints the expression's associated addresses in memory.
+    /// Prints the function call expression's associated addresses in memory.
 
     void to_sexpr(Printer& p) const override;
-    /// Prints the expression as a symbolic expression.
+    /// Prints the function call expression as a symbolic expression.
 
     Value evaluate() const override;
     /// Evaluates the function call expression.
 
-    std::vector<Expr*>* get_exprs() { return m_exprs; }
-    /// Returns the parameters of the function call.
+    Type* get_type() const override { return m_type; }
+    /// Returns the type of the function call expression.
 
-    Type* get_type() { return m_type; }
-    /// Returns the type of the function call.
+    std::vector<Expr*>* get_exprs() { return m_exprs; }
+    /// Returns the parameters of the function call expression.
 
 private:
     Type* m_type;
