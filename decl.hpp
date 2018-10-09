@@ -18,7 +18,7 @@ public:
     // Printer operations
 
     virtual void print(Printer& p) const = 0;
-    /// Prints the declaration in `pretty print`.
+    /// `Pretty prints` the declaration.
 
     virtual void debug(Printer& p) const = 0;
     /// Prints the declaration's associated addresses in memory.
@@ -44,7 +44,7 @@ public:
     /// Constructs the variable with the given arguments.
 
     void print(Printer& p) const override;
-    /// Prints the declaration in `pretty print`.
+    /// `Pretty prints` the declaration.
 
     void debug(Printer& p) const override;
     /// Prints the declaration's associated addresses in memory.
@@ -83,7 +83,7 @@ public:
     /// Constructs the reference with the given arguments.
 
     void print(Printer& p) const override;
-    /// Prints the declaration in `pretty print`.
+    /// `Pretty prints` the declaration.
 
     void debug(Printer& p) const override;
     /// Prints the declaration's associated addresses in memory.
@@ -127,7 +127,7 @@ public:
     /// Constructs the function with the given arguments.
 
     void print(Printer& p) const override;
-    /// Prints the declaration in `pretty print`.
+    /// `Pretty prints` the declaration.
 
     void debug(Printer& p) const override;
     /// Prints the declaration's associated addresses in memory.
@@ -172,7 +172,7 @@ std::ostream& operator<<(std::ostream& os, Decl const& d);
 
 // Operations
 
-/// Prints the declaration in `pretty print`.
+/// `Pretty prints` the declaration.
 inline void
 print(Printer& p, Decl const& d)
 {
