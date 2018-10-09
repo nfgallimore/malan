@@ -10,7 +10,7 @@ class Expr;
 class Stmt;
 class Decl;
 
-/// Represents the base class of all declarations
+/// Represents the base class of all declarations.
 class Decl
 {
 public:
@@ -18,7 +18,7 @@ public:
     // Printer operations
 
     virtual void print(Printer& p) const = 0;
-    /// Prints the declaration in `pretty print`
+    /// Prints the declaration in `pretty print`.
 
     virtual void debug(Printer& p) const = 0;
     /// Prints the declaration's associated addresses in memory.
@@ -37,7 +37,7 @@ public:
 
 using Decl_seq = std::vector<Decl*>;
 
-/// Represents object declarations
+/// Represents object declarations of the form `var x : t = e`
 class Var_decl : public Decl
 {
 public:
@@ -45,7 +45,7 @@ public:
     /// Constructs the variable with the given arguments.
 
     void print(Printer& p) const override;
-    /// Prints the declaration in `pretty print`
+    /// Prints the declaration in `pretty print`.
 
     void debug(Printer& p) const override;
     /// Prints the declaration's associated addresses in memory.
@@ -61,8 +61,13 @@ public:
 
 private:
     Name* m_name;
+    /// The name of the variable declaration.
+
     Type* m_type;
+    /// The type of the variable declaration.
+
     Expr* m_init;
+    /// The initial value of the variable declaration.
 };
 
 inline 
@@ -71,16 +76,15 @@ Var_decl::Var_decl(Name* name, Type* type, Expr* init)
 { }
 
 
+/// Represents reference declarations of the type: `ref x : t = e`
 class Ref_decl : public Decl
 {
 public:
-    Ref_decl(Name* name, Type* type, Expr* init) 
-        : m_name(name), m_type(type), m_init(init) 
-    { }
+    Ref_decl(Name* name, Type* type, Expr* init);
     /// Constructs the reference with the given arguments.
 
     void print(Printer& p) const override;
-    /// Prints the declaration in `pretty print`
+    /// Prints the declaration in `pretty print`.
 
     void debug(Printer& p) const override;
     /// Prints the declaration's associated addresses in memory.
@@ -96,25 +100,30 @@ public:
 
 private:
     Name* m_name;
-    /// The name of the declaration
+    /// The name of the reference declaration.
 
     Type* m_type;
-    /// The type of the declaration
+    /// The type of the reference declaration.
 
     Expr* m_init;
-    /// The initial value of the declaration
+    /// The initial value of the reference declaration.
 };
 
-struct Func_decl : public Decl
+inline
+Ref_decl::Ref_decl(Name* name, Type* type, Expr* init) 
+    : m_name(name), m_type(type), m_init(init) 
+{ }
+
+
+class Func_decl : public Decl
 {
 public:
 
-    Func_decl(Name* name, Decl_seq* parms, Type* ret, Stmt* body) 
-        : m_name(name), m_parms(parms), m_ret(ret), m_body(body)
-    { }
+    Func_decl(Name* name, Decl_seq* parms, Type* ret, Stmt* body);
+    /// Constructs the function with the given arguments.
 
     void print(Printer& p) const override;
-    /// Prints the declaration in `pretty print`
+    /// Prints the declaration in `pretty print`.
 
     void debug(Printer& p) const override;
     /// Prints the declaration's associated addresses in memory.
@@ -133,10 +142,22 @@ public:
 
 private:
     Name* m_name;
+    /// The name of the function declaration.
+
     Decl_seq* m_parms;
+    /// The parameters of the function declaration.
+
     Type* m_ret;
+    /// The return type of the function declaration.
+
     Stmt* m_body;
+    /// The body of the function declaration.
 };
+
+inline
+Func_decl::Func_decl(Name* name, Decl_seq* parms, Type* ret, Stmt* body)
+    : m_name(name), m_parms(parms), m_ret(ret), m_body(body)
+{ }
 
 
 // Operators
