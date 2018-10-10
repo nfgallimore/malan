@@ -17,7 +17,7 @@ To run the sample main file containing the AST examples make sure you are in the
 Run `./main`
 
 ## Unit test suite
-In order to run the suite of unit tests please execute from the build directory:
+In order to run the unit tests please execute from the build directory:
 
 `ctest`
 
