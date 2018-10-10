@@ -5,38 +5,53 @@
 
 // Break statement printing operations
 
-void Break_stmt::print(Printer& p) const {
+void 
+Break_stmt::print(Printer& p) const
+{
     p.print_string("break;");
 }
 
-void Break_stmt::debug(Printer& p) const {
+void 
+Break_stmt::debug(Printer& p) const
+{
     p.print_address(this);
 }
 
-void Break_stmt::to_sexpr(Printer& p) const {
+void 
+Break_stmt::to_sexpr(Printer& p) const
+{
     p.print_string("(break)");
 }
 
 
 // Continue statement printing operations
 
-void Cont_stmt::print(Printer& p) const {
+void 
+Cont_stmt::print(Printer& p) const
+{
     p.print_string("continue;");
 }
 
-void Cont_stmt::debug(Printer& p) const {
+void 
+Cont_stmt::debug(Printer& p) const
+{
     p.print_address(this);
 }
 
-void Cont_stmt::to_sexpr(Printer& p) const {
+void 
+Cont_stmt::to_sexpr(Printer& p) const
+{
     p.print_string("(continue)");
 }
 
 
 // Block statement printing operations
 
-void Block_stmt::print(Printer& p) const {
-    for(int i = 0, len = m_stmts->size(); i < len; i++) {
+void 
+Block_stmt::print(Printer& p) const
+{
+    for(int i = 0, len = m_stmts->size(); i < len; i++)
+    {
         p.print_string("\n{\n");
         p.indent();
         p.print_tabs();
@@ -46,11 +61,14 @@ void Block_stmt::print(Printer& p) const {
     }
 }
 
-void Block_stmt::debug(Printer& p) const {
+void 
+Block_stmt::debug(Printer& p) const
+{
     p.print_string("Block_stmt ");
     p.print_address(this);
     p.indent();
-    for(int i = 0, len = m_stmts->size(); i < len; i++) {
+    for(int i = 0, len = m_stmts->size(); i < len; i++)
+    {
         p.new_line();
         p.print_tabs();
         (*m_stmts)[i]->debug(p);
@@ -59,9 +77,12 @@ void Block_stmt::debug(Printer& p) const {
     p.undent();
 }
 
-void Block_stmt::to_sexpr(Printer& p) const {
+void 
+Block_stmt::to_sexpr(Printer& p) const
+{
     p.print_string("(Block_stmt ");
-    for(int i = 0, len = m_stmts->size(); i < len; i++) {
+    for(int i = 0, len = m_stmts->size(); i < len; i++)
+    {
         (*m_stmts)[i]->to_sexpr(p);
     }
     p.print_string(")");
@@ -70,11 +91,15 @@ void Block_stmt::to_sexpr(Printer& p) const {
 
 // While statement printing operations
 
-void While_stmt::print(Printer& p) const {
+void 
+While_stmt::print(Printer& p) const
+{
     p.get_stream() << "while (" << *get_cond() << ")" << *get_body();
 }
 
-void While_stmt::debug(Printer& p) const {
+void 
+While_stmt::debug(Printer& p) const
+{
     p.print_string("While_stmt ");
     p.print_address(this);
     p.indent();
@@ -89,7 +114,9 @@ void While_stmt::debug(Printer& p) const {
     p.undent();
 }
 
-void While_stmt::to_sexpr(Printer& p) const {
+void 
+While_stmt::to_sexpr(Printer& p) const
+{
     p.get_stream() << "(While_stmt ";
     m_cond->to_sexpr(p);
     m_body->to_sexpr(p);
@@ -99,7 +126,9 @@ void While_stmt::to_sexpr(Printer& p) const {
 
 // If statement printing operations
 
-void If_stmt::print(Printer& p) const {
+void 
+If_stmt::print(Printer& p) const
+{
     p.get_stream() << "if " << *m_cond << " then";
     p.new_line();
 
@@ -136,7 +165,9 @@ void If_stmt::print(Printer& p) const {
     p.undent();
 }
 
-void If_stmt::debug(Printer& p) const {
+void 
+If_stmt::debug(Printer& p) const
+{
     p.print_string("If_stmt ");
     p.print_address(this);
     p.indent();
@@ -154,7 +185,9 @@ void If_stmt::debug(Printer& p) const {
     p.undent();
 }
 
-void If_stmt::to_sexpr(Printer& p) const {
+void 
+If_stmt::to_sexpr(Printer& p) const
+{
     p.get_stream() << "(If_stmt ";
     m_cond->to_sexpr(p);
     p.get_stream() << " (then ";
@@ -167,11 +200,15 @@ void If_stmt::to_sexpr(Printer& p) const {
 
 // Return statement printing operations
 
-void Ret_stmt::print(Printer& p) const {
+void 
+Ret_stmt::print(Printer& p) const
+{
     p.get_stream() << "return " << *m_expr << ";";
 }
 
-void Ret_stmt::debug(Printer& p) const {
+void 
+Ret_stmt::debug(Printer& p) const
+{
     p.get_stream() << "Return_stmt ";
     p.print_address(this);
     p.new_line();
@@ -181,7 +218,9 @@ void Ret_stmt::debug(Printer& p) const {
     p.undent();
 }
 
-void Ret_stmt::to_sexpr(Printer& p) const {
+void 
+Ret_stmt::to_sexpr(Printer& p) const
+{
     p.print_string("(Return_stmt ");
     m_expr->to_sexpr(p);
     p.print_string(")");
@@ -190,11 +229,15 @@ void Ret_stmt::to_sexpr(Printer& p) const {
 
 // Expression statement printing operations
 
-void Expr_stmt::print(Printer& p) const {
+void 
+Expr_stmt::print(Printer& p) const
+{
     p.get_stream() << *m_expr << ";";
 }
 
-void Expr_stmt::debug(Printer& p) const {
+void 
+Expr_stmt::debug(Printer& p) const
+{
     p.get_stream() << "Expr_stmt ";
     p.print_address(this);
     p.new_line();
@@ -204,7 +247,9 @@ void Expr_stmt::debug(Printer& p) const {
     p.undent();
 }
 
-void Expr_stmt::to_sexpr(Printer& p) const {
+void 
+Expr_stmt::to_sexpr(Printer& p) const
+{
     p.print_string("(Expr_stmt ");
     m_expr->to_sexpr(p);
     p.print_string(")");
@@ -213,11 +258,15 @@ void Expr_stmt::to_sexpr(Printer& p) const {
 
 // Declaration statement printing operations
 
-void Decl_stmt::print(Printer& p) const {
+void 
+Decl_stmt::print(Printer& p) const
+{
     p.get_stream() << m_decl << ";";
 }
 
-void Decl_stmt::debug(Printer& p) const {
+void 
+Decl_stmt::debug(Printer& p) const
+{
     p.get_stream() << "Decl_stmt ";
     p.print_address(this);
     p.new_line();
@@ -227,7 +276,9 @@ void Decl_stmt::debug(Printer& p) const {
     p.undent();
 }
 
-void Decl_stmt::to_sexpr(Printer& p) const {
+void 
+Decl_stmt::to_sexpr(Printer& p) const
+{
     p.print_string("(Decl_stmt ");
     m_decl->to_sexpr(p);
     p.print_string(")");
@@ -236,7 +287,9 @@ void Decl_stmt::to_sexpr(Printer& p) const {
 
 // Operators
 
-std::ostream& operator<<(std::ostream& os, Stmt const& s) {
+std::ostream& 
+operator<<(std::ostream& os, Stmt const& s)
+{
     Printer p(os);
     s.print(p);
     return p.get_stream();
