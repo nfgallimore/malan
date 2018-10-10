@@ -4,12 +4,12 @@
 #include <boost/test/output_test_stream.hpp>
 #include <iostream>
 
-#include "../expr.hpp"
-#include "../printer.hpp"
-#include "../type.hpp"
-#include "../decl.hpp"
-#include "../name.hpp"
-#include "../stmt.hpp"
+#include "../src/expr.hpp"
+#include "../src/printer.hpp"
+#include "../src/type.hpp"
+#include "../src/decl.hpp"
+#include "../src/name.hpp"
+#include "../src/stmt.hpp"
 
 using boost::test_tools::output_test_stream;
 
