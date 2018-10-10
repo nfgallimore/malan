@@ -1168,3 +1168,4 @@ Value Call_expr::evaluate() const
 // Operators
 
 std::ostream& operator<<(std::ostream &os, Expr const& e);
+/// Write `e` to the output stream.

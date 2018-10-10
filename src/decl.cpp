@@ -9,14 +9,16 @@
 
 // Variable declaration printing operations
 
-void Var_decl::print(Printer& p) const 
+void 
+Var_decl::print(Printer& p) const 
 {
     p.get_stream() << *m_type << " " << m_name->get_str();
     assert(m_init != nullptr);
     p.get_stream() << " = " << *m_init;
 }
 
-void Var_decl::debug(Printer& p) const 
+void 
+Var_decl::debug(Printer& p) const 
 {
     p.print_string("Var_decl ");
     p.print_address(this);
@@ -47,7 +49,9 @@ void Var_decl::debug(Printer& p) const
     p.undent();
 }
 
-void Var_decl::to_sexpr(Printer& p) const {
+void 
+Var_decl::to_sexpr(Printer& p) const 
+{
     p.get_stream() << "(Var_decl (";
     m_type->to_sexpr(p);
     p.get_stream() << " " << m_name->get_str();
@@ -59,11 +63,14 @@ void Var_decl::to_sexpr(Printer& p) const {
 
 
 // Function declaration printing operations
-// Prints like the following:
+
+/// Prints like the following:
     // func f : (x : int, y : int) -> bool {
     //     return x < y;
     // }
-void Func_decl::print(Printer& p) const {
+void 
+Func_decl::print(Printer& p) const 
+{
     p.print_string("func ");
     p.get_stream() << m_name->get_str() << " : (";
     if (!m_parms->empty()) {
@@ -85,7 +92,9 @@ void Func_decl::print(Printer& p) const {
     m_body->print(p);
 }
 
-void Func_decl::debug(Printer& p) const {
+void 
+Func_decl::debug(Printer& p) const 
+{
     // Print Func_decl's address
     p.print_string("Func_decl ");
     p.print_address(this);
@@ -123,7 +132,9 @@ void Func_decl::debug(Printer& p) const {
     m_body->debug(p);
 }
 
-void Func_decl::to_sexpr(Printer& p) const {
+void 
+Func_decl::to_sexpr(Printer& p) const 
+{
     p.get_stream() << "(Func " << m_name->get_str() << " ";
     if (!m_parms->empty()) {
         p.print_string(" Params(");
@@ -147,14 +158,18 @@ void Func_decl::to_sexpr(Printer& p) const {
 
 // Reference declaration printing operations
 
-void Ref_decl::print(Printer& p) const {
+void 
+Ref_decl::print(Printer& p) const 
+{
     p.get_stream() << "Ref " << *m_type << " " << m_name->get_str();
     if (m_init != nullptr)
         p.get_stream() << " = " << *m_init;
     p.print_string(";");
 }
 
-void Ref_decl::debug(Printer& p) const {
+void 
+Ref_decl::debug(Printer& p) const 
+{
     p.print_string("Ref ");
     p.print_address(this);
     p.indent();
@@ -177,7 +192,9 @@ void Ref_decl::debug(Printer& p) const {
     p.undent();
 }
 
-void Ref_decl::to_sexpr(Printer& p) const {
+void 
+Ref_decl::to_sexpr(Printer& p) const 
+{
     p.print_string("(Ref ");
     m_type->to_sexpr(p);
     p.get_stream() << " " << m_name->get_str() << " ";
@@ -186,7 +203,11 @@ void Ref_decl::to_sexpr(Printer& p) const {
     p.print_string(")");
 }
 
-std::ostream& operator<<(std::ostream& os, Decl const& d) {
+
+// Operators
+
+std::ostream& operator<<(std::ostream& os, Decl const& d) 
+{
     Printer p(os);
     d.print(p);
     return p.get_stream();

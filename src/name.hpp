@@ -1,22 +1,33 @@
 #pragma once
 
 #include <string>
+#include <iostream>
 
+// Represents the name of a declaration
 class Name
 {
 public:
-    Name(std::string name) : m_name(name) { }
+    Name(std::string name);
+    /// Constructs a name from a string
+
     std::string get_str() { return m_name; }
+    /// Gets the string form of the name
+
     void print(std::ostream& os) const;
+    /// Prints the name to ostream
     
 private:
     std::string m_name;
+    /// String representation of the name
 };
+
+inline
+Name::Name(std::string name) 
+    : m_name(name) 
+{ }
+
+
+// Operators
 
 std::ostream& operator<<(std::ostream& os, Name const& n);
-
-inline void
-print(std::ostream& os, Name const& n)
-{
-    n.print(os);
-};
+/// Prints the name using the << operator
