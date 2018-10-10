@@ -446,8 +446,8 @@ void make_min()
 {
     Type* b = new Bool_type();
     Type* z = new Int_type();
-    Decl* p1 = new Var_decl(new Name("a"), z, nullptr);
-    Decl* p2 = new Var_decl(new Name("b"), z, nullptr);
+    Decl* p1 = new Var_decl(new Name("a"), z, new Int_lit(1, z));
+    Decl* p2 = new Var_decl(new Name("b"), z, new Int_lit(2, z));
 
       // p1 < p2 ? p1 : p2
     Expr* expr = new Con_expr(
@@ -600,7 +600,7 @@ void factorial()
 
     fact = new Func_decl(
         new Name("fact"),
-        new std::vector<Decl*> { new Var_decl(new Name("n"), it, nullptr)},
+        new std::vector<Decl*> { new Var_decl(new Name("n"), it, new Int_lit(10, it))},
         it,
         new Block_stmt(
             new std::vector<Stmt*>{
