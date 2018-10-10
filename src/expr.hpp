@@ -5,6 +5,7 @@
 #include "value.hpp"
 #include "type.hpp"
 #include "printer.hpp"
+#include "tree.hpp"
 
 class Decl;
 class Value;
