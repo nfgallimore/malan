@@ -1,0 +1,437 @@
+
+% Document settings
+\documentclass[11pt]{article}
+\usepackage{amsmath}
+\usepackage{stmaryrd}
+\usepackage{bm}
+\usepackage[margin=1in]{geometry}
+\usepackage[pdftex]{graphicx}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{setspace}
+\usepackage{xspace}
+\usepackage{listings}
+
+\pagestyle{plain}
+\setlength\parindent{0pt}
+\setlength\parskip{4pt}
+\setlength{\columnseprule}{0.2pt}
+
+% Define the speculative C++1z language.
+\lstdefinelanguage{C++1z}{alsolanguage=C++,
+                          escapechar=@,
+                          breakatwhitespace=true,
+                          breaklines=true
+                          morekeywords={alignof, 
+                                        decltype, 
+                                        concept, 
+                                        requires}}
+
+% Default formatting for listings.
+\lstset{language=C++1z,
+        basicstyle=\ttfamily,
+        keywordstyle=\bfseries,
+        stringstyle=,
+        xleftmargin=1em,
+        showstringspaces=false,
+        commentstyle=\rmfamily\itshape,
+        columns=flexible,
+        keepspaces=true,
+        texcl=true}
+
+\newcommand{\code}[1]{\lstinline @#1@}
+\lstnewenvironment{codeblock}{\lstset{language=C++1z}}{}
+
+\newcommand{\mathsc}[1]{\bm{\mathsf{#1}}}
+% \newcommand{\mathsc}[1]{\mathsf{#1}}
+
+% Types
+\newcommand{\typebool}{\ensuremath{\mathsc{bool}}\xspace}
+\newcommand{\typeint}{\ensuremath{\mathsc{int}}\xspace}
+\newcommand{\typefloat}{\ensuremath{\mathsc{float}}\xspace}
+\newcommand{\typeref}[1]{\ensuremath{\mathsc{ref}~#1}\xspace}
+\newcommand{\typefn}[2]{\ensuremath{(#1)\rightarrow #2}\xspace}
+
+% Expressions
+\newcommand{\exprtrue}{\mathsc{true}}
+\newcommand{\exprfalse}{\mathsc{false}}
+\newcommand{\exprand}[2]{#1 \mathbin{\mathsc{and}} #2}
+\newcommand{\expror}[2]{#1 \mathbin{\mathsc{or}} #2}
+\newcommand{\exprxor}[2]{#1 \mathbin{\mathsc{xor}} #2}
+\newcommand{\exprnot}[1]{\mathsc{not}\;#1}
+\newcommand{\exprif}[3]{\mathsc{if}\;#1\;\mathsc{then}\;#2\;\mathsc{else}\;#3}
+\newcommand{\exprandthen}[2]{#1 \mathbin{\mathsc{and\;then}} #2}
+\newcommand{\exprorelse}[2]{#1 \mathbin{\mathsc{or\;else}} #2}
+\newcommand{\expreq}[2]{#1 = #2}
+\newcommand{\exprne}[2]{#1 \neq #2}
+\newcommand{\exprlt}[2]{#1 < #2}
+\newcommand{\exprgt}[2]{#1 > #2}
+\newcommand{\exprle}[2]{#1 \leq #2}
+\newcommand{\exprge}[2]{#1 \geq #2}
+\newcommand{\expradd}[2]{#1 + #2}
+\newcommand{\exprsub}[2]{#1 - #2}
+\newcommand{\exprmul}[2]{#1 * #2}
+\newcommand{\exprquo}[2]{#1 \mathbin{\mathsc{div}} #2}
+\newcommand{\exprrem}[2]{#1 \mathbin{\mathsc{rem}} #2}
+\newcommand{\exprneg}[1]{-#1}
+\newcommand{\exprrec}[1]{/#1}
+\newcommand{\exprass}[2]{#1 \leftarrow #2}
+\newcommand{\exprcall}[2]{#1(#2)}
+
+% Statements
+\newcommand{\stmtbreak}{\ensuremath{\mathsc{break}}\xspace}
+\newcommand{\stmtcont}{\ensuremath{\mathsc{continue}}\xspace}
+\newcommand{\stmtblock}[1]{\ensuremath{\{#1\}}\xspace}
+\newcommand{\stmtwhile}[2]{\ensuremath{%
+  \mathsc{while}~#1~\mathsc{do}~#2%
+  }\xspace}
+\newcommand{\stmtif}[3]{\ensuremath{%
+  \mathsc{if}~#1~\mathsc{then}~#2~\mathsc{else}~#3%
+  }\xspace}
+\newcommand{\stmtret}[1]{\ensuremath{%
+  \mathsc{return}~#1%
+  }\xspace}
+\newcommand{\stmtexpr}[1]{\ensuremath{#1}\xspace}
+\newcommand{\stmtdecl}[1]{\ensuremath{#1}\xspace}
+
+\newcommand{\decllet}[4]{\ensuremath{%
+  \mathsc{#1}~#2\mathbin{:}#3\mathbin{=}#4%
+  }\xspace}
+\newcommand{\declvar}[3]{\decllet{var}{#1}{#2}{#3}}
+\newcommand{\declref}[3]{\decllet{ref}{#1}{#2}{#3}}
+\newcommand{\declfn}[4]{\ensuremath{%
+  \mathsc{fun}~#1(#2) \rightarrow #3~#4%
+  }\xspace}
+
+\title{MiniC Language Specification}
+
+\begin{document}
+\maketitle
+
+This document describes the abstract and concrete syntax and semantics of a small C-like programming language (albeit with a very different syntax for declarations).
+
+\section{Basics}
+
+The fundamental storage unit is the \emph{byte}, which is a sequence of 8 bits.
+The storage (or memory) available to a program consists of one or more sequences of contiguous bytes. 
+Every byte has a unique address.
+
+The following paragraphs describe the entities of the language. An \emph{entity} is an abstract element of a program that is described by, created by, or
+referred to in a program.
+
+A \emph{value} is element of a set.
+For example the value zero is an element in the set of integers and the set of real numbers.
+Similarly, the value true is an element in the set boolean values; the other value is false.
+A value can also be an address.
+When this document refers to specific values, they are spelled in English using the normal font.
+
+A \emph{type} describes objects, references, functions, and expressions.
+The meaning of the type is determined by the the entity it describes.
+
+An \emph{object} is region of storage, comprised of a fixed length sequence
+of bytes.
+Note that every object has an address.
+Every object has a type, which determines the size of the object and how its stored bits can be interpreted as a value (i.e., an object stores a value).
+Objects are created by definitions or when a temporary object is created.
+
+A \emph{reference} can be thought of as an alias (name) for an object or alternatively as an address for the object.
+Every reference has a type, which determines the set of objects to which the reference can bind.
+It is unspecified whether a reference requires storage.
+References are created by definitions.
+
+A \emph{function} maps a sequence of input values, called \emph{arguments},
+to an output value, called its \emph{return value}.
+Every function has a type, which determines the arguments that it can accept as inputs the type of value that it returns as an output.
+Functions are created by definitions.
+
+\section{Abstract syntax and semantics}
+
+This section describes the \emph{abstract syntax} of the language, which is comprised of four sub-languages: types ($t$), expressions ($e$), statements ($s$), and definitions $(d)$.
+Each sub-language is defined (recursively) as a set of strings belonging to that set.
+Note that these are ``strings'' in the abstract sense; they will be represented as abstract syntax trees.
+
+The meaning of each string is determined by the semantic specifications in this document. 
+The semantic specification determines several properties of the language:
+\begin{itemize}
+\item the \emph{static semantics} of the language define properties of
+strings that can be used at compile-time (e.g., the type of expressions).
+\item the \emph{dynamic semantics} of the language define properties of
+strings that are meaningful at runtime (e.g., the value of expression).
+\end{itemize}
+Static semantics are often used as an additional ``filter'' on syntactically 
+valid strings that would result in misbehaving programs.
+Dynamic semantics are used to define when the execution of a program is
+defined.
+For example, the expression \code{1 / n} is valid if and only if \code{n} refers 
+to an object of type \code{int} (statically). 
+The evaluation of that expression is defined if the value of that object is 
+never 0 (dynamically).
+
+A \emph{program} is a sequence of definitions (substrings of $d$); that is,
+it is also a string.
+
+\subsection{Objects}
+
+The basic unit of storage is the \emph{byte}, which is a sequence of 8 bits.
+
+The memory available to a program consists of one or more sequences of 
+contiguous, where every byte has a unique address.
+
+An \emph{object} is created by a object definitions and occupies a region of 
+storage during its lifetime. Note that every object is has a name and a type.
+
+A \emph{reference} is an alias to an object. References are created by
+reference definitions and are bound to the object designated by the initializer.
+
+\subsection{Types}
+
+Types describe objects, references and functions.
+
+\[
+\begin{array}{lcll}
+t &::=& \typebool  & \text{boolean values} \\
+  &   & \typeint   & \text{integer values} \\
+  &   & \typefloat & \text{floating point values} \\
+  &   & \typeref{t_1}   & \text{references to objects} \\
+  &   & \typefn{t_1, t_2, \ldots, t_n}{t_r}
+                   & \text{functions}
+\end{array}
+\]
+
+The type \typebool describes the values true and false.
+
+The type \typeint describes integer values in the left-open range $[-2^{32-1}, 2^{32-1})$.
+
+The type \typefloat describes single precision IEEE 754 floating point values.
+
+The types \typebool, \typeint, and \typefloat are collectively called the \emph{object types}, meaning they can be used to define objects.
+
+The reference types \typeref{t} describes references to objects. 
+These value can be represented as the address of the object in memory. 
+
+The set of function types \typefn{t_1, t_2, \ldots, t_n}{t_r} describes
+functions taking $n$ arguments, whose corresponding types are $t_1$, $t_2$, $\ldots$, and $t_n$, and returning a value of type $t_r$.
+These values can be represented as the address of the function in memory.
+
+\subsection{Expressions}
+
+The language has the following kinds of expressions:
+
+\begin{multicols}{2}
+\[
+\begin{array}{lcll}
+e &::=& \exprtrue & \\
+  &   & \exprfalse & \\
+  &   & n & \text{integer literals}\\
+  &   & r & \text{floating literals}\\
+  &   & x & \text{identifiers}\\
+  &   & \exprand{e_1}{e_2} & \text{logical and}\\
+  &   & \expror{e_1}{e_2} &\text{logical or}\\
+  &   & \exprnot{e_1} & \text{logical negation}\\
+  &   & \exprif{e_1}{e_2}{e_3} & \text{conditional}\\
+  &   & \expreq{e_1}{e_2} & \text{equal to}\\
+  &   & \exprne{e_1}{e_2} & \text{not equal to}\\
+  &   & \exprlt{e_1}{e_2} & \text{less than}\\
+  &   & \exprgt{e_1}{e_2} & \text{greater than}\\
+  % &   & \ldots\\
+\end{array}
+\]
+\vfill
+\columnbreak
+\[
+\begin{array}{lll}
+        % \ldots\\
+        \exprle{e_1}{e_2} & \text{less or equal}\\
+        \exprge{e_1}{e_2} & \text{greater or equal}\\
+        \expradd{e_1}{e_2} & \text{addition}\\
+        \exprsub{e_1}{e_2} & \text{subtraction}\\
+        \exprmul{e_1}{e_2} & \text{multiplication}\\
+        \exprquo{e_1}{e_2} & \text{quotient of division}\\
+        \exprrem{e_1}{e_2} & \text{remainder of division}\\
+        \exprneg{e_1} & \text{negation}\\
+        \exprrec{e_1} & \text{reciprocal}\\
+        \exprass{e_1}{e_2} & \text{assignment}\\
+        \exprcall{e_f}{e_1, e_2, \ldots, e_n} & \text{function call}\\
+\end{array}
+\]
+\end{multicols}
+
+An expression is a sequence of operands and operators that specifies a value
+computation. The evaluation of an expression results in a value. The type of an 
+expression determines a) how expressions can be combined to produce complex 
+computations and b) the kind of value it produces. The following paragraphs define
+the requirements on operands and the result types of each expression as well 
+the values they produce.
+
+The order in which an expression's operands are evaluated is unspecified unless 
+otherwise noted.
+
+The expressions $\exprtrue$ and $\exprfalse$ have type $\typebool$ and the
+values true and false, respectively.
+
+Integer literals have type $\typeint$. The value of an integer literal is the
+one indicated by its spelling.
+
+Floating point literals have type \typefloat. The vale of a floating point
+literal is the one indicated by its spelling.
+
+% The operands of the expressions $\exprand{e_1}{e_2}$, $\expror{e_1}{e_2}$,
+% and $\exprxor{e_1}{e_2}$ shall have type $\typebool$. The result type of each
+% is $\typebool$. 
+% The result of $\exprand{e_1}{e_2}$ is $\top$ if both operands are $\top$ 
+% and $\bot$ otherwise.
+% The result of $\expror{e_1}{e_2}$ is $\bot$ if both operands are $\bot$ 
+% and $\top$ otherwise.
+% The result of $\exprxor{e_1}{e_2}$ is $\top$ if the operands are different 
+% and $\bot$ otherwise.
+
+% The operand of $\exprnot{e_1}$ shall have type $\typebool$, and the type of the
+% expression is $\typebool$. The result of the expression is $\top$ when
+% the $e_1$ is $\bot$ and $\bot$ otherwise.
+% Note that $\exprnot{e_1}$ is equivalent to $\exprxor{e_1}{1}$.
+
+% In the expression $\exprif{e_1}{e_2}{e_3}$, the type of $e_1$ shall be 
+% $\typebool$, and $e_2$ and $e_3$ shall have the same type. The type of the
+% expression is the type of $e_2$ and $e_3$. The result of expression is
+% determined by first evaluating $e_1$. If that value is $\top$ then the result
+% of the expression is the value of $e_2$, otherwise, it is the value of $e_3$.
+% Only one of $e_2$ or $e_3$ is evaluated.
+
+% The operands of the expressions $\expreq{e_1}{e_2}$ and $\exprne{e_1}{e_2}$ 
+% shall have the same type. The result type is $\typebool$.
+% The result of $\expreq{e_1}{e_2}$ is $\top$ if $e_1$ and $e_2$ are equal 
+% and $\bot$ otherwise. 
+% The result of $\exprne{e_1}{e_2}$ is $\top$ if $e_1$ and $e_2$ are different 
+% and $\bot$ otherwise. 
+% Note that when $e_1$ and $e_2$ have type $\typebool$, $\exprne{e_1}{e_2}$ is
+% equivalent to $\exprxor{e_1}{e_2}$.
+
+% The operands of the expressions $\exprlt{e_1}{e_2}$, $\exprgt{e_1}{e_2}$,
+% $\exprle{e_1}{e_2}$, and $\exprge{e_1}{e_2}$ shall have type $\typeint$. The 
+% result type is $\typebool$.
+% The result of $\exprlt{e_1}{e_2}$ is $\top$ if $e_1$ is less than $e_2$ and 
+% $\bot$ otherwise. 
+% The result of $\exprgt{e_1}{e_2}$ is $\top$ if $e_1$ is greater than $e_2$ and 
+% $\bot$ otherwise. 
+% The result of $\exprle{e_1}{e_2}$ is $\top$ if $e_1$ is less than or equal to
+% $e_2$ and $\bot$ otherwise.
+% The result of $\exprge{e_1}{e_2}$ is $\top$ if $e_1$ is greater than or equal
+% to $e_2$ and $\bot$ otherwise.
+
+% The operands of the expressions $\expradd{e_1}{e_2}$, $\exprsub{e_1}{e_2}$,
+% $\exprmul{e_1}{e_2}$, $\exprquo{e_1}{e_2}$, and $\exprrem{e_1}{e_2}$ shall have 
+% type $\typeint$. The result type is $\typeint$.
+% The result of $\expradd{e_1}{e_2}$ is the sum of the operands. If the sum 
+% is greater than the maximum value of $\typeint$, the result is undefined.
+% The result of $\expradd{e_1}{e_2}$ is the difference resulting from the 
+% subtraction of the $e_2$ from $e_1$. If the difference is less than the minimum
+% value of $\typeint$, the result is undefined.
+% The result of $\exprmul{e_1}{e_2}$ is the product of the operands. If the 
+% product is greater than the maximum value of $\typeint$, the result is 
+% undefined.
+% The results of $\exprquo{e_1}{e_2}$ and $\exprrem{e_1}{e_2}$ are the quotient 
+% and remainder of dividing $e_1$ by $e_2$, respectively. In either case, if
+% $e_2$ is 0, the result is undefined. If $e_2$ is the minimum value of $\typeint$,
+% the result is undefined. For division, the fractional part of the value is
+% discarded (the value is truncated towards zero). If the expression 
+% $\exprquo{a}{b}$ is defined, 
+% $\expradd{\exprmul{(\exprquo{a}{b})}{b}}{\exprrem{a}{b}}$ is equal to $a$.
+
+% The operand of $\exprneg{e_1}$ shall have type $\typeint$, and the type of the
+% expression is $\typeint$. 
+% The result of the expression is the additive inverse of the value of $e_1$.
+% Note that $\exprneg{e_1}$ is equivalent to $\exprsub{0}{e_1}$.
+
+
+
+\subsection{Statements}
+
+The language has the following kinds of statements:
+
+\[
+\begin{array}{lcll}
+s &::=& \stmtbreak              & \text{break statements} \\
+  &   & \stmtcont               & \text{continue statement} \\
+  &   & \stmtblock{s_1, s_2, \ldots, s_n}
+                                & \text{compound statements} \\
+  &   & \stmtwhile{e_1}{s_1}    & \text{while statements} \\
+  &   & \stmtif{e}{s_1}{s_2}    & \text{if statements} \\
+  &   & \stmtret{e}             & \text{return statements} \\
+  &   & \stmtexpr{e}            & \text{expressions} \\
+  &   & \stmtdecl{d}            & \text{local definitions} \\
+\end{array}
+\]
+
+\subsection{Declarations}
+
+The language has the following kinds of declarations:
+
+\[
+\begin{array}{lcll}
+d &::=& \declvar{x}{t}{e}       & \text{object definitions} \\
+  &   & \declref{x}{t}{e}       & \text{reference definitions} \\
+  &   & \declfn{x}{d_1, d_2, \ldots, d_n}{t}{s}
+                                & \text{function definitions} \\
+\end{array}
+\]
+
+
+
+% \section{Requirements}
+
+% Implement A C++ framework (collection of classes and functions) that supports this
+% language definition. This must include:
+
+% \begin{itemize}
+% \item Implement a set of classes that define the AST for the language. Prefer
+% an object-oriented class hierarchy for the implementation.
+
+% \item A facility that verifies that an expression is well-type according to
+% the typing rules above.
+
+% \item A facility that supports the creation of well-typed AST nodes. This should
+% verify the types of operands before constructing the requested node.
+
+% \item A facility that evaluates an expression (as an AST node).
+% \end{itemize}
+
+% The type checking and evaluation functions can be implemented as virtual
+% functions or via the visitor design pattern. The tree creation facility does
+% not require virtual functions.
+
+% Store your work in an online repository. I recommend GitHub, GitLab, or 
+% BitBucket.
+
+% Write a short paper to serve as an overview and guide for your implementation.
+% Describe the components of your project in a way that would help a newcomer
+% understand the project's organization. Be sure to include a link to your online
+% source code in your submission.
+
+% \textbf{Submission:} Submit your printed homework on the due date. Send me an
+% email with a link to your online source code.
+
+% \textbf{Above and beyond}: Make sure that the classes in your hierarchy are
+% well constructed (constructors, access restrictions, appropriate documentation).
+% Note that the semantics of the language could be written 
+
+% Consider adding two extra expressions:
+% \[
+% \begin{array}{lcl}
+% e & ::= & \cdots \\
+%   &     & \exprandthen{e_1}{e_2} \\
+%   &     & \exprorelse{e_1}{e_2} \\
+% \end{array}
+% \]
+
+% The expression $\exprandthen{e_1}{e_2}$ is equivalent to 
+% $\exprif{e_1}{e_2}{\exprfalse}$.
+% The expression $\exprorelse{e_1}{e_2}$ is equivalent to
+% $\exprif{\exprtrue}{e_2}{e_2}$.
+
+\end{document}
+
+
+

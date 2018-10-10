@@ -9,14 +9,15 @@
 
 // Variable declaration printing operations
 
-void Var_decl::print(Printer& p) const {
+void Var_decl::print(Printer& p) const 
+{
     p.get_stream() << *m_type << " " << m_name->get_str();
-    if (m_init != nullptr) {
-        p.get_stream() << " = " << *m_init;
-    }
+    assert(m_init != nullptr);
+    p.get_stream() << " = " << *m_init;
 }
 
-void Var_decl::debug(Printer& p) const {
+void Var_decl::debug(Printer& p) const 
+{
     p.print_string("Var_decl ");
     p.print_address(this);
     p.new_line();

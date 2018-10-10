@@ -72,7 +72,9 @@ private:
 inline 
 Var_decl::Var_decl(Name* name, Type* type, Expr* init) 
     : m_name(name), m_type(type), m_init(init) 
-{ }
+{ 
+    assert(init != nullptr);
+}
 
 
 /// Represents reference declarations of the type: `ref x : t = e`

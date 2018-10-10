@@ -4,3 +4,7 @@ build
 **CMakeFiles
 malan.code-workspace
 .vscode
+doc/project.aux
+doc/project.log
+doc/project.out
+doc/project.pdf
