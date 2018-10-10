@@ -27,16 +27,16 @@ unit tests have been excluded and will need to be re-added.
 
 int main(int argc, char** argv)
 {
-    types();
-    exprs();
-    complex_decl();
-    nested_debug_printing();
-    make_min();
-    print_ref_decl();
-    if_stmt();
-    while_stmt();
-    identifier_if_stmt();
-    factorial();
+    // types();
+    // exprs();
+    // complex_decl();
+    // nested_debug_printing();
+    // make_min();
+    // print_ref_decl();
+    // if_stmt();
+    // while_stmt();
+    // identifier_if_stmt();
+    // factorial();
 }
 
 void types()
