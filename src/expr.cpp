@@ -4,10 +4,6 @@
 #include "decl.hpp"
 #include "name.hpp"
 
-/// Rules:
-/// Print tabs as first statement in debug.
-/// Print new line after printing address in debug.
-
 // Integer literal expressions
 
 void
@@ -19,8 +15,7 @@ Int_lit::print(Printer& p) const
 void
 Int_lit::debug(Printer& p) const
 {
-    p.debug_address(this, "Int_lit");
-
+    p.print_address("Int_lit", this);
     p.indent();
     m_type->debug(p);
     p.undent();
@@ -44,8 +39,7 @@ Bool_lit::print(Printer& p) const
 void
 Bool_lit::debug(Printer& p) const
 {
-    p.debug_address(this, "Bool_lit");
-
+    p.print_address("Bool_lit", this);
     p.indent();
     m_type->debug(p);
     p.undent();
@@ -69,8 +63,7 @@ Float_lit::print(Printer& p) const
 void
 Float_lit::debug(Printer& p) const
 {
-    p.debug_address(this, "Float_lit");
-
+    p.print_address("Float_lit", this);
     p.indent();
     m_type->debug(p);
     p.undent();
@@ -94,8 +87,7 @@ Id_expr::print(Printer& p) const
 void
 Id_expr::debug(Printer& p) const
 {
-    p.debug_address(this, "Id_expr");
-
+    p.print_address("Id_expr", this);
     p.indent();
     m_decl->debug(p);
     m_type->debug(p);
@@ -120,18 +112,10 @@ And_expr::print(Printer& p) const
 void
 And_expr::debug(Printer& p) const
 {
-    p.get_stream() << "And_expr ";
-    p.print_address(this);
-    p.new_line();
-    
+    p.print_address("And_expr", this);    
     p.indent();
-
-    p.print_tabs();
     m_e1->debug(p);
-
-    p.print_tabs();
     m_e2->debug(p);
-  
     p.undent();
 }
 
@@ -159,18 +143,10 @@ Or_expr::print(Printer& p) const
 void
 Or_expr::debug(Printer& p) const
 {
-    p.get_stream() << "Or_expr ";
-    p.print_address(this);
-    p.new_line();
-
+    p.print_address("Or_expr", this);    
     p.indent();
-
-    p.print_tabs();
     m_e1->debug(p);
-
-    p.print_tabs();
     m_e2->debug(p);
- 
     p.undent();
 }
 
@@ -198,15 +174,9 @@ Not_expr::print(Printer& p) const
 void
 Not_expr::debug(Printer& p) const
 {
-    p.get_stream() << "Not_expr ";
-    p.print_address(this);
-    p.new_line();
-
+    p.print_address("Not_expr", this);    
     p.indent();
-
-    p.print_tabs();
     m_expr->debug(p);
-
     p.undent();
 }
 
@@ -230,21 +200,11 @@ Con_expr::print(Printer& p) const
 void
 Con_expr::debug(Printer& p) const
 {
-    p.get_stream() << "Con_expr ";
-    p.print_address(this);
-    p.new_line();
+    p.print_address("Con_expr", this);
     p.indent();
-
-    p.print_tabs();
     m_e1->debug(p);
-
-    p.print_tabs();
     m_e2->debug(p);
-
-    p.print_tabs();
     m_e3->debug(p);
-    p.new_line();
-
     p.undent();
 }
 
@@ -272,18 +232,10 @@ Eq_expr::print(Printer& p) const
 void
 Eq_expr::debug(Printer& p) const
 {
-    p.get_stream() << "Eq_expr ";
-    p.print_address(this);
-    p.new_line();
-
+    p.print_address("Eq_expr", this);
     p.indent();
-
-    p.print_tabs();
     m_e1->debug(p);
-
-    p.print_tabs();
     m_e2->debug(p);
-
     p.undent();
 }
 
@@ -311,18 +263,10 @@ Ne_expr::print(Printer& p) const
 void
 Ne_expr::debug(Printer& p) const
 {
-    p.get_stream() << "Ne_expr ";
-    p.print_address(this);
-    p.new_line();
-
+    p.print_address("Ne_expr", this);
     p.indent();
-
-    p.print_tabs();
     m_e1->debug(p);
-
-    p.print_tabs();
     m_e2->debug(p);
-
     p.undent();
 }
 
@@ -350,18 +294,10 @@ Lt_expr::print(Printer& p) const
 void
 Lt_expr::debug(Printer& p) const
 {
-    p.get_stream() << "Lt_expr ";
-    p.print_address(this);
-    p.new_line();
-
+    p.print_address("Lt_expr", this);
     p.indent();
-
-    p.print_tabs();
     m_e1->debug(p);
-
-    p.print_tabs();
     m_e2->debug(p);
- 
     p.undent();
 }
 
@@ -389,18 +325,10 @@ Gt_expr::print(Printer& p) const
 void
 Gt_expr::debug(Printer& p) const
 {
-    p.get_stream() << "Gt_expr ";
-    p.print_address(this);
-    p.new_line();
-
+    p.print_address("Gt_expr", this);
     p.indent();
-
-    p.print_tabs();
     m_e1->debug(p);
-
-    p.print_tabs();
     m_e2->debug(p);
-
     p.undent();
 }
 
@@ -428,18 +356,10 @@ Le_expr::print(Printer& p) const
 void
 Le_expr::debug(Printer& p) const
 {
-    p.get_stream() << "Le_expr ";
-    p.print_address(this);
-    p.new_line();
-
+    p.print_address("Le_expr", this);
     p.indent();
-
-    p.print_tabs();
     m_e1->debug(p);
-
-    p.print_tabs();
     m_e2->debug(p);
-
     p.undent();
 }
 
@@ -467,18 +387,10 @@ Ge_expr::print(Printer& p) const
 void
 Ge_expr::debug(Printer& p) const
 {
-    p.get_stream() << "Ge_expr ";
-    p.print_address(this);
-    p.new_line();
-
+    p.print_address("Ge_expr", this);
     p.indent();
-
-    p.print_tabs();
     m_e1->debug(p);
-
-    p.print_tabs();
     m_e2->debug(p);
-
     p.undent();
 }
 
@@ -506,19 +418,10 @@ Add_expr::print(Printer& p) const
 void
 Add_expr::debug(Printer& p) const
 {
-    p.print_tabs();
-    p.get_stream() << "Add_expr ";
-    p.print_address(this);
-    p.new_line();
-
+    p.print_address("Add_expr", this);
     p.indent();
-
-    p.print_tabs();
     m_e1->debug(p);
-
-    p.print_tabs();
     m_e2->debug(p);
-
     p.undent();
 }
 
@@ -546,19 +449,10 @@ Sub_expr::print(Printer& p) const
 void
 Sub_expr::debug(Printer& p) const
 {
-    p.print_tabs();
-    p.get_stream() << "Sub_expr ";
-    p.print_address(this);
-    p.new_line();
-
+    p.print_address("Sub_expr", this);
     p.indent();
-
-    p.print_tabs();
     m_e1->debug(p);
-
-    p.print_tabs();
     m_e2->debug(p);
-
     p.undent();
 }
 
@@ -586,18 +480,10 @@ Mul_expr::print(Printer& p) const
 void
 Mul_expr::debug(Printer& p) const
 {
-    p.get_stream() << "Mul_expr ";
-    p.print_address(this);
-    p.new_line();
-
+    p.print_address("Mul_expr", this);
     p.indent();
-
-    p.print_tabs();
     m_e1->debug(p);
-
-    p.print_tabs();
     m_e2->debug(p);
-
     p.undent();
 }
 
@@ -625,18 +511,10 @@ Quo_expr::print(Printer& p) const
 void
 Quo_expr::debug(Printer& p) const
 {
-    p.get_stream() << "Quo_expr ";
-    p.print_address(this);
-    p.new_line();
-
+    p.print_address("Quo_expr", this);
     p.indent();
-
-    p.print_tabs();
     m_e1->debug(p);
-
-    p.print_tabs();
     m_e2->debug(p);
-
     p.undent();
 }
 
@@ -664,18 +542,10 @@ Rem_expr::print(Printer& p) const
 void
 Rem_expr::debug(Printer& p) const
 {
-    p.get_stream() << "Rem_expr ";
-    p.print_address(this);
-    p.new_line();
-
+    p.print_address("Rem_expr", this);
     p.indent();
-
-    p.print_tabs();
     m_e1->debug(p);
-
-    p.print_tabs();
     m_e2->debug(p);
-
     p.undent();
 }
 
@@ -703,15 +573,9 @@ Neg_expr::print(Printer& p) const
 void
 Neg_expr::debug(Printer& p) const
 {
-    p.get_stream() << "Neg_expr ";
-    p.print_address(this);
-    p.new_line();
-
+    p.print_address("Neg_expr", this);
     p.indent();
-
-    p.print_tabs();
     m_expr->debug(p);
-
     p.undent();
 }
 
@@ -735,15 +599,9 @@ Rec_expr::print(Printer& p) const
 void
 Rec_expr::debug(Printer& p) const
 {
-    p.get_stream() << "Rec_expr ";
-    p.print_address(this);
-    p.new_line();
-
+    p.print_address("Rec_expr", this);
     p.indent();
-
-    p.print_tabs();
     m_expr->debug(p);
-
     p.undent();
 }
 
@@ -770,17 +628,12 @@ Call_expr::print(Printer& p) const
 void
 Call_expr::debug(Printer& p) const
 {
-    p.get_stream() << "Call_expr ";
-    p.print_address(this);
-    p.new_line();
-
+    p.print_address("Call_expr", this);
     p.indent();
-    p.print_tabs();
     for (int i = 0, len = m_exprs->size(); i < len; i++)
     {
         (*m_exprs)[i]->debug(p);
     }
-    
     p.undent();
 }
 
@@ -807,15 +660,10 @@ Ass_expr::print(Printer& p) const
 void
 Ass_expr::debug(Printer& p) const
 {
-    p.get_stream() << "Ass_expr ";
-    p.print_address(this);
-    p.new_line();
-
+    p.print_address("Ass_expr", this);
     p.indent();
-    p.print_tabs();
     m_src->debug(p);
     m_tar->debug(p);
-    
     p.undent();
 }
 

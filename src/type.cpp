@@ -15,10 +15,7 @@ Bool_type::print(Printer& p) const
 void
 Bool_type::debug(Printer& p) const
 {
-    p.print_tabs();
-    p.print_string("Bool_type ");
-    p.print_address(this);
-    p.new_line();
+    p.print_address("Bool_type", this);
 }
 
 void
@@ -39,10 +36,7 @@ Int_type::print(Printer& p) const
 void
 Int_type::debug(Printer& p) const
 {
-    p.print_tabs();
-    p.print_string("Int_type ");
-    p.print_address(this);
-    p.new_line();
+    p.print_address("Int_type", this);
 }
 
 void
@@ -63,10 +57,7 @@ Float_type::print(Printer& p) const
 void
 Float_type::debug(Printer& p) const
 {
-    p.print_tabs();
-    p.print_string("Float_type ");
-    p.print_address(this);
-    p.new_line();
+    p.print_address("Float_type", this);
 }
 
 void
@@ -87,10 +78,7 @@ Ref_type::print(Printer& p) const
 void
 Ref_type::debug(Printer& p) const
 {
-    p.print_tabs();
-    p.print_string("Ref_type ");
-    p.print_address(this);
-    p.new_line();
+    p.print_address("Ref_type", this);
 }
 
 void
@@ -124,29 +112,16 @@ Fun_type::print(Printer& p) const
 void
 Fun_type::debug(Printer& p) const
 {
-    p.print_tabs();
-    p.print_string("Fun_type ");
-    p.print_address(this);
-    p.new_line();
-    p.indent();
+    p.print_address("Fun_type", this);
 
-    if (!m_params.empty())
-    {
-        for (int i = 0; i < m_params.size(); i++)
-        {
-            p.print_tabs();
-            m_params[i]->debug(p);
-        }
-    }
-    p.print_tabs();
-    p.print_string("Ret_type: ");
-    
     p.indent();
+    for (int i = 0; i < m_params.size(); i++)
+    {
+        p.print_tabs();
+        m_params[i]->debug(p);
+    }
     m_ret_type->debug(p);
     p.undent();
-
-    p.undent();
-    p.new_line();
 }
 
 void
@@ -179,30 +154,6 @@ std::ostream& operator<<(std::ostream& os, Type const& t)
 
 
 // Operations
-
-/// Prints `t` to the output stream.
-void
-print(std::ostream& os, Type const* t)
-{
-    Printer p(os);
-    t->print(p);
-}
-
-/// Prints the kind of type `t` and its address to output stream
-void
-debug(std::ostream& os, Type const* t)
-{
-    Printer p(os);
-    t->debug(p);
-}
-
-/// Prints `t` as a symbolic expression to output stream
-void
-to_sexpr(std::ostream& os, Type const* t)
-{
-    Printer p(os);
-    t->print(p);
-}
 
 /// Returns true when `a` and `b` denote the same type.
 bool

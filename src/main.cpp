@@ -131,29 +131,23 @@ void types()
     // p.get_stream() << '\n';
 
     p.get_stream() << "Debugging types:\n";
-    debug(p.get_stream(), &b);
-    debug(p.get_stream(), &i);
-    debug(p.get_stream(), &f);
-    debug(p.get_stream(), &rb);
-    debug(p.get_stream(), &ri);
-    debug(p.get_stream(), &fun_p);
-    debug(p.get_stream(), &fun_np);
+    b.debug(p);
+    i.debug(p);
+    f.debug(p);
+    rb.debug(p);
+    ri.debug(p);
+    fun_p.debug(p);
+    fun_np.debug(p);
     p.get_stream() << "\n\n";
 
     p.get_stream() << "Converting types to s_expr:\n";
-    to_sexpr(p.get_stream(), &b);
-    p.get_stream() << '\n';
-    to_sexpr(p.get_stream(), &i);
-    p.get_stream() << '\n';
-    to_sexpr(p.get_stream(), &f);
-    p.get_stream() << '\n';
-    to_sexpr(p.get_stream(), &rb);
-    p.get_stream() << '\n';
-    to_sexpr(p.get_stream(), &ri);
-    p.get_stream() << '\n';
-    to_sexpr(p.get_stream(), &fun_p);
-    p.get_stream() << '\n';
-    to_sexpr(p.get_stream(), &fun_np);
+    b.to_sexpr(p);
+    i.to_sexpr(p);
+    f.to_sexpr(p);
+    rb.to_sexpr(p);
+    ri.to_sexpr(p);
+    fun_p.to_sexpr(p);
+    fun_np.to_sexpr(p);
     p.get_stream() << "\n\n";
 }
 

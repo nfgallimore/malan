@@ -34,10 +34,8 @@ public:
     void print_string(char const* str);
     /// Prints the given string.
 
-    void print_address(void const* ptr);
-    /// Prints the given arguments address.
-
-    void debug_address(Expr const* e, char const* kind);
+    void print_address(char const* kind, void const* ptr);
+    /// Prints the given pointers address with the kind of the argument as a string
 
 private:
     int m_tabs;

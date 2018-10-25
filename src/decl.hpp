@@ -65,15 +65,15 @@ private:
     Type* m_type;
     /// The type of the variable declaration.
 
-    Expr* m_init;
+    Expr* m_expr;
     /// The initial value of the variable declaration.
 };
 
 inline 
-Var_decl::Var_decl(Name* name, Type* type, Expr* init) 
-    : m_name(name), m_type(type), m_init(init) 
+Var_decl::Var_decl(Name* name, Type* type, Expr* expr) 
+    : m_name(name), m_type(type), m_expr(expr) 
 { 
-    assert(init != nullptr);
+    assert(expr != nullptr);
 }
 
 
@@ -81,7 +81,7 @@ Var_decl::Var_decl(Name* name, Type* type, Expr* init)
 class Ref_decl : public Decl
 {
 public:
-    Ref_decl(Name* name, Type* type, Expr* init);
+    Ref_decl(Name* name, Type* type, Expr* expr);
     /// Constructs the reference with the given arguments.
 
     void print(Printer& p) const override;
@@ -106,13 +106,13 @@ private:
     Type* m_type;
     /// The type of the reference declaration.
 
-    Expr* m_init;
+    Expr* m_expr;
     /// The initial value of the reference declaration.
 };
 
 inline
-Ref_decl::Ref_decl(Name* name, Type* type, Expr* init) 
-    : m_name(name), m_type(type), m_init(init) 
+Ref_decl::Ref_decl(Name* name, Type* type, Expr* expr) 
+    : m_name(name), m_type(type), m_expr(expr) 
 { }
 
 

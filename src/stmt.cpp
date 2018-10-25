@@ -14,7 +14,7 @@ Break_stmt::print(Printer& p) const
 void 
 Break_stmt::debug(Printer& p) const
 {
-    p.print_address(this);
+    p.print_address("Break_stmt", this);
 }
 
 void 
@@ -35,7 +35,7 @@ Cont_stmt::print(Printer& p) const
 void 
 Cont_stmt::debug(Printer& p) const
 {
-    p.print_address(this);
+    p.print_address("Cont_stmt", this);
 }
 
 void 
@@ -64,16 +64,12 @@ Block_stmt::print(Printer& p) const
 void 
 Block_stmt::debug(Printer& p) const
 {
-    p.print_string("Block_stmt ");
-    p.print_address(this);
+    p.print_address("Block_stmt", this);
     p.indent();
-    for(int i = 0, len = m_stmts->size(); i < len; i++)
+    for (int i = 0, len = m_stmts->size(); i < len; i++)
     {
-        p.new_line();
-        p.print_tabs();
         (*m_stmts)[i]->debug(p);
     }
-    p.new_line();
     p.undent();
 }
 
@@ -100,17 +96,10 @@ While_stmt::print(Printer& p) const
 void 
 While_stmt::debug(Printer& p) const
 {
-    p.print_string("While_stmt ");
-    p.print_address(this);
+    p.print_address("While_stmt", this);
     p.indent();
-    p.new_line();
-    
-    p.print_tabs();
     m_cond->debug(p);
-
-    p.print_tabs();
     m_body->debug(p);
-
     p.undent();
 }
 
@@ -168,20 +157,11 @@ If_stmt::print(Printer& p) const
 void 
 If_stmt::debug(Printer& p) const
 {
-    p.print_string("If_stmt ");
-    p.print_address(this);
+    p.print_address("If_stmt", this);
     p.indent();
-    p.new_line();
-    
-    p.print_tabs();
     m_cond->debug(p);
-
-    p.print_tabs();
     m_then->debug(p);
-
-    p.print_tabs();
     m_else->debug(p);
-
     p.undent();
 }
 
@@ -209,11 +189,8 @@ Ret_stmt::print(Printer& p) const
 void 
 Ret_stmt::debug(Printer& p) const
 {
-    p.get_stream() << "Return_stmt ";
-    p.print_address(this);
-    p.new_line();
+    p.print_address("Ret_stmt", this);
     p.indent();
-    p.print_tabs();
     m_expr->debug(p);
     p.undent();
 }
@@ -238,11 +215,8 @@ Expr_stmt::print(Printer& p) const
 void 
 Expr_stmt::debug(Printer& p) const
 {
-    p.get_stream() << "Expr_stmt ";
-    p.print_address(this);
-    p.new_line();
+    p.print_address("Expr_stmt", this);
     p.indent();
-    p.print_tabs();
     m_expr->debug(p);
     p.undent();
 }
@@ -267,11 +241,8 @@ Decl_stmt::print(Printer& p) const
 void 
 Decl_stmt::debug(Printer& p) const
 {
-    p.get_stream() << "Decl_stmt ";
-    p.print_address(this);
-    p.new_line();
+    p.print_address("Decl_stmt", this);
     p.indent();
-    p.print_tabs();
     m_decl->debug(p);
     p.undent();
 }

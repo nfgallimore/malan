@@ -270,10 +270,12 @@ BOOST_AUTO_TEST_CASE(Id_expr_debugs)
     std::string expected_result = 
         "Id_expr " + expr_addr(id) + '\n' +
         TAB + "Var_decl " + decl_addr(decl) + '\n' +
-        TAB + TAB + "Name " + name_addr(name) + '\n' +
         TAB + TAB + "Int_type " + type_addr(it) + '\n' +
+        TAB + TAB + "Name " + name_addr(name) + '\n' +
         TAB + TAB + "Int_lit " + expr_addr(il) + '\n' +
+        TAB + TAB + TAB + "Int_type " + type_addr(it) + '\n' +
         TAB + "Int_type " + type_addr(it) + '\n';
+    std::cout << expected_result;
 
     // Act
     id->debug(p);
