@@ -5,8 +5,9 @@
 #include "decl.hpp"
 #include "name.hpp"
 #include "stmt.hpp"
+#include "error.hpp"
 
-class Ast_builder
+class Builder
 {
 public:
     // Types
@@ -17,7 +18,7 @@ public:
     Type* get_int_type() const { return m_int_type; }
     /// Returns the type `int`.
     
-    Type* get_ref_type() const { return m_ref_type; }
+    Type* get_float_type() const { return m_float_type; }
     /// Returns the type `float`.
 
     Type* get_ref_type() const { return m_ref_type; }
@@ -34,10 +35,10 @@ public:
     Expr* make_int(int n);
     /// Returns a new integer literal.
 
-    Expr* make_float(double n);
+    Expr* make_float(float f);
     /// Returns a new floating point literal.
 
-    Expr* make_id(Name* n, Decl* d, Type* t);
+    Expr* make_id(Decl* d);
     /// Returns a new identifier expression.
 
     Expr* make_and(Expr* e1, Expr* e2);
@@ -49,7 +50,7 @@ public:
     Expr* make_not(Expr* e);
     /// Returns a new not expression.
 
-    Expr* make_con(Expr* e1, Expr* e2, Expr* e3, Type* t);
+    Expr* make_con(Expr* e1, Expr* e2, Expr* e3);
     /// Returns a new conditional expression.
 
     Expr* make_eq(Expr* e1, Expr* e2);
@@ -70,19 +71,19 @@ public:
     Expr* make_ge(Expr* e1, Expr* e2);
     /// Returns a new greater than or equal expression.
 
-    Expr* make_add(Expr* e1, Expr* e2, Type* t);
+    Expr* make_add(Expr* e1, Expr* e2);
     /// Returns a new addition expression.
 
-    Expr* make_sub(Expr* e1, Expr* e2, Type* t);
+    Expr* make_sub(Expr* e1, Expr* e2);
     /// Returns a new subtraction expression.
 
-    Expr* make_mul(Expr* e1, Expr* e2, Type* t);
+    Expr* make_mul(Expr* e1, Expr* e2);
     /// Returns a new multiplication expression.
 
-    Expr* make_quo(Expr* e1, Expr* e2, Type* t);
+    Expr* make_quo(Expr* e1, Expr* e2);
     /// Returns a new quotient expression.
 
-    Expr* make_rem(Expr* e1, Expr* e2, Type* t);
+    Expr* make_rem(Expr* e1, Expr* e2);
     /// Returns a new remainder expression.
 
     Expr* make_neg(Expr* e1);
@@ -92,6 +93,23 @@ public:
     /// Returns a new reciprocal expression.
     
     // Declaration builder
+
+    // Typing
+
+    bool is_bool(Expr* e);
+    /// Returns true if the expression is of type boolean.
+
+    bool require_bool(Expr* e);
+    /// Enforces the expression is a boolean.
+
+    bool require_bools(Expr* e1, Expr* e2);
+    /// Enforces the expressions are booleans.
+
+    bool is_number(Expr* e);
+    /// Enforces the expression is an `int` or a `bool`.
+
+    bool is_type(Expr* e, Type* t);
+    /// Enforces the expression is of the given type.
 
 
 private:
@@ -110,3 +128,42 @@ private:
     Fun_type* m_fun_type;
     /// The type `fun`.
 };
+
+inline bool 
+is_bool(Expr* e) 
+{
+    return e->get_type()->get_kind() == Type::bool_type;
+}
+
+inline bool 
+require_bools(Expr* e1, Expr* e2)
+{
+    if (!is_bool(e1) && !is_bool(e2))
+	{
+		throw std::logic_error("Both expressions must be boolean.");
+	}
+}
+
+inline bool 
+require_bool(Expr* e)
+{
+    if (!is_bool(e))
+	{
+		Type_err("Expression must be a boolean.");
+	}  
+}
+
+inline bool 
+are_same_type(Expr* e1, Expr* e2)
+{
+    return e1->get_type()->get_kind() == e2->get_type()->get_kind();
+}
+
+inline bool 
+require_same_type(Expr* e1, Expr* e2)
+{
+    if (!are_same_type(e1, e2))
+    {
+        Type_err("Expression must be a boolean.");
+    }
+}
