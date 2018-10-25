@@ -1,14 +1,14 @@
 #include "name.hpp"
 
 void 
-Name::print(std::ostream& os) const
+Name::print(Printer& p) const
 {
-    os << m_name;
+    p.get_stream() << m_name;
 }
 
-std::ostream& 
-operator<<(std::ostream& os, Name const& n) 
+std::ostream& operator<<(std::ostream& os, Name const& n) 
 {
-    n.print(os);
-    return os;
+    Printer p(os);
+    n.print(p);
+    return p.get_stream();
 }

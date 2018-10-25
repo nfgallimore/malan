@@ -3,6 +3,8 @@
 #include <string>
 #include <iostream>
 
+#include "printer.hpp"
+
 // Represents the name of a declaration
 class Name
 {
@@ -13,7 +15,7 @@ public:
     std::string get_str() { return m_name; }
     /// Gets the string form of the name
 
-    void print(std::ostream& os) const;
+    void print(Printer& p) const;
     /// Prints the name to ostream
     
 private:

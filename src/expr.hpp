@@ -5,7 +5,6 @@
 #include "value.hpp"
 #include "type.hpp"
 #include "printer.hpp"
-#include "tree.hpp"
 
 class Decl;
 class Value;
@@ -188,11 +187,11 @@ public:
     Type* get_type() const override { return m_type; }
     /// Returns the type of the identifier expression.
 
-    Decl* get_decl() { return m_value; }
+    Decl* get_decl() { return m_decl; }
     /// Gets the declaration of the identifier expression.
 
 private:
-    Decl* m_value;
+    Decl* m_decl;
     /// The declaration of the identifier expression.
 
     Type* m_type;
@@ -201,7 +200,7 @@ private:
 
 inline
 Id_expr::Id_expr(Decl* d, Type* t) 
-    : m_value(d), m_type(t) 
+    : m_decl(d), m_type(t) 
 { }
 
 inline

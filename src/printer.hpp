@@ -37,6 +37,8 @@ public:
     void print_address(void const* ptr);
     /// Prints the given arguments address.
 
+    void debug_address(Expr const* e, char const* kind);
+
 private:
     int m_tabs;
     /// Represents the current number of indentation.

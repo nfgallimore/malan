@@ -4,6 +4,10 @@
 #include "decl.hpp"
 #include "name.hpp"
 
+/// Rules:
+/// Print tabs as first statement in debug.
+/// Print new line after printing address in debug.
+
 // Integer literal expressions
 
 void
@@ -15,7 +19,11 @@ Int_lit::print(Printer& p) const
 void
 Int_lit::debug(Printer& p) const
 {
-    p.get_stream() << "Int_lit " << this << '\n';
+    p.debug_address(this, "Int_lit");
+
+    p.indent();
+    m_type->debug(p);
+    p.undent();
 }
 
 void
@@ -36,7 +44,11 @@ Bool_lit::print(Printer& p) const
 void
 Bool_lit::debug(Printer& p) const
 {
-    p.get_stream() << "Bool_lit " << this << '\n';
+    p.debug_address(this, "Bool_lit");
+
+    p.indent();
+    m_type->debug(p);
+    p.undent();
 }
 
 void
@@ -57,7 +69,11 @@ Float_lit::print(Printer& p) const
 void
 Float_lit::debug(Printer& p) const
 {
-    p.get_stream() << "Float_lit " << this << '\n';
+    p.debug_address(this, "Float_lit");
+
+    p.indent();
+    m_type->debug(p);
+    p.undent();
 }
 
 void
@@ -72,19 +88,24 @@ Float_lit::to_sexpr(Printer& p) const
 void
 Id_expr::print(Printer& p) const
 {
-    p.get_stream() << m_value->get_name()->get_str();
+    p.get_stream() << m_decl->get_name()->get_str();
 }
 
 void
 Id_expr::debug(Printer& p) const
 {
-    p.get_stream() << "Id_expr " << this << '\n';
+    p.debug_address(this, "Id_expr");
+
+    p.indent();
+    m_decl->debug(p);
+    m_type->debug(p);
+    p.undent();
 }
 
 void
 Id_expr::to_sexpr(Printer& p) const
 {
-    p.get_stream() << '(' << m_value->get_name()->get_str() << ')';
+    p.get_stream() << '(' << m_decl->get_name()->get_str() << ')';
 }
 
 

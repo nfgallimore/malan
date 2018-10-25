@@ -13,6 +13,43 @@
 
 using boost::test_tools::output_test_stream;
 
+// Helper functions
+
+std::string expr_addr(Expr const* expr)
+{
+    std::stringstream ss;
+    ss << expr;
+    return ss.str();
+}
+
+std::string decl_addr(Decl const* decl)
+{
+    std::stringstream ss;
+    ss << decl;
+    return ss.str();
+}
+
+std::string type_addr(Type const* type)
+{
+    std::stringstream ss;
+    ss << type;
+    return ss.str();
+}
+
+std::string stmt_addr(Stmt const* stmt)
+{
+    std::stringstream ss;
+    ss << stmt;
+    return ss.str();
+}
+
+std::string name_addr(Name const* name)
+{
+    std::stringstream ss;
+    ss << name;
+    return ss.str();
+}
+
 // Integer literal expression unit tests
 
 /// Tests that a integer literal expression `pretty prints` correctly.
@@ -31,7 +68,7 @@ BOOST_AUTO_TEST_CASE(Int_lit_prints)
 }
 
 /// Tests that a integer literal expression converts to a symbolic expression correctly.
-BOOST_AUTO_TEST_CASE(Int_lit_to_sexpr)
+BOOST_AUTO_TEST_CASE(Int_lit_converts_to_sexpr)
 {
     // Arrange
     output_test_stream os;
@@ -51,11 +88,12 @@ BOOST_AUTO_TEST_CASE(Int_lit_debugs)
     // Arrange
     output_test_stream os;
     Printer p(os);
-    Int_lit* il = new Int_lit(1, new Int_type());
+    Int_type* it = new Int_type();
+    Int_lit* il = new Int_lit(1, it);
 
-    std::stringstream ss;
-    ss << il;
-    std::string expectedResult = "Int_lit " + ss.str() + '\n';
+    std::string expectedResult = 
+        "Int_lit " + expr_addr(il) + '\n' 
+            + TAB + "Int_type " + type_addr(it) + '\n';
 
     // Act
     il->debug(p);
@@ -83,7 +121,7 @@ BOOST_AUTO_TEST_CASE(Bool_lit_prints)
 }
 
 /// Tests that a boolean literal expression converts to symbolic expression correctly.
-BOOST_AUTO_TEST_CASE(Bool_lit_to_sexprs)
+BOOST_AUTO_TEST_CASE(Bool_lit_converts_to_sexprs)
 {
     // Arrange
     output_test_stream os;
@@ -103,14 +141,15 @@ BOOST_AUTO_TEST_CASE(Bool_lit_debugs)
     // Arrange
     output_test_stream os;
     Printer p(os);
-    Bool_lit* il = new Bool_lit(1, new Bool_type());
+    Bool_type* bt = new Bool_type();
+    Bool_lit* bl = new Bool_lit(false, bt);
 
-    std::stringstream ss;
-    ss << il;
-    std::string expectedResult = "Bool_lit " + ss.str() + '\n';
+    std::string expectedResult = 
+        "Bool_lit " + expr_addr(bl) + '\n' 
+            + TAB + "Bool_type " + type_addr(bt) + '\n';
 
     // Act
-    il->debug(p);
+    bl->debug(p);
 
     // Assert
     BOOST_TEST( os.is_equal( expectedResult ) );
@@ -135,7 +174,7 @@ BOOST_AUTO_TEST_CASE(Float_lit_prints)
 }
 
 /// Tests that a float literal expression converts to a symbolic expression correctly.
-BOOST_AUTO_TEST_CASE(Float_lit_to_sexprs)
+BOOST_AUTO_TEST_CASE(Float_lit_converts_to_sexprs)
 {
     // Arrange
     output_test_stream os;
@@ -155,80 +194,90 @@ BOOST_AUTO_TEST_CASE(Float_lit_debugs)
     // Arrange
     output_test_stream os;
     Printer p(os);
-    Float_lit* il = new Float_lit(1.1, new Float_type());
+    Float_type* ft = new Float_type();
+    Float_lit* fl = new Float_lit(1.0, ft);
 
-    std::stringstream ss;
-    ss << il;
-    std::string expectedResult = "Float_lit " + ss.str() + '\n';
+    std::string expectedResult = 
+        "Float_lit " + expr_addr(fl) + '\n' 
+            + TAB + "Float_type " + type_addr(ft) + '\n';
 
     // Act
-    il->debug(p);
+    fl->debug(p);
 
     // Assert
     BOOST_TEST( os.is_equal( expectedResult ) );
 }
 
 
-// // Identifier expression unit tests.
+// Identifier expression unit tests.
 
-// /// Tests that a identifier expression `pretty prints` correctly.
-// BOOST_AUTO_TEST_CASE(Id_expr_prints)
-// {
-//     // Arrange
-//     output_test_stream os;   
-//     Printer p(os);
+/// Tests that a identifier expression `pretty prints` correctly.
+BOOST_AUTO_TEST_CASE(Id_expr_prints)
+{
+    // Arrange
+    output_test_stream os;   
+    Printer p(os);
 
-//     Name* name = new Name("x");
-//     Type* it = new Int_type();
-//     Int_lit* il = new Int_lit(1, it);
-//     Var_decl* decl = new Var_decl(name, it, il);
+    Name* name = new Name("x");
+    Type* it = new Int_type();
+    Int_lit* il = new Int_lit(1, it);
+    Var_decl* decl = new Var_decl(name, it, il);
 
-//     Id_expr* il = new Id_expr(decl, it);
+    Id_expr* id = new Id_expr(decl, it);
 
-//     // Act
-//     il->print(p);
+    // Act
+    id->print(p);
 
-//     // Assert
-//     BOOST_TEST( os.is_equal( "x" ) );
-// }
+    // Assert
+    BOOST_TEST( os.is_equal( "x" ) );
+}
 
-// /// Tests that a identifier expression converts to a symbolic expression correctly.
-// BOOST_AUTO_TEST_CASE(Id_expr_to_sexprs)
-// {
-//     // Arrange
-//     output_test_stream os;
-//     Printer p(os);
-//     Id_expr* il = new Id_expr(1.1, new Id_expr_type());
+/// Tests that a identifier expression converts to a symbolic expression correctly.
+BOOST_AUTO_TEST_CASE(Id_expr_converts_to_sexpr)
+{
+    // Arrange
+    output_test_stream os;   
+    Printer p(os);
 
-//     // Act
-//     il->to_sexpr(p);
+    Name* name = new Name("x");
+    Type* it = new Int_type();
+    Int_lit* il = new Int_lit(1, it);
+    Var_decl* decl = new Var_decl(name, it, il);
 
-//     // Assert
-//     BOOST_TEST( os.is_equal( "(1.1)" ) );
-// }
+    Id_expr* id = new Id_expr(decl, it);
 
-// /// Tests that a identifier expression debugs correctly.
-// BOOST_AUTO_TEST_CASE(Id_expr_debugs)
-// {
-//     // Arrange
-//     output_test_stream os;
-//     Printer p(os);
+    // Act
+    id->print(p);
 
-//     Name* name = new Name("x");
-//     Type* it = new Int_type();
-//     Int_lit* il = new Int_lit(1, it);
-//     Var_decl* decl = new Var_decl(name, it, il);
+    // Assert
+    BOOST_TEST( os.is_equal( "x" ) );
+}
 
-//     Id_expr* id = new Id_expr(decl, it);
+/// Tests that a identifier expression debugs correctly.
+BOOST_AUTO_TEST_CASE(Id_expr_debugs)
+{
+    // Arrange
+    output_test_stream os;   
+    Printer p(os);
 
-//     std::stringstream ss;
-//     ss << id;
-    
-//     std::string expectedResult = "Id_expr " + ss.str() + '\n';
+    Name* name = new Name("x");
+    Type* it = new Int_type();
+    Int_lit* il = new Int_lit(1, it);
+    Var_decl* decl = new Var_decl(name, it, il);
 
-//     // Act
-//     il->debug(p);
+    Id_expr* id = new Id_expr(decl, it);
 
-//     // Assert
-//     BOOST_TEST( os.is_equal( expectedResult ) );
-// }
+    std::string expected_result = 
+        "Id_expr " + expr_addr(id) + '\n' +
+        TAB + "Var_decl " + decl_addr(decl) + '\n' +
+        TAB + TAB + "Name " + name_addr(name) + '\n' +
+        TAB + TAB + "Int_type " + type_addr(it) + '\n' +
+        TAB + TAB + "Int_lit " + expr_addr(il) + '\n' +
+        TAB + "Int_type " + type_addr(it) + '\n';
+
+    // Act
+    id->debug(p);
+
+    // Assert
+    BOOST_TEST( os.is_equal( expected_result ) );
+}

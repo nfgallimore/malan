@@ -170,27 +170,3 @@ Func_decl::Func_decl(Name* name, Decl_seq* parms, Type* ret, Stmt* body)
 
 std::ostream& operator<<(std::ostream& os, Decl const& d);
 /// Write `d` to the output stream.
-
-
-// Operations
-
-/// `Pretty prints` the declaration.
-inline void
-print(Printer& p, Decl const& d)
-{
-    p.get_stream() << d;
-};
-
-/// Prints the declaration as a symbolic expression.
-inline void
-to_sexpr(Printer& p, Decl const& d)
-{
-    d.to_sexpr(p);
-}
-
-/// Prints the declaration's associated addresses in memory.
-inline void
-debug(Printer& p, Decl const& d)
-{
-    d.debug(p);
-}

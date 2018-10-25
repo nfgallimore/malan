@@ -33,8 +33,14 @@ Printer::print_string(char const* str)
 }
 
 void
-Printer::print_address(void
-const* ptr)
+Printer::print_address(void const* ptr)
 {
     m_os << ptr;
+}
+
+void 
+Printer::debug_address(Expr const* e, char const* kind)
+{
+    print_tabs();
+    get_stream() << kind << ' ' << e << '\n';
 }

@@ -15,6 +15,7 @@ Bool_type::print(Printer& p) const
 void
 Bool_type::debug(Printer& p) const
 {
+    p.print_tabs();
     p.print_string("Bool_type ");
     p.print_address(this);
     p.new_line();
@@ -38,6 +39,7 @@ Int_type::print(Printer& p) const
 void
 Int_type::debug(Printer& p) const
 {
+    p.print_tabs();
     p.print_string("Int_type ");
     p.print_address(this);
     p.new_line();
@@ -61,6 +63,7 @@ Float_type::print(Printer& p) const
 void
 Float_type::debug(Printer& p) const
 {
+    p.print_tabs();
     p.print_string("Float_type ");
     p.print_address(this);
     p.new_line();
@@ -84,6 +87,7 @@ Ref_type::print(Printer& p) const
 void
 Ref_type::debug(Printer& p) const
 {
+    p.print_tabs();
     p.print_string("Ref_type ");
     p.print_address(this);
     p.new_line();
@@ -120,6 +124,7 @@ Fun_type::print(Printer& p) const
 void
 Fun_type::debug(Printer& p) const
 {
+    p.print_tabs();
     p.print_string("Fun_type ");
     p.print_address(this);
     p.new_line();
@@ -141,6 +146,7 @@ Fun_type::debug(Printer& p) const
     p.undent();
 
     p.undent();
+    p.new_line();
 }
 
 void

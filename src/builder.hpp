@@ -94,7 +94,6 @@ public:
     // Declaration builder
 
 
-
 private:
     Bool_type* m_bool_type;
     /// The type `bool`.

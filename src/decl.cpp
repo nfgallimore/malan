@@ -35,17 +35,8 @@ Var_decl::debug(Printer& p) const
     p.print_address(m_name);
     p.new_line();
 
-    if (m_init != nullptr) {
-        p.print_tabs();
-        p.print_string("Expr ");
-        p.print_address(m_init);
-        p.new_line();
-        p.indent();
-        m_init->debug(p);
-        p.undent();
-        p.new_line();
-    }
-
+    p.print_tabs();
+    m_init->debug(p);
     p.undent();
 }
 
