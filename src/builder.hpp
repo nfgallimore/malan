@@ -99,10 +99,10 @@ public:
     bool is_bool(Expr* e);
     /// Returns true if the expression is of type boolean.
 
-    bool require_bool(Expr* e);
+    void require_bool(Expr* e);
     /// Enforces the expression is a boolean.
 
-    bool require_bools(Expr* e1, Expr* e2);
+    void require_bools(Expr* e1, Expr* e2);
     /// Enforces the expressions are booleans.
 
     bool is_number(Expr* e);
@@ -111,6 +111,11 @@ public:
     bool is_type(Expr* e, Type* t);
     /// Enforces the expression is of the given type.
 
+    Float_lit* convert_to_float(Expr* e);
+
+    bool are_same_type(Expr* e1, Expr* e2);
+
+    void require_same_type(Expr* e1, Expr* e2);
 
 private:
     Bool_type* m_bool_type;
@@ -130,13 +135,13 @@ private:
 };
 
 inline bool 
-is_bool(Expr* e) 
+Builder::is_bool(Expr* e) 
 {
     return e->get_type()->get_kind() == Type::bool_type;
 }
 
-inline bool 
-require_bools(Expr* e1, Expr* e2)
+inline void 
+Builder::require_bools(Expr* e1, Expr* e2)
 {
     if (!is_bool(e1) && !is_bool(e2))
 	{
@@ -144,8 +149,8 @@ require_bools(Expr* e1, Expr* e2)
 	}
 }
 
-inline bool 
-require_bool(Expr* e)
+inline void 
+Builder::require_bool(Expr* e)
 {
     if (!is_bool(e))
 	{
@@ -154,16 +159,23 @@ require_bool(Expr* e)
 }
 
 inline bool 
-are_same_type(Expr* e1, Expr* e2)
+Builder::are_same_type(Expr* e1, Expr* e2)
 {
     return e1->get_type()->get_kind() == e2->get_type()->get_kind();
 }
 
-inline bool 
-require_same_type(Expr* e1, Expr* e2)
+inline void 
+Builder::require_same_type(Expr* e1, Expr* e2)
 {
     if (!are_same_type(e1, e2))
     {
         Type_err("Expression must be a boolean.");
     }
+}
+
+inline Float_lit*
+Builder::convert_to_float(Expr* e)
+{
+    assert(e->get_type()->get_kind() == Type::int_type);
+    return new Float_lit((float)e->evaluate().get_int(), get_float_type());
 }

@@ -47,7 +47,23 @@ Expr* Builder::make_con(Expr* e1, Expr* e2, Expr* e3)
 
 Expr* Builder::make_eq(Expr* e1, Expr* e2)
 {
-	
+	// If different types
+	if (!is_type(e1, e2->get_type()))
+	{
+		if (!is_number(e1) || !is_number(e2))
+		{
+			Type_err("Expressions cannot be different types unless they are numbers.");
+		}
+		else if (is_type(e1, get_int_type()))
+		{
+			return new Eq_expr(convert_to_float(e1), e2, get_bool_type());
+		}
+		else 
+		{
+			return new Eq_expr(e1, convert_to_float(e2), get_bool_type());
+		}
+	}
+	return new Eq_expr(e1, e2, get_bool_type());
 }
 
 Expr* Builder::make_ne(Expr* e1, Expr* e2)
@@ -75,27 +91,27 @@ Expr* Builder::make_ge(Expr* e1, Expr* e2)
 	
 }
 
-Expr* Builder::make_add(Expr* e1, Expr* e2, Type* t)
+Expr* Builder::make_add(Expr* e1, Expr* e2)
 {
 	
 }
 
-Expr* Builder::make_sub(Expr* e1, Expr* e2, Type* t)
+Expr* Builder::make_sub(Expr* e1, Expr* e2)
 {
 	
 }
 
-Expr* Builder::make_mul(Expr* e1, Expr* e2, Type* t)
+Expr* Builder::make_mul(Expr* e1, Expr* e2)
 {
 	
 }
 
-Expr* Builder::make_quo(Expr* e1, Expr* e2, Type* t)
+Expr* Builder::make_quo(Expr* e1, Expr* e2)
 {
 	
 }
 
-Expr* Builder::make_rem(Expr* e1, Expr* e2, Type* t)
+Expr* Builder::make_rem(Expr* e1, Expr* e2)
 {
 	
 }
