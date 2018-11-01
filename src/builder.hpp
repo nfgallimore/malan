@@ -134,10 +134,13 @@ public:
     
     // Conversion
 
-    Type::Kind get_actual_kind(Expr* e1);
+    Type::Kind get_actual_kind(Expr* e);
     /// Returns the actual kind of the expression, gets type of reference if reference type.
 
+    Type::Kind get_actual_kind(Decl* d);
+    /// Returns the actual kind of the declaration, gets type of reference if reference type.
 
+    
 private:
     Bool_type m_bool_type;
     /// The type `bool`.

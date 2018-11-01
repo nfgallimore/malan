@@ -12,7 +12,7 @@ public:
     Error(string str) : m_str(str) { }
     /// Constructs an error message with the given string
 
-    void Type_err(string str);
+    void static Type_err(string str);
     /// Prints an error to cerr with the error message.
 
 private:

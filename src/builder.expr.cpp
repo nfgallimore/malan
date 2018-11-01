@@ -71,27 +71,32 @@ Expr* Builder::make_ne(Expr* e1, Expr* e2)
 
 Expr* Builder::make_lt(Expr* e1, Expr* e2)
 {
-	
+	require_same_type(e1, e2);
+  	return new Lt_expr(e1, e2, get_bool_type());
 }
 
 Expr* Builder::make_gt(Expr* e1, Expr* e2)
 {
-	
+	require_same_type(e1, e2);
+  	return new Gt_expr(e1, e2, get_bool_type());
 }
 
 Expr* Builder::make_le(Expr* e1, Expr* e2)
 {
-	
+	require_same_type(e1, e2);
+  	return new Le_expr(e1, e2, get_bool_type());
 }
 
 Expr* Builder::make_ge(Expr* e1, Expr* e2)
 {
-	
+	require_same_type(e1, e2);
+  	return new Ge_expr(e1, e2, get_bool_type());
 }
 
 Expr* Builder::make_add(Expr* e1, Expr* e2)
 {
-	
+	// require_numbers(e1, e2);
+  	// return new Add_expr(e1, e2, get_dominant_type(e1, e2));	
 }
 
 Expr* Builder::make_sub(Expr* e1, Expr* e2)
