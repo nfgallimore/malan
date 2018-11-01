@@ -3,6 +3,7 @@
 #include "type.hpp"
 #include "expr.hpp"
 #include "decl.hpp"
+#include "stmt.hpp"
 
 class Builder
 {
@@ -115,6 +116,19 @@ public:
     /// Returns a new function declaration.
 
 
+    // Stmt builder
+
+    Stmt* make_break();
+    /// Construct a break statement.
+
+    Stmt* make_cont();
+    /// Construct a continue statement.
+
+    Stmt* make_block(Stmt_seq* seq);
+    /// Construct a block statement.
+
+    Stmt* make_while(Expr* cond, Stmt* body);
+    
     // Typing Helpers
 
     bool is_bool(Expr* e);

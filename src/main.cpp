@@ -17,6 +17,8 @@ int main(int argc, char** argv)
     factorial();
 }
 
+// TODO rearrange methods using builder. 
+// See previous versions of main.cpp for test programs.
 void make_min()
 {
 
