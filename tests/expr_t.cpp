@@ -10,6 +10,7 @@
 #include "../src/decl.hpp"
 #include "../src/name.hpp"
 #include "../src/stmt.hpp"
+#include "../src/value.hpp"
 
 using boost::test_tools::output_test_stream;
 
@@ -58,7 +59,7 @@ BOOST_AUTO_TEST_CASE(Int_lit_prints)
     // Arrange
     output_test_stream os;   
     Printer p(os);
-    Int_lit* il = new Int_lit(1, new Int_type());
+    Int_lit* il = new Int_lit(Value(1), new Int_type());
 
     // Act
     il->print(p);
@@ -73,7 +74,7 @@ BOOST_AUTO_TEST_CASE(Int_lit_converts_to_sexpr)
     // Arrange
     output_test_stream os;
     Printer p(os);
-    Int_lit* il = new Int_lit(1, new Int_type());
+    Int_lit* il = new Int_lit(Value(1), new Int_type());
 
     // Act
     il->to_sexpr(p);
@@ -89,7 +90,7 @@ BOOST_AUTO_TEST_CASE(Int_lit_debugs)
     output_test_stream os;
     Printer p(os);
     Int_type* it = new Int_type();
-    Int_lit* il = new Int_lit(1, it);
+    Int_lit* il = new Int_lit(Value(1), it);
 
     std::string expectedResult = 
         "Int_lit " + expr_addr(il) + '\n' 
@@ -111,7 +112,7 @@ BOOST_AUTO_TEST_CASE(Bool_lit_prints)
     // Arrange
     output_test_stream os;   
     Printer p(os);
-    Bool_lit* il = new Bool_lit(false, new Bool_type());
+    Bool_lit* il = new Bool_lit(Value(false), new Bool_type());
 
     // Act
     il->print(p);
@@ -126,7 +127,7 @@ BOOST_AUTO_TEST_CASE(Bool_lit_converts_to_sexprs)
     // Arrange
     output_test_stream os;
     Printer p(os);
-    Bool_lit* il = new Bool_lit(false, new Bool_type());
+    Bool_lit* il = new Bool_lit(Value(false), new Bool_type());
 
     // Act
     il->to_sexpr(p);
@@ -142,7 +143,7 @@ BOOST_AUTO_TEST_CASE(Bool_lit_debugs)
     output_test_stream os;
     Printer p(os);
     Bool_type* bt = new Bool_type();
-    Bool_lit* bl = new Bool_lit(false, bt);
+    Bool_lit* bl = new Bool_lit(Value(false), bt);
 
     std::string expectedResult = 
         "Bool_lit " + expr_addr(bl) + '\n' 
@@ -164,7 +165,7 @@ BOOST_AUTO_TEST_CASE(Float_lit_prints)
     // Arrange
     output_test_stream os;   
     Printer p(os);
-    Float_lit* il = new Float_lit(1.1, new Float_type());
+    Float_lit* il = new Float_lit(Value(1.1f), new Float_type());
 
     // Act
     il->print(p);
@@ -179,7 +180,7 @@ BOOST_AUTO_TEST_CASE(Float_lit_converts_to_sexprs)
     // Arrange
     output_test_stream os;
     Printer p(os);
-    Float_lit* il = new Float_lit(1.1, new Float_type());
+    Float_lit* il = new Float_lit(Value(1.1f), new Float_type());
 
     // Act
     il->to_sexpr(p);
@@ -195,7 +196,7 @@ BOOST_AUTO_TEST_CASE(Float_lit_debugs)
     output_test_stream os;
     Printer p(os);
     Float_type* ft = new Float_type();
-    Float_lit* fl = new Float_lit(1.0, ft);
+    Float_lit* fl = new Float_lit(Value(1.0f), ft);
 
     std::string expectedResult = 
         "Float_lit " + expr_addr(fl) + '\n' 
@@ -220,7 +221,7 @@ BOOST_AUTO_TEST_CASE(Id_expr_prints)
 
     Name* name = new Name("x");
     Type* it = new Int_type();
-    Int_lit* il = new Int_lit(1, it);
+    Int_lit* il = new Int_lit(Value(1), it);
     Var_decl* decl = new Var_decl(name, it, il);
 
     Id_expr* id = new Id_expr(decl, it);
@@ -241,7 +242,7 @@ BOOST_AUTO_TEST_CASE(Id_expr_converts_to_sexpr)
 
     Name* name = new Name("x");
     Type* it = new Int_type();
-    Int_lit* il = new Int_lit(1, it);
+    Int_lit* il = new Int_lit(Value(1), it);
     Var_decl* decl = new Var_decl(name, it, il);
 
     Id_expr* id = new Id_expr(decl, it);
@@ -262,7 +263,7 @@ BOOST_AUTO_TEST_CASE(Id_expr_debugs)
 
     Name* name = new Name("x");
     Type* it = new Int_type();
-    Int_lit* il = new Int_lit(1, it);
+    Int_lit* il = new Int_lit(Value(1), it);
     Var_decl* decl = new Var_decl(name, it, il);
 
     Id_expr* id = new Id_expr(decl, it);
@@ -275,7 +276,6 @@ BOOST_AUTO_TEST_CASE(Id_expr_debugs)
         TAB + TAB + "Int_lit " + expr_addr(il) + '\n' +
         TAB + TAB + TAB + "Int_type " + type_addr(it) + '\n' +
         TAB + "Int_type " + type_addr(it) + '\n';
-    std::cout << expected_result;
 
     // Act
     id->debug(p);

@@ -34,7 +34,7 @@ public:
 class Bool_lit : public Expr 
 {
 public:   
-    Bool_lit(bool b, Type* t);
+    Bool_lit(Value v, Type* t);
     /// Constructs a boolean literal expression with the given arguments.
 
     void print(Printer& p) const override;
@@ -49,14 +49,14 @@ public:
     Value evaluate() const override;
     /// Evaluates the boolean literal expression.
 
-    bool get_value() { return m_value; }
+    Value get_value() { return m_value; }
     /// Returns the boolean value of the boolean literal expression.
 
     Type* get_type() const override { return m_type; }
     /// Returns the type of the boolean literal expression.
 
 private:
-    bool m_value;
+    Value m_value;
     /// The boolean value of the boolean literal expression.
 
     Type* m_type;
@@ -64,8 +64,8 @@ private:
 };
 
 inline
-Bool_lit::Bool_lit(bool b, Type* t) 
-    : m_value(b), m_type(t) 
+Bool_lit::Bool_lit(Value v, Type* t) 
+    : m_value(v), m_type(t) 
 { }
 
 inline
@@ -78,8 +78,8 @@ Value Bool_lit::evaluate() const
 /// Represents the integer literal of the form `1, 2, ..., n`.
 class Int_lit : public Expr 
 {
-public:    
-    Int_lit(int i, Type* t);
+public:
+    Int_lit(Value v, Type* t);
     /// Constructs an integer literal expression with the given arguments.
 
     void print(Printer& p) const override;
@@ -94,14 +94,14 @@ public:
     Value evaluate() const override;
     /// Evaluates the integer literal expression.
 
-    int get_value() { return m_value; }
+    Value get_value() { return m_value; }
     /// Returns the integer value of the integer literal expression.
 
     Type* get_type() const override { return m_type; }
     /// Returns the type of the integer literal expression.
 
 private:
-    int m_value;
+    Value m_value;
     /// The integer value of the integer literal expression.
 
     Type* m_type;
@@ -109,8 +109,8 @@ private:
 };
 
 inline
-Int_lit::Int_lit(int i, Type* t) 
-    : m_value(i), m_type(t) 
+Int_lit::Int_lit(Value v, Type* t) 
+    : m_value(v), m_type(t) 
 { }
 
 inline
@@ -124,7 +124,7 @@ Value Int_lit::evaluate() const
 class Float_lit : public Expr
 {
 public:    
-    Float_lit(float f, Type* t);
+    Float_lit(Value v, Type* t);
     /// Constructs a float literal expression with the given arguments.
 
     void print(Printer& p) const override;
@@ -142,11 +142,11 @@ public:
     Type* get_type() const override { return m_type; }
     /// Returns the type of the float literal expression.
 
-    float get_value() { return m_value; }
+    Value get_value() { return m_value; }
     /// Returns the float value of the float literal expression.
 
 private:
-    float m_value;
+    Value m_value;
     /// The float value of the float literal expression.
 
     Type* m_type;
@@ -154,8 +154,8 @@ private:
 };
 
 inline
-Float_lit::Float_lit(float f, Type* t) 
-    : m_value(f), m_type(t) 
+Float_lit::Float_lit(Value v, Type* t) 
+    : m_value(v), m_type(t) 
 { }
 
 inline

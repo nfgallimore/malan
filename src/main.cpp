@@ -6,6 +6,7 @@
 #include "name.hpp"
 #include "stmt.hpp"
 #include "printer.hpp"
+#include "builder.hpp"
 
 void types();
 void exprs();
@@ -26,8 +27,7 @@ unit tests have been excluded and will need to be re-added.
  */
 
 int main(int argc, char** argv)
-{
-    types();
+{   types();
     exprs();
     complex_decl();
     nested_debug_printing();
@@ -154,33 +154,34 @@ void types()
 
 void exprs()
 {    
+    Builder* b = new Builder();
     Int_type it;
     Bool_type bt;
 
     Printer p(std::cout);
     // Int literal operations
     p.get_stream() << "Integer literal:\n";
-    Int_lit il(1, &it);
+    Int_lit* il = b->make_int(1);
     p.get_stream() << "print: " << il << '\n';
     p.get_stream() << "debug: \n";
-    il.debug(p);
+    il->debug(p);
     p.get_stream() << "s_expr: ";
-    il.to_sexpr(p);
+    il->to_sexpr(p);
     p.new_line(2);
 
     // Bool literal operations
     p.get_stream() << "Boolean literal:\n";
-    Bool_lit bl(false, &bt);
+    Expr* bl = b->make_false();
     p.get_stream() << "print: " << bl << '\n';
     p.get_stream() << "debug: \n";
-    bl.debug(p);
+    bl->debug(p);
     p.get_stream() << "s_expr: ";
-    bl.to_sexpr(p);
+    bl->to_sexpr(p);
     p.new_line(2);
 
     // Float literal operations
     p.get_stream() << "Boolean literal:\n";
-    Float_lit fl(1.3f, &bt);
+    Float_lit fl(Value(1.3f), &bt);
     p.get_stream() << "print: " << fl << '\n';
     p.get_stream() << "debug: \n";
     fl.debug(p);
@@ -190,7 +191,7 @@ void exprs()
 
     // Identifier operations
     Name n("x");
-    Var_decl vdecl(&n, &it, &il);
+    Var_decl vdecl(&n, &it, il);
     
     p.get_stream() << "Identifier:\n";
     Id_expr id(&vdecl, &it);
@@ -203,7 +204,7 @@ void exprs()
 
     // Logical AND operations
     p.get_stream() << "Logical AND:\n";
-    And_expr andExp(&bl, &bl, &bt);
+    And_expr andExp(bl, bl, &bt);
     p.get_stream() << "print: " << andExp << '\n';
     p.get_stream() << "debug: \n";
     andExp.debug(p);
@@ -214,7 +215,7 @@ void exprs()
 
     // Logical OR operations
     p.get_stream() << "Logical OR:\n";
-    Or_expr orExp(&bl, &bl, &bt);
+    Or_expr orExp(bl, bl, &bt);
     p.get_stream() << "print: " << orExp << '\n';
     p.get_stream() << "debug: \n";
     orExp.debug(p);
@@ -225,7 +226,7 @@ void exprs()
     
     // Logical NOT operations
     p.get_stream() << "Logical NOT:\n";
-    Not_expr notExp(&bl, &bt);
+    Not_expr notExp(bl, &bt);
     p.get_stream() << "print: " << notExp << '\n';
     p.get_stream() << "debug: \n";
     notExp.debug(p);
@@ -236,7 +237,7 @@ void exprs()
 
     // Ternary expression operations
     p.get_stream() << "Ternary expression:\n";
-    Con_expr conExpr(&bl, &bl, &bl, &bt);
+    Con_expr conExpr(bl, bl, bl, &bt);
     p.get_stream() << "print: " << conExpr << '\n';
     p.get_stream() << "debug: \n";
     conExpr.debug(p);
@@ -246,7 +247,7 @@ void exprs()
 
     // Equal expression operations
     p.get_stream() << "Equal expression:\n";
-    Eq_expr eqExpr(&il, &il, &bt);
+    Eq_expr eqExpr(il, il, &bt);
     p.get_stream() << "print: " << eqExpr << '\n';
     p.get_stream() << "debug: \n";
     eqExpr.debug(p);
@@ -256,7 +257,7 @@ void exprs()
 
     // Not equal expression operations
     p.get_stream() << "Not equal expression:\n";
-    Ne_expr neExpr(&il, &il, &bt);
+    Ne_expr neExpr(il, il, &bt);
     p.get_stream() << "print: " << neExpr << '\n';
     p.get_stream() << "debug: \n";
     neExpr.debug(p);
@@ -266,7 +267,7 @@ void exprs()
 
     // Less than expression operations
     p.get_stream() << "Less than expression:\n";
-    Lt_expr ltExpr(&il, &il, &bt);
+    Lt_expr ltExpr(il, il, &bt);
     p.get_stream() << "print: " << ltExpr << '\n';
     p.get_stream() << "debug: \n";
     ltExpr.debug(p);
@@ -276,7 +277,7 @@ void exprs()
 
     // Greater than expression operations
     p.get_stream() << "Greater than expression:\n";
-    Gt_expr gtExpr(&il, &il, &bt);
+    Gt_expr gtExpr(il, il, &bt);
     p.get_stream() << "print: " << gtExpr << '\n';
     p.get_stream() << "debug: \n";
     gtExpr.debug(p);
@@ -286,7 +287,7 @@ void exprs()
 
     // Less than or equal expression operations
     p.get_stream() << "Less than or equal expression:\n";
-    Le_expr leExpr(&il, &il, &bt);
+    Le_expr leExpr(il, il, &bt);
     p.get_stream() << "print: " << leExpr << '\n';
     p.get_stream() << "debug: \n";
     leExpr.debug(p);
@@ -296,7 +297,7 @@ void exprs()
 
     // Greater than or equal expression operations
     p.get_stream() << "Greater than or equal expression:\n";
-    Ge_expr geExpr(&il, &il, &bt);
+    Ge_expr geExpr(il, il, &bt);
     p.get_stream() << "print: " << geExpr << '\n';
     p.get_stream() << "debug: \n";
     geExpr.debug(p);
@@ -306,7 +307,7 @@ void exprs()
 
     // Addition expression operations
     p.get_stream() << "Addition expression:\n";
-    Add_expr addExpr(&il, &il, &it);
+    Add_expr addExpr(il, il, &it);
     p.get_stream() << "print: " << addExpr << '\n';
     p.get_stream() << "debug: \n";
     addExpr.debug(p);
@@ -316,7 +317,7 @@ void exprs()
 
     // Subtraction expression operations
     p.get_stream() << "Subtraction expression:\n";
-    Sub_expr subExpr(&il, &il, &it);
+    Sub_expr subExpr(il, il, &it);
     p.get_stream() << "print: " << subExpr << '\n';
     p.get_stream() << "debug: \n";
     subExpr.debug(p);
@@ -326,7 +327,7 @@ void exprs()
 
     // Multiplication expression operations
     p.get_stream() << "Multiplication expression:\n";
-    Mul_expr mulExpr(&il, &il, &it);
+    Mul_expr mulExpr(il, il, &it);
     p.get_stream() << "print: " << mulExpr << '\n';
     p.get_stream() << "debug: \n";
     mulExpr.debug(p);
@@ -336,7 +337,7 @@ void exprs()
 
     // Quotient expression operations
     p.get_stream() << "Quotient expression:\n";
-    Quo_expr quoExpr(&il, &il, &it);
+    Quo_expr quoExpr(il, il, &it);
     p.get_stream() << "print: " << quoExpr << '\n';
     p.get_stream() << "debug: \n";
     quoExpr.debug(p);
@@ -346,7 +347,7 @@ void exprs()
 
     // Remainder expression operations
     p.get_stream() << "Remainder expression:\n";
-    Rem_expr remExpr(&il, &il, &it);
+    Rem_expr remExpr(il, il, &it);
     p.get_stream() << "print: " << remExpr << '\n';
     p.get_stream() << "debug: \n";
     remExpr.debug(p);
@@ -356,7 +357,7 @@ void exprs()
 
     // Negate expression operations
     p.get_stream() << "Negate expression:\n";
-    Neg_expr negExpr(&il, &it);
+    Neg_expr negExpr(il, &it);
     p.get_stream() << "print: " << negExpr << '\n';
     p.get_stream() << "debug: \n";
     negExpr.debug(p);
@@ -366,7 +367,7 @@ void exprs()
 
     // Reciprocal expression operations
     p.get_stream() << "Reciprocal expression:\n";
-    Rec_expr recExpr(&il, &it);
+    Rec_expr recExpr(il, &it);
     p.get_stream() << "print: " << recExpr << '\n';
     p.get_stream() << "debug: \n";
     recExpr.debug(p);
@@ -385,8 +386,8 @@ void complex_decl()
     Name name("x");
     Int_type type;
 
-    Int_lit operand1(2, &type);
-    Int_lit operand2(2, &type);
+    Int_lit operand1(Value(2), &type);
+    Int_lit operand2(Value(2), &type);
 
     // 2 + 2;
     Add_expr add_expr(&operand1, &operand2, &type);
@@ -409,8 +410,8 @@ void nested_debug_printing()
 {
     Bool_type bt;
 
-    Bool_lit cierto(true, &bt);
-    Bool_lit falso(false, &bt);
+    Bool_lit cierto(Value(true), &bt);
+    Bool_lit falso(Value(false), &bt);
 
     And_expr andExpr(&cierto, &cierto, &bt);;
 
@@ -440,8 +441,8 @@ void make_min()
 {
     Type* b = new Bool_type();
     Type* z = new Int_type();
-    Decl* p1 = new Var_decl(new Name("a"), z, new Int_lit(1, z));
-    Decl* p2 = new Var_decl(new Name("b"), z, new Int_lit(2, z));
+    Decl* p1 = new Var_decl(new Name("a"), z, new Int_lit(Value(1), z));
+    Decl* p2 = new Var_decl(new Name("b"), z, new Int_lit(Value(2), z));
 
       // p1 < p2 ? p1 : p2
     Expr* expr = new Con_expr(
@@ -482,7 +483,7 @@ void print_ref_decl()
     Printer p(std::cout);
     p.new_line(2);
     Int_type it = Int_type();
-    Ref_decl* refDecl = new Ref_decl(new Name("foo"), new Int_type(), new Int_lit(1, &it));
+    Ref_decl* refDecl = new Ref_decl(new Name("foo"), new Int_type(), new Int_lit(Value(1), &it));
     p.get_stream() << *refDecl;
     p.new_line(2);
     refDecl->to_sexpr(p);
@@ -497,9 +498,9 @@ void if_stmt()
     Int_type it = Int_type();
 
     If_stmt* ifstmt = new If_stmt(
-        new Lt_expr(new Int_lit(2, &it), new Int_lit(3, &it), &it),
-        new Expr_stmt(new Int_lit(1, &it)),
-        new Expr_stmt(new Int_lit(1, &it))
+        new Lt_expr(new Int_lit(Value(2), &it), new Int_lit(Value(3), &it), &it),
+        new Expr_stmt(new Int_lit(Value(1), &it)),
+        new Expr_stmt(new Int_lit(Value(1), &it))
     );
 
     p.get_stream() << *ifstmt;
@@ -516,8 +517,8 @@ void while_stmt()
     Bool_type bt = Bool_type();
 
     While_stmt* whilestmt = new While_stmt(
-        new Bool_lit(true, &bt),
-        new Expr_stmt(new Bool_lit(false, &bt))
+        new Bool_lit(Value(true), &bt),
+        new Expr_stmt(new Bool_lit(Value(false), &bt))
     );
     
     p.get_stream() << *whilestmt;
@@ -531,6 +532,7 @@ void while_stmt()
 
 void identifier_if_stmt()
 {
+    Builder* b = new Builder();
     Int_type it = Int_type();
     Bool_type bt = Bool_type();
 
@@ -538,8 +540,8 @@ void identifier_if_stmt()
         new Name("x"),
         &it,
         new Add_expr(
-            new Int_lit(1, &it),
-            new Int_lit(1, &it),
+            new Int_lit(Value(1), &it),
+            new Int_lit(Value(1), &it),
             &it
         )
     ));
@@ -551,11 +553,11 @@ void identifier_if_stmt()
                 x->get_decl(),
                 &it
             ),
-            new Int_lit(2, &it),
+            b->make_int(2),
             &it
         ),
-        new Expr_stmt(new Bool_lit(false, &bt)),
-        new Expr_stmt(new Bool_lit(true, &bt))
+        new Expr_stmt(b->make_false()),
+        new Expr_stmt(b->make_true())
     );
 
     Printer p(std::cout);
@@ -578,6 +580,7 @@ void identifier_if_stmt()
 // Recursive implementation
 void factorial()
 {
+    Builder* b = new Builder();
     Printer p(std::cout);
     p.new_line(2);
     Int_type* it = new Int_type();
@@ -587,21 +590,21 @@ void factorial()
     Var_decl* n = new Var_decl(
         new Name("n"), 
         it, 
-        new Int_lit(10, it)
+        b->make_int(10)
     );
 
     Func_decl* fact = new Func_decl(new Name("fact"), nullptr, nullptr, nullptr);
 
     fact = new Func_decl(
         new Name("fact"),
-        new std::vector<Decl*> { new Var_decl(new Name("n"), it, new Int_lit(10, it))},
+        new std::vector<Decl*> { new Var_decl(new Name("n"), it, b->make_int(10))},
         it,
         new Block_stmt(
             new std::vector<Stmt*>{
                 new If_stmt(
                     new Gt_expr(
                         new Id_expr(n, it),
-                        new Int_lit(0, it),
+                        b->make_int(0),
                         it
                     ),
                     new Ret_stmt(
@@ -612,7 +615,7 @@ void factorial()
                                     new Id_expr(fact, it),
                                     new Sub_expr(
                                         new Id_expr(n, it),
-                                        new Int_lit(1, it),
+                                        b->make_int(1),
                                         it
                                     )
                                 },
@@ -622,7 +625,7 @@ void factorial()
                         )
                     ),
                     new Ret_stmt(
-                        new Int_lit(1, it)
+                        b->make_int(1)
                     )
                 )
             }

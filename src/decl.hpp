@@ -8,7 +8,6 @@ class Name;
 class Type;
 class Expr;
 class Stmt;
-class Decl;
 
 /// Represents the base class of all declarations.
 class Decl

@@ -2,94 +2,97 @@
 
 #include "type.hpp"
 #include "expr.hpp"
-#include "decl.hpp"
-#include "name.hpp"
-#include "stmt.hpp"
-#include "error.hpp"
 
 class Builder
 {
 public:
+
     // Types
 
-    Type* get_bool_type() const { return m_bool_type; }
+    Type* get_bool_type() { return &m_bool_type; }
     /// Returns the type `bool`.
     
-    Type* get_int_type() const { return m_int_type; }
+    Type* get_int_type() { return &m_int_type; }
     /// Returns the type `int`.
     
-    Type* get_float_type() const { return m_float_type; }
+    Type* get_float_type() { return &m_float_type; }
     /// Returns the type `float`.
 
-    Type* get_ref_type() const { return m_ref_type; }
-    /// Returns the type `ref`.
+    Type* get_reference_type(Type* t);
+    /// Returns the type `ref t`.
 
-    Type* get_fun_type() const { return m_fun_type; }
-    /// Returns the type `fun`.
+    Type* get_function_type(std::vector<Type*> const& ts);
+    /// Returns the type `(t1, t2, ..., tn) -> tr`.
 
     // Expression builder
 
-    Expr* make_bool(bool b);
+    Bool_lit* make_bool(bool b);
     /// Returns a new boolean literal.
 
-    Expr* make_int(int n);
+    Bool_lit* make_true();
+    /// Returns a new boolean literal with  value of true.
+
+    Bool_lit* make_false();
+    /// Returns a new boolean literal with  value of false.
+
+    Int_lit* make_int(int n);
     /// Returns a new integer literal.
 
-    Expr* make_float(float f);
+    Float_lit* make_float(float f);
     /// Returns a new floating point literal.
 
-    Expr* make_id(Decl* d);
+    Id_expr* make_id(Decl* d);
     /// Returns a new identifier expression.
 
-    Expr* make_and(Expr* e1, Expr* e2);
+    And_expr* make_and(Expr* e1, Expr* e2);
     /// Returns a new and expression.
 
-    Expr* make_or(Expr* e1, Expr* e2);
+    Or_expr* make_or(Expr* e1, Expr* e2);
     /// Returns a new or epression.
 
-    Expr* make_not(Expr* e);
+    Not_expr* make_not(Expr* e);
     /// Returns a new not expression.
 
-    Expr* make_con(Expr* e1, Expr* e2, Expr* e3);
+    Con_expr* make_con(Expr* e1, Expr* e2, Expr* e3);
     /// Returns a new conditional expression.
 
-    Expr* make_eq(Expr* e1, Expr* e2);
+    Eq_expr* make_eq(Expr* e1, Expr* e2);
     /// Returns a new equality expression.
 
-    Expr* make_ne(Expr* e1, Expr* e2);
+    Ne_expr* make_ne(Expr* e1, Expr* e2);
     /// Returns a new inequality expression.
 
-    Expr* make_lt(Expr* e1, Expr* e2);
+    Lt_expr* make_lt(Expr* e1, Expr* e2);
     /// Returns a new less than expression.
 
-    Expr* make_gt(Expr* e1, Expr* e2);
+    Gt_expr* make_gt(Expr* e1, Expr* e2);
     /// Returns a new greater than or equal expression.
 
-    Expr* make_le(Expr* e1, Expr* e2);
+    Le_expr* make_le(Expr* e1, Expr* e2);
     /// Returns a new less than expression.
 
-    Expr* make_ge(Expr* e1, Expr* e2);
+    Ge_expr* make_ge(Expr* e1, Expr* e2);
     /// Returns a new greater than or equal expression.
 
-    Expr* make_add(Expr* e1, Expr* e2);
+    Add_expr* make_add(Expr* e1, Expr* e2);
     /// Returns a new addition expression.
 
-    Expr* make_sub(Expr* e1, Expr* e2);
+    Sub_expr* make_sub(Expr* e1, Expr* e2);
     /// Returns a new subtraction expression.
 
-    Expr* make_mul(Expr* e1, Expr* e2);
+    Mul_expr* make_mul(Expr* e1, Expr* e2);
     /// Returns a new multiplication expression.
 
-    Expr* make_quo(Expr* e1, Expr* e2);
+    Quo_expr* make_quo(Expr* e1, Expr* e2);
     /// Returns a new quotient expression.
 
-    Expr* make_rem(Expr* e1, Expr* e2);
+    Rem_expr* make_rem(Expr* e1, Expr* e2);
     /// Returns a new remainder expression.
 
-    Expr* make_neg(Expr* e1);
+    Neg_expr* make_neg(Expr* e1);
     /// Returns a new negation expression.
 
-    Expr* make_rec(Expr* e1);
+    Rec_expr* make_rec(Expr* e1);
     /// Returns a new reciprocal expression.
     
     // Declaration builder
@@ -111,71 +114,19 @@ public:
     bool is_type(Expr* e, Type* t);
     /// Enforces the expression is of the given type.
 
-    Float_lit* convert_to_float(Expr* e);
-
     bool are_same_type(Expr* e1, Expr* e2);
-
+    /// Determines if the expressions are of the same type.
+    
     void require_same_type(Expr* e1, Expr* e2);
+    /// Enforces that the expressions are the same type.
 
 private:
-    Bool_type* m_bool_type;
+    Bool_type m_bool_type;
     /// The type `bool`.
 
-    Int_type* m_int_type;
+    Int_type m_int_type;
     /// The type `int`.
 
-    Float_type* m_float_type;
+    Float_type m_float_type;
     /// The type `float`.
-
-    Ref_type* m_ref_type;
-    /// The type `ref`.
-
-    Fun_type* m_fun_type;
-    /// The type `fun`.
 };
-
-inline bool 
-Builder::is_bool(Expr* e) 
-{
-    return e->get_type()->get_kind() == Type::bool_type;
-}
-
-inline void 
-Builder::require_bools(Expr* e1, Expr* e2)
-{
-    if (!is_bool(e1) && !is_bool(e2))
-	{
-		throw std::logic_error("Both expressions must be boolean.");
-	}
-}
-
-inline void 
-Builder::require_bool(Expr* e)
-{
-    if (!is_bool(e))
-	{
-		Type_err("Expression must be a boolean.");
-	}  
-}
-
-inline bool 
-Builder::are_same_type(Expr* e1, Expr* e2)
-{
-    return e1->get_type()->get_kind() == e2->get_type()->get_kind();
-}
-
-inline void 
-Builder::require_same_type(Expr* e1, Expr* e2)
-{
-    if (!are_same_type(e1, e2))
-    {
-        Type_err("Expression must be a boolean.");
-    }
-}
-
-inline Float_lit*
-Builder::convert_to_float(Expr* e)
-{
-    assert(e->get_type()->get_kind() == Type::int_type);
-    return new Float_lit((float)e->evaluate().get_int(), get_float_type());
-}

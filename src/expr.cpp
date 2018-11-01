@@ -9,7 +9,7 @@
 void
 Int_lit::print(Printer& p) const
 {
-    p.get_stream() << m_value;
+    p.get_stream() << m_value.get_int();
 }
 
 void
@@ -24,7 +24,7 @@ Int_lit::debug(Printer& p) const
 void
 Int_lit::to_sexpr(Printer& p) const
 {
-    p.get_stream() << '(' << m_value << ')';
+    p.get_stream() << '(' << m_value.get_int() << ')';
 }
 
 
@@ -33,7 +33,7 @@ Int_lit::to_sexpr(Printer& p) const
 void
 Bool_lit::print(Printer& p) const
 {
-    p.get_stream() << std::boolalpha << m_value;
+    p.get_stream() << std::boolalpha << m_value.get_bool();
 }
 
 void
@@ -48,7 +48,7 @@ Bool_lit::debug(Printer& p) const
 void
 Bool_lit::to_sexpr(Printer& p) const
 {
-    p.get_stream() << '(' << std::boolalpha << m_value << ')';
+    p.get_stream() << '(' << std::boolalpha << m_value.get_bool() << ')';
 }
 
 
@@ -57,7 +57,7 @@ Bool_lit::to_sexpr(Printer& p) const
 void
 Float_lit::print(Printer& p) const
 {
-    p.get_stream() << m_value;
+    p.get_stream() << m_value.get_float();
 }
 
 void
@@ -72,7 +72,7 @@ Float_lit::debug(Printer& p) const
 void
 Float_lit::to_sexpr(Printer& p) const
 {
-    p.get_stream() << '(' << m_value << ')';
+    p.get_stream() << '(' << m_value.get_float() << ')';
 }
 
 
