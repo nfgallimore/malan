@@ -11,6 +11,7 @@
 #include "../src/name.hpp"
 #include "../src/stmt.hpp"
 #include "../src/value.hpp"
+#include "../src/builder.hpp"
 
 using boost::test_tools::output_test_stream;
 
@@ -59,7 +60,8 @@ BOOST_AUTO_TEST_CASE(Int_lit_prints)
     // Arrange
     output_test_stream os;   
     Printer p(os);
-    Int_lit* il = new Int_lit(Value(1), new Int_type());
+    Builder b;
+    Expr* il = b.make_int(1);
 
     // Act
     il->print(p);
@@ -74,7 +76,8 @@ BOOST_AUTO_TEST_CASE(Int_lit_converts_to_sexpr)
     // Arrange
     output_test_stream os;
     Printer p(os);
-    Int_lit* il = new Int_lit(Value(1), new Int_type());
+    Builder b;
+    Expr* il = b.make_int(1);
 
     // Act
     il->to_sexpr(p);
@@ -89,12 +92,12 @@ BOOST_AUTO_TEST_CASE(Int_lit_debugs)
     // Arrange
     output_test_stream os;
     Printer p(os);
-    Int_type* it = new Int_type();
-    Int_lit* il = new Int_lit(Value(1), it);
+    Builder b;
+    Expr* il = b.make_int(1);
 
     std::string expectedResult = 
         "Int_lit " + expr_addr(il) + '\n' 
-            + TAB + "Int_type " + type_addr(it) + '\n';
+            + TAB + "Int_type " + type_addr(il->get_type()) + '\n';
 
     // Act
     il->debug(p);
@@ -112,10 +115,11 @@ BOOST_AUTO_TEST_CASE(Bool_lit_prints)
     // Arrange
     output_test_stream os;   
     Printer p(os);
-    Bool_lit* il = new Bool_lit(Value(false), new Bool_type());
+    Builder b;
+    Expr* bl = b.make_false();
 
     // Act
-    il->print(p);
+    bl->print(p);
 
     // Assert
     BOOST_TEST( os.is_equal( "false" ) );
@@ -127,10 +131,11 @@ BOOST_AUTO_TEST_CASE(Bool_lit_converts_to_sexprs)
     // Arrange
     output_test_stream os;
     Printer p(os);
-    Bool_lit* il = new Bool_lit(Value(false), new Bool_type());
+    Builder b;
+    Expr* bl = b.make_false();
 
     // Act
-    il->to_sexpr(p);
+    bl->to_sexpr(p);
 
     // Assert
     BOOST_TEST( os.is_equal( "(false)" ) );
@@ -142,12 +147,12 @@ BOOST_AUTO_TEST_CASE(Bool_lit_debugs)
     // Arrange
     output_test_stream os;
     Printer p(os);
-    Bool_type* bt = new Bool_type();
-    Bool_lit* bl = new Bool_lit(Value(false), bt);
+    Builder b;
+    Expr* bl = b.make_false();
 
     std::string expectedResult = 
         "Bool_lit " + expr_addr(bl) + '\n' 
-            + TAB + "Bool_type " + type_addr(bt) + '\n';
+            + TAB + "Bool_type " + type_addr(bl->get_type()) + '\n';
 
     // Act
     bl->debug(p);
@@ -165,10 +170,11 @@ BOOST_AUTO_TEST_CASE(Float_lit_prints)
     // Arrange
     output_test_stream os;   
     Printer p(os);
-    Float_lit* il = new Float_lit(Value(1.1f), new Float_type());
+    Builder b;
+    Expr* fl = b.make_float(1.1f);
 
     // Act
-    il->print(p);
+    fl->print(p);
 
     // Assert
     BOOST_TEST( os.is_equal( "1.1" ) );
@@ -180,10 +186,11 @@ BOOST_AUTO_TEST_CASE(Float_lit_converts_to_sexprs)
     // Arrange
     output_test_stream os;
     Printer p(os);
-    Float_lit* il = new Float_lit(Value(1.1f), new Float_type());
+    Builder b;
+    Expr* fl = b.make_float(1.1f);
 
     // Act
-    il->to_sexpr(p);
+    fl->to_sexpr(p);
 
     // Assert
     BOOST_TEST( os.is_equal( "(1.1)" ) );
@@ -195,12 +202,12 @@ BOOST_AUTO_TEST_CASE(Float_lit_debugs)
     // Arrange
     output_test_stream os;
     Printer p(os);
-    Float_type* ft = new Float_type();
-    Float_lit* fl = new Float_lit(Value(1.0f), ft);
+    Builder b;
+    Expr* fl = b.make_float(1.1);
 
     std::string expectedResult = 
         "Float_lit " + expr_addr(fl) + '\n' 
-            + TAB + "Float_type " + type_addr(ft) + '\n';
+            + TAB + "Float_type " + type_addr(fl->get_type()) + '\n';
 
     // Act
     fl->debug(p);
@@ -279,6 +286,262 @@ BOOST_AUTO_TEST_CASE(Id_expr_debugs)
 
     // Act
     id->debug(p);
+
+    // Assert
+    BOOST_TEST( os.is_equal( expected_result ) );
+}
+
+
+// And expression unit tests.
+
+/// Tests that an And expression `pretty prints` correctly.
+BOOST_AUTO_TEST_CASE(And_expr_prints)
+{
+    // Arrange
+    output_test_stream os;   
+    Printer p(os);
+    Builder b;
+
+    Expr* expr = b.make_and(b.make_true(), b.make_true());
+
+    // Act
+    expr->print(p);
+
+    // Assert
+    BOOST_TEST( os.is_equal( "(true AND true)" ) );
+}
+
+/// Tests that an And expression converts to a symbolic expression correctly.
+BOOST_AUTO_TEST_CASE(And_expr_converts_to_sexpr)
+{
+    // Arrange
+    output_test_stream os;   
+    Printer p(os);
+    Builder b;
+
+    Expr* expr = b.make_and(b.make_true(), b.make_true());
+
+    // Act
+    expr->to_sexpr(p);
+
+    // Assert
+    BOOST_TEST( os.is_equal( "(AND (true) (true))" ) );
+}
+
+/// Tests that an And expression debugs correctly.
+BOOST_AUTO_TEST_CASE(And_expr_debugs)
+{
+    // Arrange
+    output_test_stream os;   
+    Printer p(os);
+    Builder b;
+
+    Expr* e1 = b.make_true();
+    Expr* e2 = b.make_true();
+    Expr* expr = b.make_and(e1, e2);
+
+    std::string expected_result = 
+        "And_expr " + expr_addr(expr) + '\n' +
+        TAB + "Bool_lit " + expr_addr(e1) + '\n' +
+        TAB + TAB "Bool_type " + type_addr(e1->get_type()) + '\n' +
+        TAB + "Bool_lit " + expr_addr(e2) + '\n' +
+        TAB + TAB "Bool_type " + type_addr(e2->get_type()) + '\n' +
+        TAB + "Bool_type " + type_addr(expr->get_type()) + '\n';
+
+    // Act
+    expr->debug(p);
+
+    // Assert
+    BOOST_TEST( os.is_equal( expected_result ) );
+}
+
+
+// Or expression unit tests.
+
+/// Tests that an Or expression `pretty prints` correctly.
+BOOST_AUTO_TEST_CASE(Or_expr_prints)
+{
+    // Arrange
+    output_test_stream os;   
+    Printer p(os);
+    Builder b;
+
+    Expr* expr = b.make_or(b.make_true(), b.make_true());
+
+    // Act
+    expr->print(p);
+
+    // Assert
+    BOOST_TEST( os.is_equal( "(true OR true)" ) );
+}
+
+/// Tests that an Or expression converts to a symbolic expression correctly.
+BOOST_AUTO_TEST_CASE(Or_expr_converts_to_sexpr)
+{
+    // Arrange
+    output_test_stream os;   
+    Printer p(os);
+    Builder b;
+
+    Expr* expr = b.make_or(b.make_true(), b.make_true());
+
+    // Act
+    expr->to_sexpr(p);
+
+    // Assert
+    BOOST_TEST( os.is_equal( "(OR (true) (true))" ) );
+}
+
+/// Tests that an Or expression debugs correctly.
+BOOST_AUTO_TEST_CASE(Or_expr_debugs)
+{
+    // Arrange
+    output_test_stream os;   
+    Printer p(os);
+    Builder b;
+
+    Expr* e1 = b.make_true();
+    Expr* e2 = b.make_true();
+    Expr* expr = b.make_or(e1, e2);
+
+    std::string expected_result = 
+        "Or_expr " + expr_addr(expr) + '\n' +
+        TAB + "Bool_lit " + expr_addr(e1) + '\n' +
+        TAB + TAB "Bool_type " + type_addr(e1->get_type()) + '\n' +
+        TAB + "Bool_lit " + expr_addr(e2) + '\n' +
+        TAB + TAB "Bool_type " + type_addr(e2->get_type()) + '\n' +
+        TAB + "Bool_type " + type_addr(expr->get_type()) + '\n';
+
+    // Act
+    expr->debug(p);
+
+    // Assert
+    BOOST_TEST( os.is_equal( expected_result ) );
+}
+
+
+// Eq expression unit tests.
+
+/// Tests that an Eq expression `pretty prints` correctly.
+BOOST_AUTO_TEST_CASE(Eq_expr_prints)
+{
+    // Arrange
+    output_test_stream os;   
+    Printer p(os);
+    Builder b;
+
+    Expr* expr = b.make_eq(b.make_true(), b.make_true());
+
+    // Act
+    expr->print(p);
+
+    // Assert
+    BOOST_TEST( os.is_equal( "(true == true)" ) );
+}
+
+/// Tests that an Eq expression converts to a symbolic expression correctly.
+BOOST_AUTO_TEST_CASE(Eq_expr_converts_to_sexpr)
+{
+    // Arrange
+    output_test_stream os;   
+    Printer p(os);
+    Builder b;
+
+    Expr* expr = b.make_eq(b.make_true(), b.make_true());
+
+    // Act
+    expr->to_sexpr(p);
+
+    // Assert
+    BOOST_TEST( os.is_equal( "(== (true) (true))" ) );
+}
+
+/// Tests that an Eq expression debugs correctly.
+BOOST_AUTO_TEST_CASE(Eq_expr_debugs)
+{
+    // Arrange
+    output_test_stream os;   
+    Printer p(os);
+    Builder b;
+
+    Expr* e1 = b.make_true();
+    Expr* e2 = b.make_true();
+    Expr* expr = b.make_eq(e1, e2);
+
+    std::string expected_result = 
+        "Eq_expr " + expr_addr(expr) + '\n' +
+        TAB + "Bool_lit " + expr_addr(e1) + '\n' +
+        TAB + TAB "Bool_type " + type_addr(e1->get_type()) + '\n' +
+        TAB + "Bool_lit " + expr_addr(e2) + '\n' +
+        TAB + TAB "Bool_type " + type_addr(e2->get_type()) + '\n' +
+        TAB + "Bool_type " + type_addr(expr->get_type()) + '\n';
+
+    // Act
+    expr->debug(p);
+
+    // Assert
+    BOOST_TEST( os.is_equal( expected_result ) );
+}
+
+
+// Ne expression unit tests.
+
+/// Tests that an Ne expression `pretty prints` correctly.
+BOOST_AUTO_TEST_CASE(Ne_expr_prints)
+{
+    // Arrange
+    output_test_stream os;   
+    Printer p(os);
+    Builder b;
+
+    Expr* expr = b.make_ne(b.make_true(), b.make_true());
+
+    // Act
+    expr->print(p);
+
+    // Assert
+    BOOST_TEST( os.is_equal( "(true != true)" ) );
+}
+
+/// Tests that an Ne expression converts to a symbolic expression correctly.
+BOOST_AUTO_TEST_CASE(Ne_expr_converts_to_sexpr)
+{
+    // Arrange
+    output_test_stream os;   
+    Printer p(os);
+    Builder b;
+
+    Expr* expr = b.make_ne(b.make_true(), b.make_true());
+
+    // Act
+    expr->to_sexpr(p);
+
+    // Assert
+    BOOST_TEST( os.is_equal( "(!= (true) (true))" ) );
+}
+
+/// Tests that an Ne expression debugs correctly.
+BOOST_AUTO_TEST_CASE(Ne_expr_debugs)
+{
+    // Arrange
+    output_test_stream os;   
+    Printer p(os);
+    Builder b;
+
+    Expr* e1 = b.make_true();
+    Expr* e2 = b.make_true();
+    Expr* expr = b.make_ne(e1, e2);
+
+    std::string expected_result = 
+        "Ne_expr " + expr_addr(expr) + '\n' +
+        TAB + "Bool_lit " + expr_addr(e1) + '\n' +
+        TAB + TAB "Bool_type " + type_addr(e1->get_type()) + '\n' +
+        TAB + "Bool_lit " + expr_addr(e2) + '\n' +
+        TAB + TAB "Bool_type " + type_addr(e2->get_type()) + '\n' +
+        TAB + "Bool_type " + type_addr(expr->get_type()) + '\n';
+
+    // Act
+    expr->debug(p);
 
     // Assert
     BOOST_TEST( os.is_equal( expected_result ) );

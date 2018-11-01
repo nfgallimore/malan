@@ -27,7 +27,7 @@ Builder::require_bool(Expr* e)
 bool 
 Builder::are_same_type(Expr* e1, Expr* e2)
 {
-    return e1->get_type()->get_kind() == e2->get_type()->get_kind();
+    return get_actual_kind(e1) == get_actual_kind(e2);
 }
 
 void 
@@ -37,4 +37,10 @@ Builder::require_same_type(Expr* e1, Expr* e2)
     {
         throw std::logic_error("Expression must be a boolean.");
     }
+}
+
+bool
+Builder::are_same_type(Decl* d1, Decl* d2)
+{
+    return d1->get_type()->get_kind() == d2->get_type()->get_kind();
 }

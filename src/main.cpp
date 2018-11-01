@@ -161,7 +161,7 @@ void exprs()
     Printer p(std::cout);
     // Int literal operations
     p.get_stream() << "Integer literal:\n";
-    Int_lit* il = b->make_int(1);
+    Expr* il = b->make_int(1);
     p.get_stream() << "print: " << il << '\n';
     p.get_stream() << "debug: \n";
     il->debug(p);

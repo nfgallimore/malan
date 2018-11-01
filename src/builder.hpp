@@ -2,6 +2,7 @@
 
 #include "type.hpp"
 #include "expr.hpp"
+#include "decl.hpp"
 
 class Builder
 {
@@ -26,76 +27,84 @@ public:
 
     // Expression builder
 
-    Bool_lit* make_bool(bool b);
+    Expr* make_bool(bool b);
     /// Returns a new boolean literal.
 
-    Bool_lit* make_true();
+    Expr* make_true();
     /// Returns a new boolean literal with  value of true.
 
-    Bool_lit* make_false();
+    Expr* make_false();
     /// Returns a new boolean literal with  value of false.
 
-    Int_lit* make_int(int n);
+    Expr* make_int(int n);
     /// Returns a new integer literal.
 
-    Float_lit* make_float(float f);
+    Expr* make_float(float f);
     /// Returns a new floating point literal.
 
-    Id_expr* make_id(Decl* d);
-    /// Returns a new identifier expression.
+    Expr* make_id(Decl* d);
+    /// Returns a new identifier expression that references a declaration.
 
-    And_expr* make_and(Expr* e1, Expr* e2);
+    Expr* make_and(Expr* e1, Expr* e2);
     /// Returns a new and expression.
 
-    Or_expr* make_or(Expr* e1, Expr* e2);
+    Expr* make_or(Expr* e1, Expr* e2);
     /// Returns a new or epression.
 
-    Not_expr* make_not(Expr* e);
+    Expr* make_not(Expr* e);
     /// Returns a new not expression.
 
-    Con_expr* make_con(Expr* e1, Expr* e2, Expr* e3);
+    Expr* make_con(Expr* e1, Expr* e2, Expr* e3);
     /// Returns a new conditional expression.
 
-    Eq_expr* make_eq(Expr* e1, Expr* e2);
+    Expr* make_eq(Expr* e1, Expr* e2);
     /// Returns a new equality expression.
 
-    Ne_expr* make_ne(Expr* e1, Expr* e2);
+    Expr* make_ne(Expr* e1, Expr* e2);
     /// Returns a new inequality expression.
 
-    Lt_expr* make_lt(Expr* e1, Expr* e2);
+    Expr* make_lt(Expr* e1, Expr* e2);
     /// Returns a new less than expression.
 
-    Gt_expr* make_gt(Expr* e1, Expr* e2);
+    Expr* make_gt(Expr* e1, Expr* e2);
     /// Returns a new greater than or equal expression.
 
-    Le_expr* make_le(Expr* e1, Expr* e2);
+    Expr* make_le(Expr* e1, Expr* e2);
     /// Returns a new less than expression.
 
-    Ge_expr* make_ge(Expr* e1, Expr* e2);
+    Expr* make_ge(Expr* e1, Expr* e2);
     /// Returns a new greater than or equal expression.
 
-    Add_expr* make_add(Expr* e1, Expr* e2);
+    Expr* make_add(Expr* e1, Expr* e2);
     /// Returns a new addition expression.
 
-    Sub_expr* make_sub(Expr* e1, Expr* e2);
+    Expr* make_sub(Expr* e1, Expr* e2);
     /// Returns a new subtraction expression.
 
-    Mul_expr* make_mul(Expr* e1, Expr* e2);
+    Expr* make_mul(Expr* e1, Expr* e2);
     /// Returns a new multiplication expression.
 
-    Quo_expr* make_quo(Expr* e1, Expr* e2);
+    Expr* make_quo(Expr* e1, Expr* e2);
     /// Returns a new quotient expression.
 
-    Rem_expr* make_rem(Expr* e1, Expr* e2);
+    Expr* make_rem(Expr* e1, Expr* e2);
     /// Returns a new remainder expression.
 
-    Neg_expr* make_neg(Expr* e1);
+    Expr* make_neg(Expr* e1);
     /// Returns a new negation expression.
 
-    Rec_expr* make_rec(Expr* e1);
+    Expr* make_rec(Expr* e1);
     /// Returns a new reciprocal expression.
     
+
     // Declaration builder
+
+    Var_decl* make_var(Type* t, Name* n, Expr* init);
+    /// Returns a new variable declaration.
+
+    Func_decl* make_func(Name* n, Decl_seq* parms, Type* ret, Stmt* body);
+    /// Returns a new function declaration.
+
 
     // Typing
 
@@ -117,8 +126,17 @@ public:
     bool are_same_type(Expr* e1, Expr* e2);
     /// Determines if the expressions are of the same type.
     
+    bool are_same_type(Decl* d1, Decl* d2);
+
     void require_same_type(Expr* e1, Expr* e2);
     /// Enforces that the expressions are the same type.
+
+    
+    // Conversion
+
+    Type::Kind get_actual_kind(Expr* e1);
+    /// Returns the actual kind of the expression, gets type of reference if reference type.
+
 
 private:
     Bool_type m_bool_type;

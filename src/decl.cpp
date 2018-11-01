@@ -21,7 +21,6 @@ void
 Var_decl::debug(Printer& p) const 
 {
     p.print_address("Var_decl", this);
-
     p.indent();
     m_type->debug(p);
     p.print_address("Name", m_name);
@@ -32,12 +31,10 @@ Var_decl::debug(Printer& p) const
 void 
 Var_decl::to_sexpr(Printer& p) const 
 {
-    p.get_stream() << "(Var_decl (";
+    p.print_string("(Var_decl (");
     m_type->to_sexpr(p);
     p.get_stream() << " " << m_name->get_str();
-    if (m_expr != nullptr) {
-        p.get_stream() << " " << m_expr;
-    }
+    p.get_stream() << " " << m_expr;
     p.print_string(")");
 }
 

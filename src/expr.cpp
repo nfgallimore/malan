@@ -116,17 +116,16 @@ And_expr::debug(Printer& p) const
     p.indent();
     m_e1->debug(p);
     m_e2->debug(p);
+    m_type->debug(p);
     p.undent();
 }
 
 void
 And_expr::to_sexpr(Printer& p) const
 {
-    p.get_stream() << "(AND ";
-
+    p.print_string("(AND ");
     m_e1->to_sexpr(p);
     p.print_string(" ");
-
     m_e2->to_sexpr(p);
     p.print_string(")");
 }
@@ -147,17 +146,16 @@ Or_expr::debug(Printer& p) const
     p.indent();
     m_e1->debug(p);
     m_e2->debug(p);
+    m_type->debug(p);
     p.undent();
 }
 
 void
 Or_expr::to_sexpr(Printer& p) const
 {
-    p.get_stream() << "(OR ";
-
+    p.print_string("(OR ");
     m_e1->to_sexpr(p);
     p.print_string(" ");
-
     m_e2->to_sexpr(p);
     p.print_string(")");
 }
@@ -177,15 +175,16 @@ Not_expr::debug(Printer& p) const
     p.print_address("Not_expr", this);    
     p.indent();
     m_expr->debug(p);
+    m_type->debug(p);
     p.undent();
 }
 
 void
 Not_expr::to_sexpr(Printer& p) const
 {
-    p.get_stream() << "(NOT ";
+    p.print_string("(NOT ");
     m_expr->to_sexpr(p);
-    p.get_stream() << ')';
+    p.print_string(")");
 }
 
 
@@ -205,19 +204,20 @@ Con_expr::debug(Printer& p) const
     m_e1->debug(p);
     m_e2->debug(p);
     m_e3->debug(p);
+    m_type->debug(p);
     p.undent();
 }
 
 void
 Con_expr::to_sexpr(Printer& p) const
 {
-    p.get_stream() << "(If ";
+    p.print_string("(If ");
     m_e1->to_sexpr(p);
-    p.get_stream() << " (then ";
+    p.print_string(" (then ");
     m_e2->to_sexpr(p);
-    p.get_stream() << ") (else ";
+    p.print_string(") (else ");
     m_e3->to_sexpr(p);
-    p.get_stream() << "))";
+    p.print_string("))");
 }
 
 
@@ -236,17 +236,16 @@ Eq_expr::debug(Printer& p) const
     p.indent();
     m_e1->debug(p);
     m_e2->debug(p);
+    m_type->debug(p);
     p.undent();
 }
 
 void
 Eq_expr::to_sexpr(Printer& p) const
 {
-    p.get_stream() << "(== ";
-
+    p.print_string("(== ");
     m_e1->to_sexpr(p);
     p.print_string(" ");
-
     m_e2->to_sexpr(p);
     p.print_string(")");
 }
@@ -267,17 +266,16 @@ Ne_expr::debug(Printer& p) const
     p.indent();
     m_e1->debug(p);
     m_e2->debug(p);
+    m_type->debug(p);
     p.undent();
 }
 
 void
 Ne_expr::to_sexpr(Printer& p) const
 {
-    p.get_stream() << "(!= ";
-
+    p.print_string("(!= ");
     m_e1->to_sexpr(p);
     p.print_string(" ");
-
     m_e2->to_sexpr(p);
     p.print_string(")");
 }
@@ -298,6 +296,7 @@ Lt_expr::debug(Printer& p) const
     p.indent();
     m_e1->debug(p);
     m_e2->debug(p);
+    m_type->debug(p);
     p.undent();
 }
 
@@ -329,17 +328,16 @@ Gt_expr::debug(Printer& p) const
     p.indent();
     m_e1->debug(p);
     m_e2->debug(p);
+    m_type->debug(p);
     p.undent();
 }
 
 void
 Gt_expr::to_sexpr(Printer& p) const
 {
-    p.get_stream() << "(> ";
-
+    p.print_string("(> ");
     m_e1->to_sexpr(p);
     p.print_string(" ");
-
     m_e2->to_sexpr(p);
     p.print_string(")");
 }
@@ -360,17 +358,16 @@ Le_expr::debug(Printer& p) const
     p.indent();
     m_e1->debug(p);
     m_e2->debug(p);
+    m_type->debug(p);
     p.undent();
 }
 
 void
 Le_expr::to_sexpr(Printer& p) const
 {
-    p.get_stream() << "(<= ";
-
+    p.print_string("(<= ");
     m_e1->to_sexpr(p);
     p.print_string(" ");
-
     m_e2->to_sexpr(p);
     p.print_string(")");
 }
@@ -391,17 +388,16 @@ Ge_expr::debug(Printer& p) const
     p.indent();
     m_e1->debug(p);
     m_e2->debug(p);
+    m_type->debug(p);
     p.undent();
 }
 
 void
 Ge_expr::to_sexpr(Printer& p) const
 {
-    p.get_stream() << "(>= ";
-
+    p.print_string("(>= ");
     m_e1->to_sexpr(p);
     p.print_string(" ");
-
     m_e2->to_sexpr(p);
     p.print_string(")");
 }
@@ -422,17 +418,16 @@ Add_expr::debug(Printer& p) const
     p.indent();
     m_e1->debug(p);
     m_e2->debug(p);
+    m_type->debug(p);
     p.undent();
 }
 
 void
 Add_expr::to_sexpr(Printer& p) const
 {
-    p.get_stream() << "(+ ";
-
+    p.print_string("(+ ");
     m_e1->to_sexpr(p);
     p.print_string(" ");
-
     m_e2->to_sexpr(p);
     p.print_string(")");
 }
@@ -453,17 +448,16 @@ Sub_expr::debug(Printer& p) const
     p.indent();
     m_e1->debug(p);
     m_e2->debug(p);
+    m_type->debug(p);
     p.undent();
 }
 
 void
 Sub_expr::to_sexpr(Printer& p) const
 {
-    p.get_stream() << "(- ";
-
+    p.print_string("(- ");
     m_e1->to_sexpr(p);
     p.print_string(" ");
-
     m_e2->to_sexpr(p);
     p.print_string(")");
 }
@@ -484,17 +478,16 @@ Mul_expr::debug(Printer& p) const
     p.indent();
     m_e1->debug(p);
     m_e2->debug(p);
+    m_type->debug(p);
     p.undent();
 }
 
 void
 Mul_expr::to_sexpr(Printer& p) const
 {
-    p.get_stream() << "(* ";
-
+    p.print_string("(* ");
     m_e1->to_sexpr(p);
     p.print_string(" ");
-
     m_e2->to_sexpr(p);
     p.print_string(")");
 }
@@ -515,17 +508,16 @@ Quo_expr::debug(Printer& p) const
     p.indent();
     m_e1->debug(p);
     m_e2->debug(p);
+    m_type->debug(p);
     p.undent();
 }
 
 void
 Quo_expr::to_sexpr(Printer& p) const
 {
-    p.get_stream() << "(/ ";
-
+    p.print_string("(/ ");
     m_e1->to_sexpr(p);
     p.print_string(" ");
-
     m_e2->to_sexpr(p);
     p.print_string(")");
 }
@@ -546,17 +538,16 @@ Rem_expr::debug(Printer& p) const
     p.indent();
     m_e1->debug(p);
     m_e2->debug(p);
+    m_type->debug(p);
     p.undent();
 }
 
 void
 Rem_expr::to_sexpr(Printer& p) const
 {
-    p.get_stream() << "(% ";
-
+    p.print_string("(% ");
     m_e1->to_sexpr(p);
     p.print_string(" ");
-
     m_e2->to_sexpr(p);
     p.print_string(")");
 }
@@ -576,15 +567,16 @@ Neg_expr::debug(Printer& p) const
     p.print_address("Neg_expr", this);
     p.indent();
     m_expr->debug(p);
+    m_type->debug(p);
     p.undent();
 }
 
 void
 Neg_expr::to_sexpr(Printer& p) const
 {
-    p.get_stream() << "(NEG ";
+    p.print_string("(NEG ");
     m_expr->to_sexpr(p);
-    p.get_stream() << ')';
+    p.print_string(")");
 }
 
 
@@ -602,15 +594,16 @@ Rec_expr::debug(Printer& p) const
     p.print_address("Rec_expr", this);
     p.indent();
     m_expr->debug(p);
+    m_type->debug(p);
     p.undent();
 }
 
 void
 Rec_expr::to_sexpr(Printer& p) const
 {
-    p.get_stream() << "(REC ";
+    p.print_string("(REC ");
     m_expr->to_sexpr(p);
-    p.get_stream() << ')';
+    p.print_string(")");
 }
 
 
@@ -634,18 +627,19 @@ Call_expr::debug(Printer& p) const
     {
         (*m_exprs)[i]->debug(p);
     }
+    m_type->debug(p);
     p.undent();
 }
 
 void
 Call_expr::to_sexpr(Printer& p) const
 {
-    p.get_stream() << "(Call_expr ";
+    p.print_string("(Call_expr ");
     for (int i = 0, len = m_exprs->size(); i < len; i++)
     {
         (*m_exprs)[i]->to_sexpr(p);
     }
-    p.get_stream() << ')';
+    p.print_string(")");
 }
 
 
@@ -664,16 +658,17 @@ Ass_expr::debug(Printer& p) const
     p.indent();
     m_src->debug(p);
     m_tar->debug(p);
+    m_type->debug(p);
     p.undent();
 }
 
 void
 Ass_expr::to_sexpr(Printer& p) const
 {
-    p.get_stream() << "(Ass_expr ";
+    p.print_string("(Ass_expr ");
     m_src->to_sexpr(p);
     m_tar->to_sexpr(p);
-    p.get_stream() << ')';
+    p.print_string(")");
 }
 
 
