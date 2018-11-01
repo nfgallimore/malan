@@ -4,7 +4,15 @@
 Var_decl*
 Builder::make_var(Type* t, Name* n, Expr* init)
 {
-  return new Var_decl(n, t, init);
+    Var_decl* var = new Var_decl(n, t);
+    var->set_initializer(init);
+    return var;
+}
+
+Var_decl*
+Builder::make_var(Type* t, Name* n)
+{
+  return new Var_decl(n, t);
 }
 
 Func_decl*

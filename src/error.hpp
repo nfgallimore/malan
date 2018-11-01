@@ -22,5 +22,5 @@ private:
 inline void 
 Error::Type_err(std::string str)
 {
-     std::cerr << str;
+    throw std::runtime_error(str);
 }

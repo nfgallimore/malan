@@ -13,8 +13,10 @@ void
 Var_decl::print(Printer& p) const 
 {
     p.get_stream() << *m_type << " " << m_name->get_str();
-    assert(m_expr != nullptr);
-    p.get_stream() << " = " << *m_expr;
+    if (is_initialized())
+    {
+        p.get_stream() << " = " << *m_init;
+    }
 }
 
 void 
@@ -24,7 +26,10 @@ Var_decl::debug(Printer& p) const
     p.indent();
     m_type->debug(p);
     p.print_address("Name", m_name);
-    m_expr->debug(p);
+    if (is_initialized())
+    {
+        m_init->debug(p);
+    }
     p.undent();
 }
 
@@ -34,7 +39,10 @@ Var_decl::to_sexpr(Printer& p) const
     p.print_string("(Var_decl (");
     m_type->to_sexpr(p);
     p.get_stream() << " " << m_name->get_str();
-    p.get_stream() << " " << m_expr;
+    if (is_initialized())
+    {
+        p.get_stream() << " " << m_init;
+    }
     p.print_string(")");
 }
 

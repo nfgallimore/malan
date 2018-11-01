@@ -225,13 +225,13 @@ BOOST_AUTO_TEST_CASE(Id_expr_prints)
     // Arrange
     output_test_stream os;   
     Printer p(os);
+    Builder b;
 
     Name* name = new Name("x");
-    Type* it = new Int_type();
-    Int_lit* il = new Int_lit(Value(1), it);
-    Var_decl* decl = new Var_decl(name, it, il);
+    Expr* il = b.make_int(1);
 
-    Id_expr* id = new Id_expr(decl, it);
+    Var_decl* var = b.make_var(b.get_int_type(), name, il);
+    Expr* id = b.make_id(var);
 
     // Act
     id->print(p);
@@ -246,19 +246,19 @@ BOOST_AUTO_TEST_CASE(Id_expr_converts_to_sexpr)
     // Arrange
     output_test_stream os;   
     Printer p(os);
+    Builder b;
 
     Name* name = new Name("x");
-    Type* it = new Int_type();
-    Int_lit* il = new Int_lit(Value(1), it);
-    Var_decl* decl = new Var_decl(name, it, il);
+    Expr* il = b.make_int(1);
 
-    Id_expr* id = new Id_expr(decl, it);
+    Var_decl* var = b.make_var(b.get_int_type(), name, il);
+    Expr* id = b.make_id(var);
 
     // Act
-    id->print(p);
+    id->to_sexpr(p);
 
     // Assert
-    BOOST_TEST( os.is_equal( "x" ) );
+    BOOST_TEST( os.is_equal( "(x)" ) );
 }
 
 /// Tests that a identifier expression debugs correctly.
@@ -267,22 +267,22 @@ BOOST_AUTO_TEST_CASE(Id_expr_debugs)
     // Arrange
     output_test_stream os;   
     Printer p(os);
+    Builder b;
 
     Name* name = new Name("x");
-    Type* it = new Int_type();
-    Int_lit* il = new Int_lit(Value(1), it);
-    Var_decl* decl = new Var_decl(name, it, il);
+    Expr* il = b.make_int(1);
 
-    Id_expr* id = new Id_expr(decl, it);
+    Var_decl* var = b.make_var(b.get_int_type(), name, il);
+    Expr* id = b.make_id(var);
 
     std::string expected_result = 
         "Id_expr " + expr_addr(id) + '\n' +
-        TAB + "Var_decl " + decl_addr(decl) + '\n' +
-        TAB + TAB + "Int_type " + type_addr(it) + '\n' +
+        TAB + "Var_decl " + decl_addr(var) + '\n' +
+        TAB + TAB + "Int_type " + type_addr(b.get_int_type()) + '\n' +
         TAB + TAB + "Name " + name_addr(name) + '\n' +
         TAB + TAB + "Int_lit " + expr_addr(il) + '\n' +
-        TAB + TAB + TAB + "Int_type " + type_addr(it) + '\n' +
-        TAB + "Int_type " + type_addr(it) + '\n';
+        TAB + TAB + TAB + "Int_type " + type_addr(b.get_int_type()) + '\n' +
+        TAB + "Int_type " + type_addr(b.get_int_type()) + '\n';
 
     // Act
     id->debug(p);
@@ -303,7 +303,7 @@ BOOST_AUTO_TEST_CASE(And_expr_prints)
     Builder b;
 
     Expr* expr = b.make_and(b.make_true(), b.make_true());
-
+ 
     // Act
     expr->print(p);
 

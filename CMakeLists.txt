@@ -14,9 +14,9 @@ src/name.cpp
 src/stmt.cpp
 src/builder.cpp
 src/builder.expr.cpp
-src/builder.conv.cpp
 src/builder.decl.cpp
 src/builder.stmt.cpp
+src/builder.check.cpp
 src/builder.type.cpp
 )
 
@@ -36,9 +36,9 @@ src/name.cpp
 src/stmt.cpp
 src/builder.cpp
 src/builder.expr.cpp
-src/builder.conv.cpp
 src/builder.decl.cpp
 src/builder.stmt.cpp
+src/builder.check.cpp
 src/builder.type.cpp
 )
 

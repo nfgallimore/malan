@@ -39,7 +39,7 @@ public:
 class Var_decl : public Decl
 {
 public:
-    Var_decl(Name* name, Type* type, Expr* init);
+    Var_decl(Name* name, Type* type);
     /// Constructs the variable with the given arguments.
 
     void print(Printer& p) const override;
@@ -57,6 +57,14 @@ public:
     Type* get_type() const override { return m_type; }
     /// Returns the type of the declaration, if any.
 
+    void set_initializer(Expr* e) { m_init = e; }
+    /// Sets the initial value of the variable declaration.
+
+    Expr* get_initializer() const { return m_init; }
+    /// Returns the initial value of the function if set.
+    
+    bool is_initialized() const { return m_init != nullptr; }
+
 private:
     Name* m_name;
     /// The name of the variable declaration.
@@ -64,16 +72,14 @@ private:
     Type* m_type;
     /// The type of the variable declaration.
 
-    Expr* m_expr;
+    Expr* m_init;
     /// The initial value of the variable declaration.
 };
 
 inline 
-Var_decl::Var_decl(Name* name, Type* type, Expr* expr) 
-    : m_name(name), m_type(type), m_expr(expr) 
-{ 
-    assert(expr != nullptr);
-}
+Var_decl::Var_decl(Name* name, Type* type) 
+    : m_name(name), m_type(type)
+{ }
 
 
 /// Represents reference declarations of the type: `ref x : t = e`

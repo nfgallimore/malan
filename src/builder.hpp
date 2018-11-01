@@ -90,48 +90,77 @@ public:
     Expr* make_rem(Expr* e1, Expr* e2);
     /// Returns a new remainder expression.
 
-    Expr* make_neg(Expr* e1);
+    Expr* make_neg(Expr* e);
     /// Returns a new negation expression.
 
-    Expr* make_rec(Expr* e1);
+    Expr* make_rec(Expr* e);
     /// Returns a new reciprocal expression.
     
+    Expr* make_ass(Expr* e1, Expr* e2);
+    /// Returns a new assignment expression.
+
+    Expr* make_call(std::vector<Expr*>* exprs);
+    /// Returns a new function call expression.
+
 
     // Declaration builder
 
     Var_decl* make_var(Type* t, Name* n, Expr* init);
-    /// Returns a new variable declaration.
+    /// Returns a new variable declaration that is initializedl
+
+    Var_decl* make_var(Type* t, Name* n);
+    /// Returns a new uninitialized variable declaration.
 
     Func_decl* make_func(Name* n, Decl_seq* parms, Type* ret, Stmt* body);
     /// Returns a new function declaration.
 
 
-    // Typing
+    // Typing Helpers
 
     bool is_bool(Expr* e);
     /// Returns true if the expression is of type boolean.
 
-    void require_bool(Expr* e);
-    /// Enforces the expression is a boolean.
-
-    void require_bools(Expr* e1, Expr* e2);
-    /// Enforces the expressions are booleans.
-
     bool is_number(Expr* e);
-    /// Enforces the expression is an `int` or a `bool`.
+    /// Determines if the expression is an `int` or a `float`.
 
     bool is_type(Expr* e, Type* t);
-    /// Enforces the expression is of the given type.
+    /// Determines if the expression is of the given type.
 
     bool are_same_type(Expr* e1, Expr* e2);
-    /// Determines if the expressions are of the same type.
+    /// Determines if the expressions are the same type.
     
     bool are_same_type(Decl* d1, Decl* d2);
+    /// Determines if the declarations are the same type.
+
+    Type* get_dominant_type(Expr* e1, Expr* e2);
+    /// Enforces e1 and e2 are numbers.
+    /// Returns float if either are float, else returns int.
+
+
+    // Type Enforcing
+
+    void require_bool(Expr* e);
+    /// Enforces the expression is a boolean.
+    
+    void require_bools(Expr* e1, Expr* e2);
+    /// Enforces the expressions are booleans.
+    
+    void require_number(Expr* e);
+    /// Enforces that the expression is an `int` or a `float`.
+
+    void require_numbers(Expr* e1, Expr* e2);
+    /// Enforces that the expressions are either `int` or `float`.
+
+    void require_type(Expr* e, Type* t);
+    /// Enforces that the expression is the provided type.
 
     void require_same_type(Expr* e1, Expr* e2);
     /// Enforces that the expressions are the same type.
 
-    
+    void require_same_type(Decl* d1, Decl* d2);
+    /// Determines that the declarations are the same type.
+
+
     // Conversion
 
     Type::Kind get_actual_kind(Expr* e);
@@ -140,7 +169,7 @@ public:
     Type::Kind get_actual_kind(Decl* d);
     /// Returns the actual kind of the declaration, gets type of reference if reference type.
 
-    
+
 private:
     Bool_type m_bool_type;
     /// The type `bool`.

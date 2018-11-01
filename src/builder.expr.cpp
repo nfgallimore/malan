@@ -95,31 +95,56 @@ Expr* Builder::make_ge(Expr* e1, Expr* e2)
 
 Expr* Builder::make_add(Expr* e1, Expr* e2)
 {
-	// require_numbers(e1, e2);
-  	// return new Add_expr(e1, e2, get_dominant_type(e1, e2));	
+  	return new Add_expr(e1, e2, get_dominant_type(e1, e2));	
 }
 
 Expr* Builder::make_sub(Expr* e1, Expr* e2)
 {
-	
+  	return new Sub_expr(e1, e2, get_dominant_type(e1, e2));		
 }
 
 Expr* Builder::make_mul(Expr* e1, Expr* e2)
 {
-	
+  	return new Mul_expr(e1, e2, get_dominant_type(e1, e2));		
 }
 
 Expr* Builder::make_quo(Expr* e1, Expr* e2)
 {
-	
+  	return new Quo_expr(e1, e2, get_dominant_type(e1, e2));		
 }
 
 Expr* Builder::make_rem(Expr* e1, Expr* e2)
 {
-	
+  	return new Rem_expr(e1, e2, get_dominant_type(e1, e2));		
 }
 
-Expr* Builder::make_neg(Expr* e1)
+Expr* Builder::make_neg(Expr* e)
 {
+	require_number(e);
+	return new Neg_expr(e, e->get_type());
+}
+
+Expr* Builder::make_rec(Expr* e)
+{
+	require_number(e);
+	return new Rec_expr(e, e->get_type());
+}
+
+Expr* Builder::make_ass(Expr* e1, Expr* e2)
+{
+	require_type(e2, e1->get_type());
+	return new Ass_expr(e1, e2, e1->get_type());
+}
+
+Expr* Builder::make_call(std::vector<Expr*>* exprs)
+{
+	std::vector<Type*> types;
+	std::vector<Expr*> es = *exprs;
 	
+	for(Expr* e : *exprs)
+	{
+		types.push_back(e->get_type());
+	}
+	require_type(es[0], get_function_type(types));
+	return new Call_expr(exprs, es[0]->get_type());
 }
