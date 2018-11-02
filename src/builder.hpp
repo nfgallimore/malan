@@ -128,7 +128,15 @@ public:
     /// Construct a block statement.
 
     Stmt* make_while(Expr* cond, Stmt* body);
-    
+    /// Constructs a while statement.
+
+    Stmt* make_expr_stmt(Expr* expr);
+    /// Constructs an expression statement.
+
+    // Name builder
+
+    Name* make_name(std::string);
+
     // Typing Helpers
 
     bool is_bool(Expr* e);

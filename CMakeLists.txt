@@ -18,6 +18,7 @@ src/builder.decl.cpp
 src/builder.stmt.cpp
 src/builder.check.cpp
 src/builder.type.cpp
+src/builder.name.cpp
 )
 
 find_package(Boost 1.55 REQUIRED COMPONENTS unit_test_framework)
@@ -40,6 +41,7 @@ src/builder.decl.cpp
 src/builder.stmt.cpp
 src/builder.check.cpp
 src/builder.type.cpp
+src/builder.name.cpp
 )
 
 target_link_libraries (expr_t ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY} ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})

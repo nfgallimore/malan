@@ -1109,7 +1109,7 @@ private:
 };
 
 inline
-Ass_expr::Ass_expr(Expr* src, Expr* tar, Type* t)
+Ass_expr::Ass_expr(Expr* tar, Expr* src, Type* t)
     : m_src(src), m_tar(tar), m_type(t)
 { }
 
