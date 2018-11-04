@@ -6,6 +6,7 @@
 #include "type.hpp"
 #include "printer.hpp"
 #include "decl.hpp"
+#include "error.hpp"
 
 // Represents the base class of all expressions.
 class Expr 
@@ -215,7 +216,7 @@ Value Id_expr::evaluate() const
     {
         throw std::logic_error("error: cannot evaluate uninitialized object");
     }
-    
+
     return Value(obj->get_initializer()->evaluate());
 }
 

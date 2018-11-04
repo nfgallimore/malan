@@ -13,7 +13,10 @@ public:
     /// Constructs an error message with the given string
 
     void static Type_err(string str);
-    /// Prints an error to cerr with the error message.
+    /// Handles the type checking error with provided error message.
+
+    void static Eval_err(string str);
+    /// Handles the evaluation error with provided error message.
 
 private:
     string m_str;
@@ -23,4 +26,10 @@ inline void
 Error::Type_err(std::string str)
 {
     throw std::runtime_error(str);
+}
+
+inline void
+Error::Eval_err(std::string str)
+{
+    throw std::logic_error(str);
 }

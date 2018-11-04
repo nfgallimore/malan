@@ -36,7 +36,6 @@ Builder::are_same_type(Decl* d1, Decl* d2)
 Type* 
 Builder::get_dominant_type(Expr* e1, Expr* e2)
 {
-    require_numbers(e1, e2);
     if (is_type(e1, get_float_type()) || is_type(e2, get_float_type()))
     {
         return get_float_type();

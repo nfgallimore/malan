@@ -95,26 +95,31 @@ Expr* Builder::make_ge(Expr* e1, Expr* e2)
 
 Expr* Builder::make_add(Expr* e1, Expr* e2)
 {
+    require_numbers(e1, e2);
   	return new Add_expr(e1, e2, get_dominant_type(e1, e2));	
 }
 
 Expr* Builder::make_sub(Expr* e1, Expr* e2)
 {
+	require_numbers(e1, e2);
   	return new Sub_expr(e1, e2, get_dominant_type(e1, e2));		
 }
 
 Expr* Builder::make_mul(Expr* e1, Expr* e2)
 {
+	require_numbers(e1, e2);
   	return new Mul_expr(e1, e2, get_dominant_type(e1, e2));		
 }
 
 Expr* Builder::make_quo(Expr* e1, Expr* e2)
 {
+    require_numbers(e1, e2);
   	return new Quo_expr(e1, e2, get_dominant_type(e1, e2));		
 }
 
 Expr* Builder::make_rem(Expr* e1, Expr* e2)
 {
+    require_numbers(e1, e2);
   	return new Rem_expr(e1, e2, get_dominant_type(e1, e2));		
 }
 

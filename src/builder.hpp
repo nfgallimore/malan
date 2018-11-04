@@ -130,8 +130,18 @@ public:
     Stmt* make_while(Expr* cond, Stmt* body);
     /// Constructs a while statement.
 
+    Stmt* make_if(Expr* cond, Stmt* then_stmt, Stmt* else_stmt);
+    /// Constructs an if statement.
+
+    Stmt* make_ret(Expr* ret);
+    /// Constructs a return statement.
+
     Stmt* make_expr_stmt(Expr* expr);
     /// Constructs an expression statement.
+
+    Stmt* make_decl_stmt(Decl* decl);
+    /// Constructs a declaration statement.
+
 
     // Name builder
 

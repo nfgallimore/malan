@@ -22,6 +22,7 @@ Func_decl*
 Builder::make_func(Name* n, Decl_seq* parms, Type* ret, Stmt* body)
 {
     require_not_fun_type(ret);
+    Func_decl* decl = new Func_decl(n, parms, ret, body);
 
     std::vector<Type*> parm_types;
     for (Decl* d : *parms)
@@ -31,5 +32,8 @@ Builder::make_func(Name* n, Decl_seq* parms, Type* ret, Stmt* body)
     }
 
     Fun_type* type = new Fun_type(parm_types, ret);
-    return new Func_decl(n, parms, ret, body);
+
+    decl->set_type(type);
+    
+    return decl;
 }
