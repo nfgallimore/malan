@@ -5,9 +5,7 @@
 #include "value.hpp"
 #include "type.hpp"
 #include "printer.hpp"
-
-class Decl;
-class Value;
+#include "decl.hpp"
 
 // Represents the base class of all expressions.
 class Expr 
@@ -206,9 +204,20 @@ Id_expr::Id_expr(Decl* d, Type* t)
 inline
 Value Id_expr::evaluate() const
 {
-    throw std::logic_error("Cannot evaluate an identifier.");
-}
+    if (!m_decl->is_object())
+    {
+        throw std::logic_error("error: cannot evaluate non object");
+    }
 
+    Var_decl* obj = static_cast<Var_decl*>(m_decl);
+
+    if(!obj->is_initialized()) 
+    {
+        throw std::logic_error("error: cannot evaluate uninitialized object");
+    }
+    
+    return Value(obj->get_initializer()->evaluate());
+}
 
 /// Represents the logical and expression of the form `e1 and e2`.
 class And_expr : public Expr 
@@ -465,7 +474,7 @@ Eq_expr::Eq_expr(Expr* e1, Expr* e2, Type* t)
 inline
 Value Eq_expr::evaluate() const
 {
-    throw std::logic_error("Not implemented");
+    return Value(m_e1->evaluate().get_bool() == m_e2->evaluate().get_bool());
 }
 
 

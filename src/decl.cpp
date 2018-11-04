@@ -123,38 +123,6 @@ Func_decl::to_sexpr(Printer& p) const
 }
 
 
-// Reference declaration printing operations
-
-void 
-Ref_decl::print(Printer& p) const 
-{
-    p.get_stream() << "Ref " << *m_type << " " << m_name->get_str();
-    p.get_stream() << " = " << *m_expr;
-    p.print_string(";");
-}
-
-void 
-Ref_decl::debug(Printer& p) const 
-{
-    p.print_address("Ref_decl", this);
-    p.indent();
-    p.print_address("Name", m_name);
-    m_type->debug(p);
-    m_expr->debug(p);
-    p.undent();
-}
-
-void 
-Ref_decl::to_sexpr(Printer& p) const 
-{
-    p.print_string("(Ref ");
-    m_type->to_sexpr(p);
-    p.get_stream() << " " << m_name->get_str() << " ";
-    m_expr->to_sexpr(p);
-    p.print_string(")");
-}
-
-
 // Operators
 
 std::ostream& operator<<(std::ostream& os, Decl const& d) 

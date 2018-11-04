@@ -182,6 +182,8 @@ public:
     void require_same_type(Decl* d1, Decl* d2);
     /// Determines that the declarations are the same type.
 
+    void require_not_fun_type(Type* t);
+    /// Requries the type to not be a function.
 
     // Conversion
 

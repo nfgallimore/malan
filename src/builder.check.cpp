@@ -128,3 +128,12 @@ Builder::get_actual_kind(Decl* decl)
     }
     return decl->get_type()->get_kind();
 }
+
+void
+Builder::require_not_fun_type(Type* t)
+{
+    if (t->get_kind() == Type::fun_type)
+    {
+        Error::Type_err("error: type cannot be function type");
+    }
+}
