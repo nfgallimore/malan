@@ -51,68 +51,101 @@ Lexer::Lexer(Symbol_table& syms, std::string const& str)
     : Lexer(syms, str.data(), str.data() + str.size())
 { }
 
+Lexer::Lexer(std::string const& str)
+	: Lexer(*new Symbol_table, str.data(), str.data() + str.size())
+{ }
+
 Token
 Lexer::get_next_token()
 {
     while (true) {
         switch (peek()) {
+
+		case 0:
+			return match(Token::eof, 1);
+
         case ' ':
         case '\t':
             consume();
             continue;
 
         case '\n':
+			if (peek(1) == '\r')
+				consume();
+            ++m_line;
+            consume();
+            continue;
+
+        case '\r':
+			if (peek(1) == '\n')
+				consume();
             ++m_line;
             consume();
             continue;
 
         case '{':
             return match(Token::lbrace, 1);
+
         case '}':
             return match(Token::rbrace, 1);
+
         case '(':
             return match(Token::lparen, 1);
+
         case ')':
             return match(Token::rparen, 1);
+
+		case ':':
+            return match(Token::colon, 1);
+
+		case ';':
+            return match(Token::semicolon, 1);
+
         case ',':
             return match(Token::comma, 1);
-        case ';':
-            return match(Token::semicolon, 1);
-        case ':':
-            return match(Token::colon, 1);
+			
         case '+':
             return match(Token::plus, 1);
+
         case '-':
+			if (peek(1) == '>')
+				return match(Token::arrow, 2);
             return match(Token::minus, 1);
+
         case '*':
             return match(Token::star, 1);
+
         case '/':
             return match(Token::slash, 1);
+
         case '%':
             return match(Token::percent, 1);
-        case '<':
-            if (peek(1) == '=')
-                return match(Token::less_equal, 2);
-            return match(Token::less, 1);
-        case '>':
-            if (peek(1) == '=')
-                return match(Token::greater_equal, 2);
-            return match(Token::lbrace, 1);
+
+		case '?':
+			return match(Token::question, 1);
+
         case '=':
             if (peek(1) == '=')
                 return match(Token::equal_equal, 2);
             return match(Token::equal, 1);
+
         case '!':
             if (peek(1) == '=')
                 return match(Token::bang_equal, 2);
-            
-            // Consume the invalid input and then restart processing.
-            consume();
-            std::cerr << "error: " << m_line << ": " << "expected '=' after '!'\n";
-            continue;
+			// Consume the invalid input and then restart processing.
+			consume();
+			std::cerr << "error: " << m_line << ": " << "expected '=' after '!'\n";
+			continue;
 
-		case 0:
-			return match(Token::eof, 1);
+        case '<':
+            if (peek(1) == '=')
+                return match(Token::less_equal, 2);
+            return match(Token::less, 1);
+			
+        case '>':
+            if (peek(1) == '=')
+                return match(Token::greater_equal, 2);
+            return match(Token::greater, 1);
 
         default:
 			if (is_nondigit(*m_first))
@@ -167,12 +200,12 @@ Lexer::match_word()
         ++iter;
 
     // Build the token.
-    std::string id(m_first, iter);
-    Symbol sym = m_syms->get(id);
+    std::string word(m_first, iter);
+    Symbol sym = m_syms->get(word);
 
     // Look to see if the identifier is actually a keyword.
     Token::Name kind;
-    auto lookup = m_kws.find(id);
+    auto lookup = m_kws.find(word);
     if (lookup == m_kws.end())
         kind = Token::identifier;
     else

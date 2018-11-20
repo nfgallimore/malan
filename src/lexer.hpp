@@ -13,6 +13,9 @@ public:
     Lexer(Symbol_table& syms, std::string const& str);
     /// Constructs the lexer for `str`.
 
+	Lexer(std::string const& str);
+	/// Constructs the lexer for `str` with empty symbol table.
+
     Token get_next_token();
     /// Returns the next token in the input buffer.
 
