@@ -3,15 +3,18 @@
 #include "symbol.hpp"
 #include "location.hpp"
 
-#include <iostream>
-
-/// A token is a name and an attribute
-/// A token (in the language) is a name and a set of attributes including its lexeme and its source location. The name of a token is the name of hte abstract symbol.
+/// A token (in the language) is a name and a
+/// set of attributes including its lexeme and
+/// its source location. The name of a toke is
+/// the name of the abstract symbol.
 class Token
 {
 public:
-	enum Name
-	{
+  	enum Name
+  	{
+		// misc
+		eof,
+
 		// punctuation
 		lbrace,
 		rbrace,
@@ -20,6 +23,7 @@ public:
 		colon,
 		semicolon,
 		comma,
+		arrow,
 
 		// operators
 		plus,
@@ -43,6 +47,7 @@ public:
 		continue_kw,
 		else_kw,
 		false_kw,
+		fun_kw,
 		if_kw,
 		int_kw,
 		not_kw,
@@ -56,25 +61,44 @@ public:
 		// literals
 		integer_literal,
 		float_literal,
+		
+		// identifiers
 		identifier
-	};
+ 	};
 
-	Token(Name n, Symbol sym, Location = {})
-		: m_name(n), m_lex(sym), m_loc()
+	Token()
+		: Token(eof, Symbol())
 	{ }
 
-	Name get_name() const { return m_name; }
-	/// Returns the name of the token.
+  	Token(Name n, Symbol sym, Location = {})
+    	: m_name(n), m_lex(sym), m_loc()
+  	{ }
 
-	Symbol get_lexeme() const { return m_lex; }
-	/// Returns the lexeme of the token.
+  	// Operators
 
-	Location get_location() const { return m_loc; }
+  	explicit operator bool() const { return m_name != eof; }
+  	/// Converts to true when this is not eof.
+
+  	// Token name
+
+  	Name get_name() const { return m_name; }
+  	/// Returns the name of the token.
+
+  	bool is_keyword() const;
+  	/// Returns true if this is a keyword.
+
+ 	bool is_logical_operator() const;
+  	/// Returns true if this is a logical operator.
+
+  	// Token attributes
+
+  	Symbol get_lexeme() const { return m_lex; }
+  	/// Returns the lexeme (spelling) of the token.
 
 private:
-	Name m_name;
-	Symbol m_lex;
-	Location m_loc;
+  	Name m_name;
+  	Symbol m_lex;
+  	Location m_loc;
 };
 
-std::ostream& operator<<(std::ostream& os, Token const& t);
+std::ostream& operator<<(std::ostream& os, Token const& tok);

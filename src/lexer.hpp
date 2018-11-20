@@ -1,62 +1,52 @@
 #pragma once
 
 #include "token.hpp"
-#include "symbol.hpp"
+
 #include <unordered_map>
 
 class Lexer
 {
 public:
+    Lexer(Symbol_table& syms, char const* first, char const* limit);
+    /// Constructs the lexer.
+    
+    Lexer(Symbol_table& syms, std::string const& str);
+    /// Constructs the lexer for `str`.
 
-	Lexer::Lexer(Symbol_table& syms, char const* first, char const* limit);
-
-	Token get_next_token();
-	/// Give you one token after another.
-
-
-private:
-	bool is_eof() const { return m_first == m_limit; } 
-	/// True if we've consumed all input.
-
-	char peek() const 
-	{ 
-		if (is_eof())
-			return 0;
-
-		return *m_first;
-	}
-	// Peek at the first character.
-
-	char peek(int n) const 
-	{ 
-		if (m_limit - m_first <= n)
-			return 0;
-
-		if (is_eof())
-			return 0;
-
-		return *(m_first + n);
-	}
-	// Peek at the first character.
-
-
-	char consume() { return *m_first++; }
-	// Returns the current characfter, increments
-	// the current input charafter (lookahead).
-
-	Token match(Token::Name n, int len);
-
-	Token match_word();
-
-	Token match_number();
+    Token get_next_token();
+    /// Returns the next token in the input buffer.
 
 private:
-	char* m_first;
-	char* m_limit;
+    bool is_eof(char const* ptr) const { return ptr == m_limit; }
+    /// True if we've consumed all input.
 
-	Symbol_table* m_syms;
+    bool is_eof() const { return is_eof(m_first); }
+    /// True if we've consumed all input.
 
-	int m_line;
+    char peek() const;
+    /// Returns the current character.
 
-	std::unordered_map<std::string, Token::Name> map;
+    char peek(int n) const;
+    /// Returns the nth character past the current character.
+
+    char consume() { return *m_first++; }
+    // Returns the current character, increments
+    // the current input character (lookahead).
+
+    Token match(Token::Name n, int len);
+    /// Match the token.
+
+    Token match_word();
+
+    Token match_number();
+
+private:
+    Symbol_table* m_syms;
+
+    char const* m_first;
+    char const* m_limit;
+
+    int m_line;
+
+    std::unordered_map<std::string, Token::Name> m_kws;
 };

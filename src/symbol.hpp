@@ -5,45 +5,50 @@
 
 class Symbol
 {
-	friend class Symbol_table;
-	
-	Symbol(std::string const* str) : m_str(str) { }
-	/// Constructs the symbol from `str`.
+    friend class Symbol_table;
+  
+    Symbol(std::string const* str) : m_str(str) { }
+    /// Constructs the symbol from `str`.
 
 public:
-	std::string const& str() const { return *m_str; }
-	/// Returns the spelling of the token.
+    Symbol() : m_str() { }
 
-	friend bool operator==(Symbol a, Symbol b)
-	{
-		return a.m_str == b.m_str;
-	}
+    std::string const& str() const { return *m_str; }
+    /// Returns the spelling of the token.
 
-	friend bool operator!=(Symbol a, Symbol b)
-	{
-		return a.m_str != b.m_str;
-	}
+    friend bool operator==(Symbol a, Symbol b) 
+    {
+        return a.m_str == b.m_str;
+    }
+
+    friend bool operator!=(Symbol a, Symbol b) 
+    {
+        return a.m_str != b.m_str;
+    }
 
 private:
-	std::string const* m_str;
+    std::string const* m_str;  
 };
+
 
 class Symbol_table : std::unordered_set<std::string>
 {
 public:
-	Symbol get(std::string const& str);
-	/// Returns the unique symbol for `str`.
-
-	Symbol get(char const* str);
-	/// Returns the unique symbol for `str`.
+    Symbol get(std::string const& str);
+    /// Returns the unique symbol for `str`.
+  
+    Symbol get(char const* str);
+    /// Returns the unique symbol for `str`.
 };
 
-inline Symbol Symbol_table::get(std::string const& str)
+inline Symbol
+Symbol_table::get(std::string const& str)
 {
-	return &*emplace(str).first;
+    return &*emplace(str).first;
 }
 
-inline Symbol Symbol_table::get(char const* str)
+inline Symbol
+Symbol_table::get(char const* str)
 {
-	return &*emplace(str).first;
+    return &*emplace(str).first;
 }
