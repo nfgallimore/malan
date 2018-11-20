@@ -7,6 +7,8 @@ str(Token::Name k)
 {
     switch (k) {
     case Token::eof: return "eof";
+    case Token::comment: return "comment";
+    
     case Token::lbrace: return "lbrace";
     case Token::rbrace: return "rbrace";
     case Token::lparen: return "lparen";

@@ -39,6 +39,9 @@ private:
     // Returns the current character, increments
     // the current input character (lookahead).
 
+    int get_col() { return m_col + 1; }
+    /// Returns the character column number.
+
     Token match(Token::Name n, int len);
     /// Match the token.
 
@@ -53,6 +56,7 @@ private:
     char const* m_limit;
 
     int m_line;
+    int m_col;
 
     std::unordered_map<std::string, Token::Name> m_kws;
 };

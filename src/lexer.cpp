@@ -58,6 +58,7 @@ Lexer::Lexer(std::string const& str)
 Token
 Lexer::get_next_token()
 {
+	int len = 0;
     while (true) {
         switch (peek()) {
 
@@ -65,6 +66,15 @@ Lexer::get_next_token()
 			return match(Token::eof, 1);
 
         case ' ':
+
+		case '#':
+			while (peek(1) != '\r' || peek(1) != '\n' || peek(1) != 0) 
+			{
+				++len;
+				consume();
+			}
+			return match(Token::comment, len);			
+			
         case '\t':
             consume();
             continue;
@@ -73,6 +83,7 @@ Lexer::get_next_token()
 			if (peek(1) == '\r')
 				consume();
             ++m_line;
+			m_col = 0;
             consume();
             continue;
 
@@ -80,6 +91,7 @@ Lexer::get_next_token()
 			if (peek(1) == '\n')
 				consume();
             ++m_line;
+			m_col = 0;
             consume();
             continue;
 
@@ -132,16 +144,17 @@ Lexer::get_next_token()
         case '!':
             if (peek(1) == '=')
                 return match(Token::bang_equal, 2);
+			
 			// Consume the invalid input and then restart processing.
 			consume();
-			std::cerr << "error: " << m_line << ": " << "expected '=' after '!'\n";
+			std::cerr << "error: line " << m_line << " row " << get_col() << ": expected '=' after '!'\n";
 			continue;
 
         case '<':
             if (peek(1) == '=')
                 return match(Token::less_equal, 2);
             return match(Token::less, 1);
-			
+
         case '>':
             if (peek(1) == '=')
                 return match(Token::greater_equal, 2);
@@ -155,7 +168,7 @@ Lexer::get_next_token()
 				return match_number();
 
 			// Consume the invalid character and restart processing.
-			std::cerr << "error: " << m_line << ": invalid character";
+			std::cerr << "error: line " << m_line << " row " << get_col() << ": invalid character\n";
 			consume();
 			continue;
     	}
@@ -188,7 +201,7 @@ Lexer::match(Token::Name n, int len)
 
     // Update the lexer.
     m_first += len;
-    
+    m_col += len;
     return tok;
 }
 
@@ -196,8 +209,12 @@ Token
 Lexer::match_word()
 {
     char const* iter = m_first + 1;
+	int col = 0;
     while (!is_eof(iter) && is_nondigit_or_digit(*iter))
-        ++iter;
+	{
+		++iter;
+		++col;
+	}
 
     // Build the token.
     std::string word(m_first, iter);
@@ -213,6 +230,7 @@ Lexer::match_word()
 
     // Advance the lexer
     m_first = iter;
+	m_col += col;
 
     return Token(kind, sym);
 }
@@ -221,8 +239,11 @@ Token
 Lexer::match_number()
 {
     char const* iter = m_first + 1;
-    while (!is_eof(iter) && is_digit(*iter))
-        ++iter;
+	int col = 0;
+    while (!is_eof(iter) && is_digit(*iter)) {
+		++iter;
+		++col;
+	}
 
     // Build the token.
     std::string id(m_first, iter);
@@ -230,6 +251,6 @@ Lexer::match_number()
 
     // Advance the lexer
     m_first = iter;
-
+	m_col += col;
     return Token(Token::integer_literal, sym);
 }

@@ -10,10 +10,13 @@
 class Token
 {
 public:
+
+	// IMPORTANT - Update token implementation after adding to table
   	enum Name
   	{
 		// misc
 		eof,
+		comment,
 
 		// punctuation
 		lbrace,

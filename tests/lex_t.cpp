@@ -29,3 +29,21 @@ BOOST_AUTO_TEST_CASE(LexsAddExpr)
 
     BOOST_TEST(os.is_equal("<integer_literal>\n<plus>\n<integer_literal>\n<semicolon>\n"));
 }
+
+BOOST_AUTO_TEST_CASE(LexsBadBangEqual)
+{
+    std::ifstream ifs("../programs/bad_bang_equal.dm");
+    std::istreambuf_iterator<char> first(ifs);
+    std::istreambuf_iterator<char> limit;
+    std::string input(first, limit);
+
+    output_test_stream os;
+
+    Lexer lexer(input);
+    while (Token tok = lexer.get_next_token()) {
+        os << tok << '\n';
+    }
+
+    BOOST_TEST(os.is_equal("<bang_equal>\n"));
+}
+

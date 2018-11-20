@@ -14,8 +14,6 @@ main(int argc, char* argv[])
     std::istreambuf_iterator<char> limit;
     std::string input(first, limit);
 
-    std::cout << '\n';
-
     Lexer lexer(input);
     while (Token tok = lexer.get_next_token()) {
         std::cout << tok << '\n';
