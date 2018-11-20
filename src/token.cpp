@@ -54,6 +54,39 @@ str(Token::Name k)
     }
 }
 
+bool 
+Token::is_keyword() const
+{
+	return (
+	get_name() == and_kw ||
+	get_name() == bool_kw ||
+	get_name() == break_kw ||
+	get_name() == continue_kw ||
+	get_name() == else_kw ||
+	get_name() == false_kw ||
+	get_name() == fun_kw ||
+	get_name() == if_kw ||
+	get_name() == int_kw ||
+	get_name() == not_kw ||
+	get_name() == or_kw ||
+	get_name() == ref_kw ||
+	get_name() == return_kw ||
+	get_name() == true_kw ||
+	get_name() == var_kw ||
+	get_name() == while_kw
+    );
+}
+
+bool 
+Token::is_logical_operator() const
+{
+	return (
+	get_name() == and_kw ||
+	get_name() == not_kw ||
+	get_name() == or_kw
+    );
+}
+
 std::ostream& 
 operator<<(std::ostream& os, Token const& tok)
 {
