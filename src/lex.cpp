@@ -16,7 +16,7 @@ main(int argc, char* argv[])
 
     Symbol_table syms;
 
-#if 1
+#if 0
     std::vector<Token> toks {
         Token(Token::if_kw, syms.get("if")),
         Token(Token::lparen, syms.get("(")),
@@ -28,9 +28,9 @@ main(int argc, char* argv[])
     for (Token tok : toks)
         std::cout << tok << '\n';
 #endif
+    std::cout << '\n';
 
     Lexer lexer(syms, input);
-
     while (Token tok = lexer.get_next_token()) {
         std::cout << tok << '\n';
     }

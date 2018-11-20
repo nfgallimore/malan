@@ -111,19 +111,22 @@ Lexer::get_next_token()
             std::cerr << "error: " << m_line << ": " << "expected '=' after '!'\n";
             continue;
 
-        default:
-            if (is_nondigit(*m_first))
-                return match_word();
-            
-            if (is_digit(*m_first))
-                return match_number();
+		case 0:
+			return match(Token::eof, 1);
 
-            // Consume the invalid character and restart processing.
-            std::cerr << "error: " << m_line << ": invalid character";
-            consume();
-            continue;
-        }
-    }
+        default:
+			if (is_nondigit(*m_first))
+				return match_word();
+			
+			if (is_digit(*m_first))
+				return match_number();
+
+			// Consume the invalid character and restart processing.
+			std::cerr << "error: " << m_line << ": invalid character";
+			consume();
+			continue;
+    	}
+	}
 }
 
 char 

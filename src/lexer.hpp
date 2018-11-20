@@ -17,7 +17,10 @@ public:
     /// Returns the next token in the input buffer.
 
 private:
-    bool is_eof(char const* ptr) const { return ptr == m_limit; }
+    bool is_eof(char const* ptr) const 
+	{ 
+		return ptr == m_limit; 
+	}
     /// True if we've consumed all input.
 
     bool is_eof() const { return is_eof(m_first); }
