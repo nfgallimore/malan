@@ -52,46 +52,46 @@ Lexer::Lexer(Symbol_table& syms, std::string const& str)
 { }
 
 Lexer::Lexer(std::string const& str)
-	: Lexer(*new Symbol_table, str.data(), str.data() + str.size())
+    : Lexer(*new Symbol_table, str.data(), str.data() + str.size())
 { }
 
 Token
 Lexer::get_next_token()
 {
-	int len = 0;
+    int len = 0;
     while (true) {
         switch (peek()) {
 
-		case 0:
-			return match(Token::eof, 1);
+        case 0:
+            return match(Token::eof, 1);
 
         case ' ':
 
-		case '#':
-			while (peek(1) != '\r' || peek(1) != '\n' || peek(1) != 0) 
-			{
-				++len;
-				consume();
-			}
-			return match(Token::comment, len);			
-			
+        case '#':
+            while (peek(1) != '\r' || peek(1) != '\n' || peek(1) != 0) 
+            {
+                ++len;
+                consume();
+            }
+            return match(Token::comment, len);			
+            
         case '\t':
             consume();
             continue;
 
         case '\n':
-			if (peek(1) == '\r')
-				consume();
+            if (peek(1) == '\r')
+                consume();
             ++m_line;
-			m_col = 0;
+            m_col = 0;
             consume();
             continue;
 
         case '\r':
-			if (peek(1) == '\n')
-				consume();
+            if (peek(1) == '\n')
+                consume();
             ++m_line;
-			m_col = 0;
+            m_col = 0;
             consume();
             continue;
 
@@ -107,21 +107,21 @@ Lexer::get_next_token()
         case ')':
             return match(Token::rparen, 1);
 
-		case ':':
+        case ':':
             return match(Token::colon, 1);
 
-		case ';':
+        case ';':
             return match(Token::semicolon, 1);
 
         case ',':
             return match(Token::comma, 1);
-			
+            
         case '+':
             return match(Token::plus, 1);
 
         case '-':
-			if (peek(1) == '>')
-				return match(Token::arrow, 2);
+            if (peek(1) == '>')
+                return match(Token::arrow, 2);
             return match(Token::minus, 1);
 
         case '*':
@@ -133,8 +133,8 @@ Lexer::get_next_token()
         case '%':
             return match(Token::percent, 1);
 
-		case '?':
-			return match(Token::question, 1);
+        case '?':
+            return match(Token::question, 1);
 
         case '=':
             if (peek(1) == '=')
@@ -144,11 +144,11 @@ Lexer::get_next_token()
         case '!':
             if (peek(1) == '=')
                 return match(Token::bang_equal, 2);
-			
-			// Consume the invalid input and then restart processing.
-			consume();
-			std::cerr << "error: line " << m_line << " row " << get_col() << ": expected '=' after '!'\n";
-			continue;
+            
+            // Consume the invalid input and then restart processing.
+            consume();
+            std::cerr << "error: line " << m_line << " row " << get_col() << ": expected '=' after '!'\n";
+            continue;
 
         case '<':
             if (peek(1) == '=')
@@ -161,18 +161,18 @@ Lexer::get_next_token()
             return match(Token::greater, 1);
 
         default:
-			if (is_nondigit(*m_first))
-				return match_word();
-			
-			if (is_digit(*m_first))
-				return match_number();
+            if (is_nondigit(*m_first))
+                return match_word();
+            
+            if (is_digit(*m_first))
+                return match_number();
 
-			// Consume the invalid character and restart processing.
-			std::cerr << "error: line " << m_line << " row " << get_col() << ": invalid character\n";
-			consume();
-			continue;
-    	}
-	}
+            // Consume the invalid character and restart processing.
+            std::cerr << "error: line " << m_line << " row " << get_col() << ": invalid character\n";
+            consume();
+            continue;
+        }
+    }
 }
 
 char 
@@ -209,12 +209,12 @@ Token
 Lexer::match_word()
 {
     char const* iter = m_first + 1;
-	int col = 0;
+    int col = 0;
     while (!is_eof(iter) && is_nondigit_or_digit(*iter))
-	{
-		++iter;
-		++col;
-	}
+    {
+        ++iter;
+        ++col;
+    }
 
     // Build the token.
     std::string word(m_first, iter);
@@ -230,7 +230,7 @@ Lexer::match_word()
 
     // Advance the lexer
     m_first = iter;
-	m_col += col;
+    m_col += col;
 
     return Token(kind, sym);
 }
@@ -239,11 +239,11 @@ Token
 Lexer::match_number()
 {
     char const* iter = m_first + 1;
-	int col = 0;
+    int col = 0;
     while (!is_eof(iter) && is_digit(*iter)) {
-		++iter;
-		++col;
-	}
+        ++iter;
+        ++col;
+    }
 
     // Build the token.
     std::string id(m_first, iter);
@@ -251,6 +251,6 @@ Lexer::match_number()
 
     // Advance the lexer
     m_first = iter;
-	m_col += col;
+    m_col += col;
     return Token(Token::integer_literal, sym);
 }

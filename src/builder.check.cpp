@@ -50,18 +50,18 @@ void
 Builder::require_bool(Expr* e)
 {
     if (!is_bool(e))
-	{
-		Error::Type_err("error: expression must be a boolean");
-	}  
+    {
+        Error::Type_err("error: expression must be a boolean");
+    }  
 }
 
 void
 Builder::require_bools(Expr* e1, Expr* e2)
 {
     if (!is_bool(e1) && !is_bool(e2))
-	{
-		Error::Type_err("error: expressions must be boolean");
-	}
+    {
+        Error::Type_err("error: expressions must be boolean");
+    }
 }
 
 void Builder::require_number(Expr* e)

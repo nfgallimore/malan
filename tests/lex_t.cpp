@@ -46,4 +46,3 @@ BOOST_AUTO_TEST_CASE(LexsBadBangEqual)
 
     BOOST_TEST(os.is_equal("<bang_equal>\n"));
 }
-
