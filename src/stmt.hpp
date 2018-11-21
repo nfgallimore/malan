@@ -59,6 +59,23 @@ public:
     /// Prints the statement as a symbolic expression.
 };
 
+// Represents the `continue` statment
+class Skip_stmt : public Stmt
+{
+public:
+    Skip_stmt() { }
+    /// Constructs a continue statement.
+
+    void print(Printer& p) const override;
+    /// `Pretty prints` the statement as it would appear in code.
+
+    void debug(Printer& p) const override;
+    /// Prints the address of the statement and all associated addresses in memory.
+    
+    void to_sexpr(Printer& p) const override;
+    /// Prints the statement as a symbolic expression.
+};
+
 
 // Represents statements of the form `{ s1; s2; ... sn; }`
 class Block_stmt : public Stmt

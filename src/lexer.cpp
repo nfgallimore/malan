@@ -45,6 +45,7 @@ Lexer::Lexer(Symbol_table& syms, char const* first, char const* limit)
     m_kws.emplace("true", Token::true_kw);
     m_kws.emplace("var", Token::var_kw);
     m_kws.emplace("while", Token::while_kw);
+    m_kws.emplace("skip", Token::skip_kw);
 }
 
 Lexer::Lexer(Symbol_table& syms, std::string const& str)

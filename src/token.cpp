@@ -75,7 +75,8 @@ Token::is_keyword() const
 	get_name() == return_kw ||
 	get_name() == true_kw ||
 	get_name() == var_kw ||
-	get_name() == while_kw
+	get_name() == while_kw ||
+	get_name() == skip_kw
 	);
 }
 

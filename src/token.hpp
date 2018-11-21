@@ -60,7 +60,8 @@ public:
         true_kw,
         var_kw,
         while_kw,
-
+        skip_kw,
+        
         // literals
         integer_literal,
         float_literal,

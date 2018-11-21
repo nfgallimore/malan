@@ -51,3 +51,9 @@ Builder::make_decl_stmt(Decl* decl)
 {
     return new Decl_stmt(decl);
 }
+
+Stmt*
+Builder::make_skip_stmt()
+{
+    return new Skip_stmt();
+}

@@ -141,7 +141,9 @@ public:
 
     Stmt* make_decl_stmt(Decl* decl);
     /// Constructs a declaration statement.
-
+    
+    Stmt* Builder::make_skip_stmt();
+    /// Constructs a skip statement.
 
     // Name builder
 
