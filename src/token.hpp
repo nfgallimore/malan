@@ -11,9 +11,9 @@ class Token
 {
 public:
 
-    // IMPORTANT - Update token implementation after adding to table
-      enum Name
-      {
+    // IMPORTANT - Update token implementation after adding to keywords or logical operators
+    enum Name
+    {
         // misc
         eof,
         comment,
@@ -67,28 +67,28 @@ public:
         
         // identifiers
         identifier
-     };
+    };
 
     Token()
         : Token(eof, Symbol())
     { }
 
-      Token(Name n, Symbol sym, Location = {})
+    Token(Name n, Symbol sym, Location = {})
         : m_name(n), m_lex(sym), m_loc()
-      { }
+    { }
 
-      // Operators
+    // Operators
 
-      explicit operator bool() const { return m_name != eof; }
-      /// Converts to true when this is not eof.
+    explicit operator bool() const { return m_name != eof; }
+    /// Converts to true when this is not eof.
 
-      // Token name
+    // Token name
 
-      Name get_name() const { return m_name; }
-      /// Returns the name of the token.
+    Name get_name() const { return m_name; }
+    /// Returns the name of the token.
 
-      bool is_keyword() const;
-      /// Returns true if this is a keyword.
+    bool is_keyword() const;
+    /// Returns true if this is a keyword.
 
      bool is_logical_operator() const;
       /// Returns true if this is a logical operator.
