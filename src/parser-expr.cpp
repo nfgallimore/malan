@@ -40,13 +40,15 @@ Parser::parse_conditional_expression()
 
 /// Parse an or expression.
 ///
-///   or-expression -> or-expression 'or' and-expression
-///                  | or-expression
+///   or-expression -> and-expression 'or' or-expression
+///                  | and-expression
 Expr*
 Parser::parse_or_expression()
 {
     Expr* expr = parse_and_expression();
-
+    if (match(Token::or_kw))
+        return parse_or_expression();
+    return expr;
 }
 
 /// Parse an and expression.
@@ -56,6 +58,9 @@ Parser::parse_or_expression()
 Expr*
 Parser::parse_and_expression()
 {
+    Expr* expr = parse_and_expression();
+    if (match(Token::and_kw))
+        return parse_equality_expression();
     
 }
 
