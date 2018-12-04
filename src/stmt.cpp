@@ -45,6 +45,27 @@ Cont_stmt::to_sexpr(Printer& p) const
 }
 
 
+// Skip statement printing operations
+
+void 
+Skip_stmt::print(Printer& p) const
+{
+    p.print_string(";");
+}
+
+void 
+Skip_stmt::debug(Printer& p) const
+{
+    p.print_address("Skip_stmt", this);
+}
+
+void 
+Skip_stmt::to_sexpr(Printer& p) const
+{
+    p.print_string("(skip)");
+}
+ 
+
 // Block statement printing operations
 
 void 

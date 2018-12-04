@@ -23,6 +23,9 @@ add_library(libmalan
     src/builder.name.cpp
     src/lexer.cpp
     src/token.cpp
+    src/parser-expr.cpp
+    src/parser.cpp
+    src/actions.cpp
 )
 
 add_executable(main src/main.cpp)

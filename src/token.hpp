@@ -60,8 +60,7 @@ public:
         true_kw,
         var_kw,
         while_kw,
-        skip_kw,
-        
+                
         // literals
         integer_literal,
         float_literal,
@@ -88,16 +87,19 @@ public:
     Name get_name() const { return m_name; }
     /// Returns the name of the token.
 
+    bool is(Token::Name n) const;
+    /// Returns true if token is same kind as argument.
+
     bool is_keyword() const;
     /// Returns true if this is a keyword.
 
-     bool is_logical_operator() const;
-      /// Returns true if this is a logical operator.
+    bool is_logical_operator() const;
+    /// Returns true if this is a logical operator.
 
-      // Token attributes
+    // Token attributes
 
-      Symbol get_lexeme() const { return m_lex; }
-      /// Returns the lexeme (spelling) of the token.
+    Symbol get_lexeme() const { return m_lex; }
+    /// Returns the lexeme (spelling) of the token.
 
 private:
       Name m_name;
