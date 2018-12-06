@@ -11,16 +11,34 @@ class Parser
 {
 public:
     Parser(Symbol_table& syms, std::string const& input);
-    /// Constructor for parser
+    /// Constructor for parser.
 
     Token match(Token::Name n);
-    /// Returns the next token
+    /// Returns the next token.
+
+    Token consume();
+    /// Consumes a token advacning the iterator.
+
+    const Token& peek() const { return *m_next; }
+    /// Peeks at the next token.
+
+    Token::Name next_name() const { return peek().get_name(); }
+    /// Returns the name of the next token.
+
+    bool is_eof() const { return m_next == m_last; }
+    /// True if at end of file.
+
+    bool next_token_is(Token::Name n) const { return next_name() == n; }
+    /// True if the next is n.
+
+    bool next_token_is_not(Token::Name n) { return next_name() != n; }
+    /// True if the next is not n.
 
 
     // Parsing
 
     Expr* parse_expression();
-    /// Parses an expression
+    /// Parses an expression.
 
     Expr* parse_assignment_expression();
     /// Parse an assignment expression.
@@ -62,7 +80,7 @@ private:
     std::vector<Token> m_toks;
     /// Vector of tokens lex'd during construction.
 
-    Token* m_curr;
+    Token* m_next;
     /// The current token.
 
     Token* m_last;

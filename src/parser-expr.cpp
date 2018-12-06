@@ -1,5 +1,6 @@
 #include "parser.hpp"
 #include "token.hpp"
+#include "actions.hpp"
 
 Expr*
 Parser::parse_expression()
@@ -14,10 +15,12 @@ Parser::parse_expression()
 Expr*
 Parser::parse_assignment_expression()
 {
-    Expr* expr = parse_conditional_expression();
-    if (match(Token::equal))
-        return parse_assignment_expression();
-    return expr;        
+    Expr* cond = parse_conditional_expression();
+    if (match(Token::equal)) {
+        Expr* asst = parse_assignment_expression();
+        return m_act.on_ass_expr(cond, asst);
+    }
+    return cond;
 }
 
 /// Parse a conditional expression.
@@ -30,8 +33,7 @@ Parser::parse_conditional_expression()
     Expr* orExpr = parse_or_expression();
     if (match(Token::question))
     {
-        Expr* expr = parse_expression(); // FIXME
-
+        Expr* expr = parse_expression();
         if (match(Token::colon))
             return parse_conditional_expression();
     }
@@ -40,15 +42,18 @@ Parser::parse_conditional_expression()
 
 /// Parse an or expression.
 ///
-///   or-expression -> and-expression 'or' or-expression
+///   or-expression -> or-expression 'or' and-expression
 ///                  | and-expression
 Expr*
 Parser::parse_or_expression()
 {
-    Expr* expr = parse_and_expression();
+    Expr* lhs = parse_or_expression();
     if (match(Token::or_kw))
-        return parse_or_expression();
-    return expr;
+    {
+        Expr* rhs = parse_and_expression();
+        return m_act.on_or_expr(lhs, rhs);
+    }
+    return parse_and_expression();
 }
 
 /// Parse an and expression.
