@@ -83,7 +83,17 @@ Parser::parse_and_expression()
 ///                        | relational-expression
 Expr* Parser::parse_equality_expression()
 {
-
+    Expr* eq_expr = parse_equality_expression();
+    Expr* rel_expr = parse_relational_expression();
+    if (match(Token::equal_equal))
+    {
+        return m_act.on_equality_expression(eq_expr, rel_expr);
+    }
+    if (match(Token::bang_equal))
+    {
+        return m_act.on_inequality_expression(eq_expr, rel_expr);
+    }
+    
 }
 
 /// Parse a relational expression.
@@ -95,6 +105,8 @@ Expr* Parser::parse_equality_expression()
 ///                          | additive-expression
 Expr* Parser::parse_relational_expression()
 {
+    Expr* rel_epr = parse_relational_expression();
+
 
 }
 
