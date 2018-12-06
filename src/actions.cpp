@@ -27,33 +27,37 @@ Actions::on_bool_literal(Token const& tok)
 }
 
 Expr* 
-Actions::on_ass_expr(Expr* lhs, Expr* rhs)
+Actions::on_assignment_expression(Expr* lhs, Expr* rhs)
 {
     return m_builder.make_ass(lhs, rhs);
 }
 
 Expr* 
-Actions::on_or_expr(Expr* lhs, Expr* rhs)
+Actions::on_or_expression(Expr* lhs, Expr* rhs)
 {
     return m_builder.make_or(lhs, rhs);
 }
 
 Expr*
-Actions::on_reciprocal_expr(Expr* e)
+Actions::on_and_expression(Expr* lhs, Expr* rhs)
+{
+    return m_builder.make_and(lhs, rhs);
+}
+
+Expr*
+Actions::on_reciprocal_expression(Expr* e)
 {
     return m_builder.make_rec(e);
 }
 
 Expr*
-Actions::on_negation_expr(Expr* e)
+Actions::on_negation_expression(Expr* e)
 {
     return m_builder.make_neg(e);
 }
 
 Expr*
-Actions::on_con_expr(Expr* con, Expr* if_expr, Expr* else_expr)
+Actions::on_conditional_expression(Expr* con, Expr* first, Expr* second)
 {
-    return m_builder.make_con(con, if_expr, else_expr);
+    return m_builder.make_con(con, first, second);
 }
-
-

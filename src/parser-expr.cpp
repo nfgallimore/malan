@@ -16,9 +16,10 @@ Expr*
 Parser::parse_assignment_expression()
 {
     Expr* cond = parse_conditional_expression();
-    if (match(Token::equal)) {
+    if (match(Token::equal))
+    {
         Expr* asst = parse_assignment_expression();
-        return m_act.on_ass_expr(cond, asst);
+        return m_act.on_assignment_expression(cond, asst);
     }
     return cond;
 }
@@ -30,14 +31,17 @@ Parser::parse_assignment_expression()
 Expr*
 Parser::parse_conditional_expression()
 {
-    Expr* orExpr = parse_or_expression();
+    Expr* or_expr = parse_or_expression();
     if (match(Token::question))
     {
         Expr* expr = parse_expression();
         if (match(Token::colon))
-            return parse_conditional_expression();
+        {
+            Expr* cond_expr = parse_conditional_expression();
+            return m_act.on_conditional_expression(or_expr, expr, cond_expr);
+        }
     }
-    return orExpr;
+    return or_expr;
 }
 
 /// Parse an or expression.
@@ -47,13 +51,13 @@ Parser::parse_conditional_expression()
 Expr*
 Parser::parse_or_expression()
 {
-    Expr* lhs = parse_or_expression();
+    Expr* or_expr = parse_or_expression();
+    Expr* and_expr = parse_and_expression();
     if (match(Token::or_kw))
     {
-        Expr* rhs = parse_and_expression();
-        return m_act.on_or_expr(lhs, rhs);
+        return m_act.on_or_expression(or_expr, and_expr);
     }
-    return parse_and_expression();
+    return and_expr;
 }
 
 /// Parse an and expression.
@@ -63,10 +67,13 @@ Parser::parse_or_expression()
 Expr*
 Parser::parse_and_expression()
 {
-    Expr* expr = parse_and_expression();
+    Expr* and_expr = parse_and_expression();
+    Expr* eq_expr = parse_equality_expression();
     if (match(Token::and_kw))
-        return parse_equality_expression();
-    
+    {
+        return m_act.on_and_expression(and_expr, eq_expr);
+    }
+    return eq_expr;
 }
 
 /// Parse an equality expression.
