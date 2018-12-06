@@ -23,6 +23,16 @@ Parser::consume()
 }
 
 Token 
+Parser::expect(Token::Name n)
+{
+    if (next_token_is(n))
+        return consume();
+
+    throw std::runtime_error("syntax error");
+    return Token();
+}
+
+Token 
 Parser::match(Token::Name n)
 {
     if (next_token_is(n))

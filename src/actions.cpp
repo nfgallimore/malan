@@ -118,6 +118,12 @@ Actions::on_reciprocal_expression(Expr* e)
 }
 
 Expr*
+Actions::on_not_expression(Expr* e)
+{
+    return m_builder.make_not(e);
+}
+
+Expr*
 Actions::on_integer_literal(Token const& tok)
 {
     int n = std::stoi(tok.get_lexeme().str());

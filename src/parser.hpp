@@ -13,6 +13,8 @@ public:
     Parser(Symbol_table& syms, std::string const& input);
     /// Constructor for parser.
 
+    Token expect(Token::Name n);
+
     Token match(Token::Name n);
     /// Returns the next token.
 

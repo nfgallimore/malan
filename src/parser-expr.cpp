@@ -51,13 +51,13 @@ Parser::parse_conditional_expression()
 Expr*
 Parser::parse_or_expression()
 {
-    Expr* or_expr = parse_or_expression();
     Expr* and_expr = parse_and_expression();
     if (match(Token::or_kw))
     {
+        Expr* or_expr = parse_or_expression();
         return m_act.on_or_expression(or_expr, and_expr);
     }
-    return and_expr;
+    return parse_and_expression();
 }
 
 /// Parse an and expression.
@@ -67,10 +67,10 @@ Parser::parse_or_expression()
 Expr*
 Parser::parse_and_expression()
 {
-    Expr* and_expr = parse_and_expression();
     Expr* eq_expr = parse_equality_expression();
     if (match(Token::and_kw))
     {
+        Expr* and_expr = parse_and_expression();
         return m_act.on_and_expression(and_expr, eq_expr);
     }
     return eq_expr;
@@ -83,17 +83,18 @@ Parser::parse_and_expression()
 ///                        | relational-expression
 Expr* Parser::parse_equality_expression()
 {
-    Expr* eq_expr = parse_equality_expression();
     Expr* rel_expr = parse_relational_expression();
     if (match(Token::equal_equal))
     {
+        Expr* eq_expr = parse_equality_expression();
         return m_act.on_equality_expression(eq_expr, rel_expr);
     }
     if (match(Token::bang_equal))
     {
+        Expr* eq_expr = parse_equality_expression();
         return m_act.on_inequality_expression(eq_expr, rel_expr);
     }
-    
+    return rel_expr;
 }
 
 /// Parse a relational expression.
@@ -105,9 +106,28 @@ Expr* Parser::parse_equality_expression()
 ///                          | additive-expression
 Expr* Parser::parse_relational_expression()
 {
-    Expr* rel_epr = parse_relational_expression();
-
-
+    Expr* add_expr = parse_additive_expression();
+    if (match(Token::less))
+    {
+        Expr* rel_expr = parse_relational_expression();
+        return m_act.on_less_than_expression(rel_expr, add_expr);
+    }
+    if (match(Token::greater))
+    {
+        Expr* rel_expr = parse_relational_expression();
+        return m_act.on_greater_than_expression(rel_expr, add_expr);
+    }
+    if (match(Token::less_equal))
+    {
+        Expr* rel_expr = parse_relational_expression();
+        return m_act.on_less_than_or_equal_expression(rel_expr, add_expr);
+    }
+    if (match(Token::greater_equal))
+    {
+        Expr* rel_expr = parse_relational_expression();
+        return m_act.on_greater_than_or_equal_expression(rel_expr, add_expr);
+    }
+    return add_expr;
 }
 
 /// Parse an additive expression.
@@ -118,18 +138,46 @@ Expr* Parser::parse_relational_expression()
 Expr* 
 Parser::parse_additive_expression()
 {
-
+    Expr* mul_expr = parse_multiplicative_expression();
+    if (match(Token::plus))
+    {
+        Expr* add_expr = parse_additive_expression();
+        return m_act.on_addition_expression(add_expr, mul_expr);
+    }
+    if (match(Token::minus))
+    {
+        Expr* add_expr = parse_additive_expression();
+        return m_act.on_subtraction_expression(add_expr, mul_expr);
+    }
+    return mul_expr;
 }
 
 /// Parse a multiplicative expression.
 ///
 ///   multiplicative-expression -> multiplicative-expression '*' unary-expression
 ///                              | multiplicative-expression '/' unary-expression
+///                              | multiplicative-expression '%' unary-expression
 ///                              | unary-expression
 Expr* 
 Parser::parse_multiplicative_expression()
 {
-
+    Expr* unary_expr = parse_unary_expression();
+    if (match(Token::star))
+    {
+        Expr* mul_expr = parse_multiplicative_expression();
+        return m_act.on_multiplication_expression(mul_expr, unary_expr);
+    }
+    if (match(Token::slash))
+    {
+        Expr* mul_expr = parse_multiplicative_expression();
+        return m_act.on_division_expression(mul_expr, unary_expr);
+    }
+    if (match(Token::percent))
+    {
+        Expr* mul_expr = parse_multiplicative_expression();
+        return m_act.on_remainder_expression(mul_expr, unary_expr);
+    }
+    return unary_expr;
 }
 
 /// Parse a unary expression.
@@ -141,7 +189,22 @@ Parser::parse_multiplicative_expression()
 Expr*
 Parser::parse_unary_expression()
 {
-
+    if (match(Token::minus))
+    {
+        Expr* unary_expr = parse_unary_expression();
+        return m_act.on_negation_expression(unary_expr);
+    }
+    if (match(Token::slash))
+    {
+        Expr* unary_expr = parse_unary_expression();
+        return m_act.on_reciprocal_expression(unary_expr);
+    }
+    if (match(Token::not_kw))
+    {
+        Expr* unary_expr = parse_unary_expression();
+        return m_act.on_not_expression(unary_expr);
+    }
+    return parse_primary_expression(); // FIXME
 }
 
 /// Parse a postfix expression.
@@ -165,5 +228,18 @@ Parser::parse_postfix_expression()
 Expr*
 Parser::parse_primary_expression()
 {
+    if (Token tok = match(Token::integer_literal))
+        return m_act.on_integer_literal(tok);
 
+    if (Token tok = match(Token::identifier))
+        return m_act.on_identifier_expression(tok);
+
+    if (match(Token::lparen)) 
+    {
+        Expr* expr = parse_expression();
+        expect(Token::rparen);
+        return expr;
+    }
+
+    throw std::runtime_error("expected factor");
 }

@@ -67,6 +67,9 @@ public:
     Expr* on_reciprocal_expression(Expr* e);
     /// Returns a reciprocal expression.
 
+    Expr* on_not_expression(Expr* e);
+    /// Returns a not expression.
+
     Expr* on_integer_literal(Token const& tok);
     /// Returns an integer expression.
 
