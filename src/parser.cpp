@@ -18,8 +18,9 @@ Token
 Parser::consume()
 {
     assert(!is_eof());
+    Token curr = *m_next;
     ++m_next;
-    return *m_next;
+    return curr;
 }
 
 Token 

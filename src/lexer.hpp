@@ -48,7 +48,7 @@ private:
     Token match_word();
 
     Token match_number();
-
+    
 private:
     Symbol_table* m_syms;
 

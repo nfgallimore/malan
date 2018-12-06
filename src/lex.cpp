@@ -13,7 +13,7 @@ main(int argc, char* argv[])
     std::istreambuf_iterator<char> first(ifs);
     std::istreambuf_iterator<char> limit;
     std::string input(first, limit);
-
+    input = "1+1;";
     Lexer lexer(input);
     while (Token tok = lexer.get_next_token()) {
         std::cout << tok << '\n';
