@@ -1,4 +1,5 @@
 #include "parser.hpp"
+#include "actions.hpp"
 
 void
 Parser::parse_program()

@@ -93,15 +93,12 @@ Actions::on_remainder_expression(Expr* lhs, Expr* rhs)
     return m_builder.make_rem(lhs, rhs);
 }
 
-Expr*    
+Expr*
 Actions::on_identifier_expression(Token const& tok)
 {
-    Name name(tok.get_lexeme().str());
-    Decl* decl = m_stack.lookup(name);
+    Decl* decl = m_stack.lookup(tok.get_lexeme());
     if (!decl)
-    {
         throw std::runtime_error("no matching declaration");
-    }
     return m_builder.make_id(decl);
 }
 
@@ -163,12 +160,12 @@ Actions::on_object_declaration(Token id, Type* type)
     Scope* scope = get_current_scope();
 
     // Check for redefinition errors.
-    if (scope->lookup(id))
+    if (scope->lookup(id.get_lexeme()))
         throw std::runtime_error("redefinition error"); 
 
     // Partially create the declaration.
-    Name* name = m_builder.make_name(id.get_lexeme());
-    Decl *var = m_builder.make_variable(name, type);
+    Name* name = m_builder.make_name(id.get_lexeme().str());
+    Decl* var = m_builder.make_var(type, name);
 
     // Emit the declaration.
     scope->declare(var);
@@ -176,39 +173,35 @@ Actions::on_object_declaration(Token id, Type* type)
     return var;
 }
 
-void
+Decl*
 Actions::finish_object_declaration(Decl* d, Expr* init)
 {
     Var_decl* var = static_cast<Var_decl*>(d);
 
     // Perform copy initialization.
     m_builder.copy_initialize(d, init);
+
+    return var;
 }
 
 Decl*
-Actions::on_function_declaration(Token id, std::vector<Decl*> const& parms, Type* type)
+Actions::on_function_declaration(Token id, std::vector<Decl*>& parms, Type* type)
 {
     Scope* scope = get_current_scope();
 
     // Check for redefinition errors.
-    if (scope->lookup(id))
+    if (scope->lookup(id.get_lexeme()))
         throw std::runtime_error("redefinition error"); 
 
-    // Build the function type. For example, if I declare:
-    //
-    //        fun f(a : int, b : int) -> bool { ... }
-    //
-    // The function type becomes:
-    //
-    //        (int, int) -> bool
     Type* ft = m_builder.get_function_type(parms, type);
 
     // Build the function
-    // FIXME: Implement me.
-    Fn_decl* fn = nullptr;
+
+    Name name(id.get_lexeme().str());
+    Func_decl* fn = m_builder.make_func(&name, &parms, ft, nullptr);
 
     // Emit the declaration.
-    scope->declare(var);
+    scope->declare(fn);
 
     return fn;
 }
@@ -216,18 +209,17 @@ Actions::on_function_declaration(Token id, std::vector<Decl*> const& parms, Type
 Decl*
 Actions::start_function_declaration(Decl* d)
 {
-    m_fn = static_cast<Fn_decl*>(d);
+    m_fn = static_cast<Func_decl*>(d);
+    return m_fn;
 }
 
 Decl*
 Actions::finish_function_declaration(Decl* d, Stmt* s)
 {
-    Fn_decl* fn = static_cast<Fn_decl*>(d);
+    Func_decl* fn = static_cast<Func_decl*>(d);
 
     // Set the body of the function.
     fn->set_body(s);
 
     m_fn = nullptr;
 }
-
-

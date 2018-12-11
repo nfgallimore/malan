@@ -34,6 +34,12 @@ public:
     /// Returns the type of the declaration, if any.
 
     virtual bool is_object() const = 0;
+
+    virtual bool is_variable() const = 0;
+    /// Returns true if this is a variable (i.e., an object or reference).
+
+    virtual bool is_reference() const = 0;
+    /// Returns true if this declares a reference.
 };
 
 
@@ -70,6 +76,12 @@ public:
 
     bool is_object() const override { return true; }
     /// Determines whether the declaration is an object.
+
+    bool is_reference() const override;
+    /// Determines whether the declaration is a reference.
+
+    bool is_variable() const override { return true; }
+    /// Determines whether the declaration is a variable.
 
 private:
     Name* m_name;
@@ -122,6 +134,14 @@ public:
     void set_type(Type* t) { m_type = t; }
     /// Sets the type of the function declaration.
 
+    bool is_reference() const override { return false; }
+    /// Determines whether the declaration is a reference.
+
+    bool is_variable() const override { return false; }
+    /// Determines whether the declaration is a variable.
+
+    void set_body(Stmt* body) { m_body = body; }
+    
 private:
     Name* m_name;
     /// The name of the function declaration.

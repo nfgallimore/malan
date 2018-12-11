@@ -131,3 +131,9 @@ std::ostream& operator<<(std::ostream& os, Decl const& d)
     d.print(p);
     return p.get_stream();
 }
+
+bool 
+Var_decl::is_reference() const
+{
+    return m_type->get_kind() == Type::ref_type;
+}

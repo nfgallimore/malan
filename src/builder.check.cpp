@@ -21,6 +21,12 @@ Builder::is_type(Expr* e, Type* t)
     return e->get_type()->get_kind() != t->get_kind();
 }
 
+bool
+Builder::is_type(Decl* d, Type* t)
+{
+    return d->get_type()->get_kind() != t->get_kind();
+}
+
 bool 
 Builder::are_same_type(Expr* e1, Expr* e2)
 {
@@ -80,12 +86,22 @@ void Builder::require_numbers(Expr* e1, Expr* e2)
     }
 }
 
-void Builder::require_type(Expr* e, Type* t)
+Expr* Builder::require_type(Expr* e, Type* t)
 {
     if (!is_type(e, t))
     {
         Error::Type_err("error: expression is invalid type");
     }
+    return e;
+}
+
+Decl* Builder::require_type(Decl* d, Type* t)
+{
+    if (!is_type(d, t))
+    {
+        Error::Type_err("error: declaration is invalid type");
+    }
+    return d;
 }
 
 void 

@@ -150,6 +150,5 @@ Expr* Builder::make_call(std::vector<Expr*>* exprs)
     {
         types.push_back(e->get_type());
     }
-    require_type(es[0], get_function_type(types));
     return new Call_expr(exprs, es[0]->get_type());
 }

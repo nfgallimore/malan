@@ -7,11 +7,11 @@
 #include <vector>
 #include <unordered_map>
 
-struct Scope : public std::unordered_map<std::string, Decl*>
+struct Scope : public std::unordered_map<Symbol, Decl*>
 {
-    Decl* lookup(Token::Name name)
+    Decl* lookup(Symbol sym)
     {
-        auto iter = find(name.get_str());
+        auto iter = find(sym);
         if (iter == end())
         {
             return nullptr;
@@ -33,11 +33,11 @@ struct Scope : public std::unordered_map<std::string, Decl*>
 
 struct Scope_stack : public std::vector<Scope>
 {
-    Decl* lookup(Name name)
+    Decl* lookup(Symbol sym)
     {
         for (auto iter = rbegin(); iter != rend(); ++iter)
         {
-            if (Decl * d = iter->lookup(name.get_str()))
+            if (Decl * d = iter->lookup(sym))
             {
                 return d;
             }

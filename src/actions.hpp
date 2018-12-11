@@ -95,13 +95,15 @@ public:
 
     // Declarations
     Decl* on_object_declaration(Token id, Type* t);
-    Decl* finish_object_declaration(Decl* d, Type* t);
+    Decl* finish_object_declaration(Decl* d, Expr* init);
 
-    Decl* on_function_declaration(Token id, std::vector<Decl*> const& parms, Type* t);
+    Decl* on_function_declaration(Token id, std::vector<Decl*>& parms, Type* t);
     Decl* start_function_declaration(Decl* d);
     Decl* finish_function_declaration(Decl* d, Stmt* s);
 private:
     Builder m_builder;
 
     Scope_stack m_stack;
+
+    Func_decl* m_fn;
 };

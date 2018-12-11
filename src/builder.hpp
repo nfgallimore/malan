@@ -26,6 +26,9 @@ public:
     Type* get_function_type(std::vector<Type*> const& ts);
     /// Returns the type `(t1, t2, ..., tn) -> tr`. First parameter in list is ret type.
 
+    Type* get_function_type(std::vector<Decl*> const& parms, Type* ret_type);
+    /// Returns the type `(t1, t2, ..., tn) -> tr`.
+
     // Expression builder
 
     Expr* make_bool(bool b);
@@ -160,6 +163,9 @@ public:
     bool is_type(Expr* e, Type* t);
     /// Determines if the expression is of the given type.
 
+    bool is_type(Decl* d, Type* t);
+    /// Determine if the declaration is of the given type.
+
     bool are_same_type(Expr* e1, Expr* e2);
     /// Determines if the expressions are the same type.
     
@@ -185,7 +191,10 @@ public:
     void require_numbers(Expr* e1, Expr* e2);
     /// Enforces that the expressions are either `int` or `float`.
 
-    void require_type(Expr* e, Type* t);
+    Expr* require_type(Expr* e, Type* t);
+    /// Enforces that the expression is the provided type.
+
+    Decl* require_type(Decl* d, Type* t);
     /// Enforces that the expression is the provided type.
 
     void require_same_type(Expr* e1, Expr* e2);
@@ -205,6 +214,13 @@ public:
     Type::Kind get_actual_kind(Decl* d);
     /// Returns the actual kind of the declaration, gets type of reference if reference type.
 
+    // Initialization
+
+    void copy_initialize(Decl* d, Expr* e);
+    /// Copy expression into declaration.
+
+    void reference_initialize(Decl* d, Expr* e);
+    /// Initilize the reference.
 
 private:
     Bool_type m_bool_type;

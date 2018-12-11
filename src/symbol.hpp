@@ -3,10 +3,11 @@
 #include <string>
 #include <unordered_set>
 
+
 class Symbol
 {
     friend class Symbol_table;
-  
+    
     Symbol(std::string const* str) : m_str(str) { }
     /// Constructs the symbol from `str`.
 
@@ -27,7 +28,7 @@ public:
     }
 
 private:
-    std::string const* m_str;  
+    std::string const* m_str;    
 };
 
 
@@ -36,7 +37,7 @@ class Symbol_table : std::unordered_set<std::string>
 public:
     Symbol get(std::string const& str);
     /// Returns the unique symbol for `str`.
-  
+    
     Symbol get(char const* str);
     /// Returns the unique symbol for `str`.
 };
@@ -52,3 +53,17 @@ Symbol_table::get(char const* str)
 {
     return &*emplace(str).first;
 }
+
+
+namespace std
+{
+    template<>
+    struct hash<::Symbol>
+    {
+        std::size_t operator()(::Symbol sym) const noexcept
+        {
+            std::hash<std::string const*> h;
+            return h(&sym.str());
+        }
+    };
+};
