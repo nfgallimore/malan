@@ -124,6 +124,12 @@ Actions::on_not_expression(Expr* e)
 }
 
 Expr*
+Actions::on_call_expression(std::vector<Expr*>* exprs)
+{
+    return m_builder.make_call(exprs);
+}
+
+Expr*
 Actions::on_integer_literal(Token const& tok)
 {
     int n = std::stoi(tok.get_lexeme().str());
@@ -149,3 +155,79 @@ Actions::on_bool_literal(Token const& tok)
         return m_builder.make_false();
     }
 }
+
+
+Decl*
+Actions::on_object_declaration(Token id, Type* type)
+{
+    Scope* scope = get_current_scope();
+
+    // Check for redefinition errors.
+    if (scope->lookup(id))
+        throw std::runtime_error("redefinition error"); 
+
+    // Partially create the declaration.
+    Name* name = m_builder.make_name(id.get_lexeme());
+    Decl *var = m_builder.make_variable(name, type);
+
+    // Emit the declaration.
+    scope->declare(var);
+
+    return var;
+}
+
+void
+Actions::finish_object_declaration(Decl* d, Expr* init)
+{
+    Var_decl* var = static_cast<Var_decl*>(d);
+
+    // Perform copy initialization.
+    m_builder.copy_initialize(d, init);
+}
+
+Decl*
+Actions::on_function_declaration(Token id, std::vector<Decl*> const& parms, Type* type)
+{
+    Scope* scope = get_current_scope();
+
+    // Check for redefinition errors.
+    if (scope->lookup(id))
+        throw std::runtime_error("redefinition error"); 
+
+    // Build the function type. For example, if I declare:
+    //
+    //        fun f(a : int, b : int) -> bool { ... }
+    //
+    // The function type becomes:
+    //
+    //        (int, int) -> bool
+    Type* ft = m_builder.get_function_type(parms, type);
+
+    // Build the function
+    // FIXME: Implement me.
+    Fn_decl* fn = nullptr;
+
+    // Emit the declaration.
+    scope->declare(var);
+
+    return fn;
+}
+
+Decl*
+Actions::start_function_declaration(Decl* d)
+{
+    m_fn = static_cast<Fn_decl*>(d);
+}
+
+Decl*
+Actions::finish_function_declaration(Decl* d, Stmt* s)
+{
+    Fn_decl* fn = static_cast<Fn_decl*>(d);
+
+    // Set the body of the function.
+    fn->set_body(s);
+
+    m_fn = nullptr;
+}
+
+

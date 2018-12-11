@@ -34,6 +34,13 @@ Parser::expect(Token::Name n)
 }
 
 Token 
+Parser::require(Token::Name n)
+{
+    assert(next_token_is(n));
+    return consume();
+}
+
+Token 
 Parser::match(Token::Name n)
 {
     if (next_token_is(n))

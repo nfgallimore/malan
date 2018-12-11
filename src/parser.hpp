@@ -6,7 +6,9 @@
 
 class Expr;
 class Symbol_table;
-
+class Type;
+class Stmt;
+class Decl;
 class Parser 
 {
 public:
@@ -14,6 +16,10 @@ public:
     /// Constructor for parser.
 
     Token expect(Token::Name n);
+    /// Expect a token.
+
+     Token require(Token::Name n);
+    /// Assert next_name is n, consume.
 
     Token match(Token::Name n);
     /// Returns the next token.
@@ -36,8 +42,10 @@ public:
     bool next_token_is_not(Token::Name n) { return next_name() != n; }
     /// True if the next is not n.
 
+    void parse_program();
+    /// Parses a program.
 
-    // Parsing
+    // Expression Parsing
 
     Expr* parse_expression();
     /// Parses an expression.
@@ -72,8 +80,39 @@ public:
     Expr* parse_postfix_expression();
     /// Parse a postfix expression.
 
+    std::vector<Expr*>* parse_argument_list();
+    /// Parse a function argument list.
+
+    Expr* parse_argument();
+    /// Parse an argument.
+
     Expr* parse_primary_expression();
     /// Parse a primary expression.
+
+
+    // Statement parsing
+
+    Stmt* parse_statement();
+    Stmt* parse_empty_statement();
+    Stmt* parse_block_statement();
+    Stmt* parse_if_statement();
+    Stmt* parse_while_statement();
+    Stmt* parse_break_statement();
+    Stmt* parse_continue_statement();
+    Stmt* parse_return_statement();
+    Stmt* parse_declaration_statement();
+    Stmt* parse_expression_statement();
+
+    // Types
+
+    Type* parse_type();
+
+    // Declarations
+
+    Decl* parse_declaration();
+    Decl* parse_local_declaration();
+    Decl* parse_function_definition();
+    Decl* parse_object_definition();
 
 private:
     Actions m_act;

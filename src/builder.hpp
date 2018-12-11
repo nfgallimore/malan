@@ -24,7 +24,7 @@ public:
     /// Returns the type `ref t`.
 
     Type* get_function_type(std::vector<Type*> const& ts);
-    /// Returns the type `(t1, t2, ..., tn) -> tr`.
+    /// Returns the type `(t1, t2, ..., tn) -> tr`. First parameter in list is ret type.
 
     // Expression builder
 

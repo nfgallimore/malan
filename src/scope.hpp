@@ -9,7 +9,7 @@
 
 struct Scope : public std::unordered_map<std::string, Decl*>
 {
-    Decl* lookup(Name name)
+    Decl* lookup(Token::Name name)
     {
         auto iter = find(name.get_str());
         if (iter == end())

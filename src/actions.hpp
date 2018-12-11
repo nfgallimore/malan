@@ -70,6 +70,9 @@ public:
     Expr* on_not_expression(Expr* e);
     /// Returns a not expression.
 
+    Expr* on_call_expression(std::vector<Expr*>* exprs);
+    /// Returns a function call expression.
+
     Expr* on_integer_literal(Token const& tok);
     /// Returns an integer expression.
 
@@ -90,6 +93,13 @@ public:
     Scope* get_current_scope() { return &m_stack.back(); }
     /// Return the current scope.
 
+    // Declarations
+    Decl* on_object_declaration(Token id, Type* t);
+    Decl* finish_object_declaration(Decl* d, Type* t);
+
+    Decl* on_function_declaration(Token id, std::vector<Decl*> const& parms, Type* t);
+    Decl* start_function_declaration(Decl* d);
+    Decl* finish_function_declaration(Decl* d, Stmt* s);
 private:
     Builder m_builder;
 

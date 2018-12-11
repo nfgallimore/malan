@@ -204,20 +204,43 @@ Parser::parse_unary_expression()
         Expr* unary_expr = parse_unary_expression();
         return m_act.on_not_expression(unary_expr);
     }
-    return parse_primary_expression(); // FIXME
+    return parse_postfix_expression();
 }
 
 /// Parse a postfix expression.
 ///
 ///   postfix-expression -> postfix-expression ( argument-list? )
 ///                       | primary-expression
-///        argument-list -> argument-list ',' argument
-///                       | argument
-///             argument -> expression
+
 Expr*
 Parser::parse_postfix_expression()
 {
+    if (match(Token::lparen)) {
+        std::vector<Expr*>* arg_list = parse_argument_list();
+        expect(Token::rparen);
+        return m_act.on_call_expression(arg_list);
+    }
+    return parse_primary_expression();
+}
 
+///   argument-list -> argument-list ',' argument
+///                   | argument
+std::vector<Expr*>*
+Parser::parse_argument_list()
+{
+    std::vector<Expr*>* argument_list;
+    while (match(Token::comma)) {
+        argument_list->push_back(parse_argument());
+    }
+    argument_list->push_back(parse_argument());
+    return argument_list;
+}
+
+///   argument -> expression
+Expr*
+Parser::parse_argument()
+{
+    return parse_expression();
 }
 
 /// Parse a primary expression.
