@@ -9,6 +9,7 @@ class Symbol_table;
 class Type;
 class Stmt;
 class Decl;
+
 class Parser 
 {
 public:
@@ -89,19 +90,37 @@ public:
     Expr* parse_primary_expression();
     /// Parse a primary expression.
 
-
     // Statement parsing
 
     Stmt* parse_statement();
+    /// Parse a statement.
+
     Stmt* parse_empty_statement();
+    /// Parse an empty statement.
+
     Stmt* parse_block_statement();
+    /// Parse a block statement.
+
     Stmt* parse_if_statement();
+    /// Parse an if statement.
+
     Stmt* parse_while_statement();
+    /// Parse a while statement.
+
     Stmt* parse_break_statement();
+    /// Parse a break statement.
+
     Stmt* parse_continue_statement();
+    /// Parse a continue statement.
+
     Stmt* parse_return_statement();
+    /// Parse a return statement.
+
     Stmt* parse_declaration_statement();
+    /// Parse a declaration statement.
+
     Stmt* parse_expression_statement();
+    /// Parse an expression statement.
 
     // Types
 
@@ -109,17 +128,30 @@ public:
 
     // Declarations
 
+    Decl_seq* parse_declaration_seq();
+    /// Parse a declaration sequence.
+
     Decl* parse_declaration();
+    /// Parse a declaration.
+
     Decl* parse_local_declaration();
+    /// Parse a local declaration.
+
     Decl* parse_function_definition();
+    /// Parse a function declaration.
+
     Decl* parse_object_definition();
+    /// Parse an object definition.
+
+    std::vector<Decl*> parse_parameter_declarations();
+    /// Parse parameter declarations.
 
 private:
     Actions m_act;
-    /// Semantic actor
+    /// Semantic actor.
 
     std::vector<Token> m_toks;
-    /// Vector of tokens lex'd during construction.
+    /// Vector of tokens lex'd during parser construction.
 
     Token* m_next;
     /// The current token.
@@ -128,5 +160,8 @@ private:
     /// The last token.
 
     Lexer m_lex;
-    /// Lexer
+    /// Lexer.
+
+    Decl_seq* m_prog;
+    /// The program parsed.
 };

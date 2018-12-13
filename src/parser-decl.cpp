@@ -4,9 +4,15 @@
 void
 Parser::parse_program()
 {
-    enter_scope();
+    m_act.enter_scope();
     parse_declaration_seq();
-    leave_scope();
+    m_act.leave_scope();
+}
+
+Decl_seq*
+Parser::parse_declaration_seq()
+{
+    return nullptr;
 }
 
 Decl*
@@ -30,7 +36,7 @@ Parser::parse_object_definition()
     Expr* init = parse_expression();
     Token semi = expect(Token::semicolon);
 
-    m_act.finish_object_definition(var, init);
+    m_act.finish_object_declaration(var, init);
 
     return var;
 }
@@ -55,11 +61,17 @@ Parser::parse_function_definition()
 
     Decl* fn = m_act.on_function_declaration(id, parms, type);
 
-    m_act.start_function_definition(fn, init);
+    m_act.start_function_declaration(fn);
     Stmt* body = parse_statement();
-    m_act.finish_function_definition(fn, init);
+    m_act.finish_function_declaration(fn, body);
 
     m_act.leave_scope();
 
-    return var;
+    return fn;
+}
+
+std::vector<Decl*>
+Parser::parse_parameter_declarations()
+{
+    return std::vector<Decl*>();
 }

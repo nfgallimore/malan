@@ -104,6 +104,4 @@ private:
     Builder m_builder;
 
     Scope_stack m_stack;
-
-    Func_decl* m_fn;
 };

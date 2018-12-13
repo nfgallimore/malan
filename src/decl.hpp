@@ -13,7 +13,6 @@ class Stmt;
 class Decl
 {
 public:
-
     // Printer operations
 
     virtual void print(Printer& p) const = 0;

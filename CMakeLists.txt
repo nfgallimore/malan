@@ -21,6 +21,7 @@ add_library(libmalan
     src/builder.check.cpp
     src/builder.type.cpp
     src/builder.name.cpp
+    src/builder.init.cpp
     src/lexer.cpp
     src/token.cpp
     src/parser-expr.cpp

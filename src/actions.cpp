@@ -209,8 +209,7 @@ Actions::on_function_declaration(Token id, std::vector<Decl*>& parms, Type* type
 Decl*
 Actions::start_function_declaration(Decl* d)
 {
-    m_fn = static_cast<Func_decl*>(d);
-    return m_fn;
+    return static_cast<Func_decl*>(d);
 }
 
 Decl*
@@ -221,5 +220,5 @@ Actions::finish_function_declaration(Decl* d, Stmt* s)
     // Set the body of the function.
     fn->set_body(s);
 
-    m_fn = nullptr;
+    return fn;
 }
